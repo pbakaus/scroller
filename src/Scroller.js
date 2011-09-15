@@ -13,88 +13,62 @@
 ==================================================================================================
 */
 
-/**
- * A pure logic 'component' for 'virtual' scrolling/zooming through mouse or touch controls.
- */
-Class("z.event.Scroller", {
+if (!window.zynga) {
+	zynga = {};
+}
 
-	construct: function(callback) {
+(function() {
+	
+	/**
+	 * A pure logic 'component' for 'virtual' scrolling/zooming through mouse or touch controls.
+	 */
+	zynga.Scroller = function(callback, options) {
+
 		this.__callback = callback;
-	},
 
-	include: [ jasy.property.MGeneric ],
+		this.options = {
+			/** Enable scrolling on x-axis */
+			scrollingX: true,
 
-	properties: {
+			/** Enable scrolling on y-axis */
+			scrollingY: true,
 
-		/** Enable scrolling on x-axis */
-		scrollingX: {
-			type: "Boolean",
-			init: true
-		},
+			/** Enable deceleration when moving finger/mouse fast */
+			decelerating: true,
 
-		/** Enable scrolling on y-axis */
-		scrollingY: {
-			type: "Boolean",
-			init: true
-		},
+			/** Enable animations for snap back, zooming and scrolling */
+			animating: true,
 
-		/** Enable deceleration when moving finger/mouse fast */
-		decelerating: {
-			type: "Boolean",
-			init: true
-		},
+			/** Enable bouncing (content can be slowly moved outside and jumps back after releasing) */
+			bouncing: true,
 
-		/** Enable animations for snap back, zooming and scrolling */
-		animating: {
-			type: "Boolean",
-			init: true
-		},
+			/** Enable locking to the main axis if user moves only slightly on one of them at start */
+			locking: true,
 
-		/** Enable bouncing (content can be slowly moved outside and jumps back after releasing) */
-		bouncing: {
-			type: "Boolean",
-			init: true
-		},
+			/** Enable pagination mode (switching between full page content panes) */
+			paging: true,
 
-		/** Enable locking to the main axis if user moves only slightly on one of them at start */
-		locking: {
-			type: "Boolean",
-			init: true
-		},
+			/** Enable snapping of content to a configured pixel grid */
+			snapping: true,
 
-		/** Enable pagination mode (switching between full page content panes) */
-		paging: {
-			type: "Boolean",
-			init: false
-		},
+			/** Enable zooming of content via API, fingers and mouse wheel */
+			zooming: true,
 
-		/** Enable snapping of content to a configured pixel grid */
-		snapping: {
-			type: "Boolean",
-			init: false
-		},
+			/** Minimum zoom level */
+			minZoom: 0.5,
 
-		/** Enable zooming of content via API, fingers and mouse wheel */
-		zooming: {
-			type: "Boolean",
-			init: false
-		},
+			/** Maximum zoom level */
+			maxZoom: 3
+		};
 
-		/** Minimum zoom level */
-		minZoom: {
-			type: "Number",
-			init: 0.5
-		},
-
-		/** Maximum zoom level */
-		maxZoom: {
-			type: "Number",
-			init: 3
+		for (var key in options) {
+			this.options[key] = options[key];
 		}
-	},
 
-
-	members: {
+	};
+	
+	
+	var members = {
 
 		/*
 		---------------------------------------------------------------------------
@@ -245,17 +219,15 @@ Class("z.event.Scroller", {
 		 */
 		initElement: function(elem) {
 
-			if (jasy.Env.isSet("debug")) {
-				if (elem.children.length !== 1) {
-					throw new Error("Invalid element for Scroller. Should have exactly one child element!");
-				}
+			if (elem.children.length !== 1) {
+				throw new Error("Invalid element for Scroller. Should have exactly one child element!");
 			}
 
-			z.core.Style.set(elem, {
+			zynga.Style.set(elem, {
 				overflow: "hidden"
 			});
 
-			z.core.Style.set(elem.children[0], {
+			zynga.Style.set(elem.children[0], {
 				transformOrigin: "left top",
 				transform: "translateZ(0)"
 			});
@@ -457,7 +429,7 @@ Class("z.event.Scroller", {
 				self.__isDecelerating = false;
 			}
 
-			if (!self.getScrollingX()) {
+			if (!self.__options.scrollingX) {
 
 				left = self.__scrollLeft;
 
@@ -471,7 +443,7 @@ Class("z.event.Scroller", {
 
 			}
 
-			if (!self.getScrollingY()) {
+			if (!self.__options.scrollingY) {
 
 				top = self.__scrollTop;
 
@@ -588,8 +560,8 @@ Class("z.event.Scroller", {
 			self.__lastScale = 1;
 
 			// Reset locking flags
-			self.__enableScrollX = !isSingleTouch && self.getScrollingX();
-			self.__enableScrollY = !isSingleTouch && self.getScrollingY();
+			self.__enableScrollX = !isSingleTouch && self.__options.scrollingX;
+			self.__enableScrollY = !isSingleTouch && self.__options.scrollingY;
 
 			// Reset deceleration
 			self.__decelerationVelocityX = 0;
@@ -734,8 +706,8 @@ Class("z.event.Scroller", {
 				var distanceX = Math.abs(currentTouchLeft - self.__initialTouchLeft);
 				var distanceY = Math.abs(currentTouchTop - self.__initialTouchTop);
 
-				self.__enableScrollX = self.getScrollingX() && distanceX >= minimumTrackingForScroll;
-				self.__enableScrollY = self.getScrollingY() && distanceY >= minimumTrackingForScroll;
+				self.__enableScrollX = self.__options.scrollingX && distanceX >= minimumTrackingForScroll;
+				self.__enableScrollY = self.__options.scrollingY && distanceY >= minimumTrackingForScroll;
 
 				self.__isDragging = (self.__enableScrollX || self.__enableScrollY) && (distanceX >= minimumTrackingForDrag || distanceY >= minimumTrackingForDrag);
 
@@ -1087,5 +1059,11 @@ Class("z.event.Scroller", {
 				}
 			}
 		}
+	};
+	
+	// Copy over members to prototype
+	for (var key in members) {
+		zynga.Scroller.prototype[key] = members[key];
 	}
-});
+		
+})();

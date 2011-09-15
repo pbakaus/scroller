@@ -11,15 +11,16 @@ var clientWidth = 0;
 var clientHeight = 0;
 
 // Initialize Scroller
-this.scroller = new z.event.Scroller(function(left, top, zoom) {
+this.scroller = new zynga.Scroller(function(left, top, zoom) {
 	render(left, top, zoom);
 
 	document.getElementById("scrollLeft").value = left.toFixed(2);
 	document.getElementById("scrollTop").value = top.toFixed(2);
 	document.getElementById("zoomLevel").value = zoom.toFixed(2);
+}, {
+	zooming: true
 });
 
-scroller.setZooming(true);
 scroller.initElement(container);
 
 var rect = container.getBoundingClientRect();

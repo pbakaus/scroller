@@ -5,6 +5,7 @@
 	<link rel="stylesheet" href="ui.css" />
 	
 	<script type="text/javascript" src="../src/RequestAnimationFrame.js"></script>
+	<script type="text/javascript" src="../src/Engine.js"></script>
 	<script type="text/javascript" src="../src/Style.js"></script>
 	<script type="text/javascript" src="../src/Easing.js"></script>
 	<script type="text/javascript" src="../src/Animate.js"></script>
@@ -71,13 +72,13 @@
 
 		// DOM based rendering (Use 3D when available)
 		var render;
-		if (z.core.Style.property("perspective")) {
+		if (zynga.Style.property("perspective")) {
 			render = function(left, top, zoom) {
-				z.core.Style.set(content, "transform", "translate3d(" + (-left) + "px," + (-top) + "px,0) scale(" + zoom + ")");
+				zynga.Style.set(content, "transform", "translate3d(" + (-left) + "px," + (-top) + "px,0) scale(" + zoom + ")");
 			};
 		} else {
 			render = function(left, top, zoom) {
-				z.core.Style.set(content, "transform", "translate(" + (-left) + "px," + (-top) + "px) scale(" + zoom + ")");
+				zynga.Style.set(content, "transform", "translate(" + (-left) + "px," + (-top) + "px) scale(" + zoom + ")");
 			};
 		}
 

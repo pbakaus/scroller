@@ -26,7 +26,7 @@
 	var running = {};
 	var counter = 1;
 	
-	if (!global.zynga) {
+	if (!window.zynga) {
 		zynga = {};
 	}
 

@@ -4,6 +4,7 @@
 	<title>Scroll Demo - Paging X</title>
 
 	<script type="text/javascript" src="../src/RequestAnimationFrame.js"></script>
+	<script type="text/javascript" src="../src/Engine.js"></script>
 	<script type="text/javascript" src="../src/Style.js"></script>
 	<script type="text/javascript" src="../src/Easing.js"></script>
 	<script type="text/javascript" src="../src/Animate.js"></script>
@@ -70,12 +71,12 @@
 
 	// Scroll Callback
 	var callback = function(left, top) {
-		z.core.Style.set(content, "transform", "translateX(" + (-left) + "px) translateY(" + (-top) + "px)");
+		zynga.Style.set(content, "transform", "translateX(" + (-left) + "px) translateY(" + (-top) + "px)");
 	};
 
 
 	// Initialize Scroller
-	var scroller = new z.event.Scroller(callback);
+	var scroller = new zynga.Scroller(callback);
 	scroller.setScrollingY(false);
 	scroller.setPaging(true);
 	scroller.initElement(container);
