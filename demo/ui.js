@@ -36,9 +36,12 @@ var reflow = function() {
 window.addEventListener("resize", reflow, false);
 reflow();
 
-document.querySelector("#settings input[type=checkbox]").addEventListener("change", function() {
-	scroller.set(this.id, this.checked);
-}, false);
+var checkboxes = document.querySelectorAll("#settings input[type=checkbox]");
+for (var i=0, l=checkboxes.length; i<l; i++) {
+	checkboxes[i].addEventListener("change", function() {
+		scroller.options[this.id] = this.checked;
+	}, false);
+}
 
 document.querySelector("#settings #zoom").addEventListener("click", function() {
 	scroller.zoomTo(parseFloat(document.getElementById("zoomLevel").value));
