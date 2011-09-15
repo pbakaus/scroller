@@ -12,10 +12,11 @@
 ==================================================================================================
 */
 
-/**
- * @name {z.core.Easing}
- */
-Module("z.core.Easing", {
+if (!global.zynga) {
+	zynga = {};
+}
+
+zynga.Easing = {
 
 	/**
 	 * @param pos {Number} position between 0 (start of effect) and 1 (end of effect)
@@ -325,4 +326,4 @@ Module("z.core.Easing", {
 	easeTo: function(pos) {
 		return Math.pow(pos, 0.25);
 	}
-});
+};

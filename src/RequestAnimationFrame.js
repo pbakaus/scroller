@@ -15,6 +15,9 @@
 ==================================================================================================
 */
 
+/**
+ * Polyfill for requestAnimationFrame() and cancelRequestAnimationFrame()
+ */
 (function(global) 
 {
 	if(global.requestAnimationFrame) {

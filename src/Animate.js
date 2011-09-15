@@ -15,8 +15,6 @@
  * Dropped frame logic allows to keep using the same updater logic independent from the actual
  * rendering. This eases a lot of cases where it might be pretty complex to break down a state
  * based on the pure time difference.
- *
- * @name {z.core.Animate}
  */
 (function() {
 	var time = Date.now || function() { 
@@ -27,8 +25,12 @@
 	var millisecondsPerSecond = 1000;
 	var running = {};
 	var counter = 1;
+	
+	if (!global.zynga) {
+		zynga = {};
+	}
 
-	Module("z.core.Animate", {
+	zynga.Animate = {
 
 		/**
 		 * Stops the given animation.
@@ -152,6 +154,6 @@
 			// Return unique animation ID
 			return id;
 		}
-	});
+	};
 })();
 

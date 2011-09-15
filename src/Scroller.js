@@ -14,9 +14,7 @@
 */
 
 /**
- * A logic 'component' for 'virtual' scrolling/zooming through mouse or touch controls.
- *
- * @name {z.event.Scroller}
+ * A pure logic 'component' for 'virtual' scrolling/zooming through mouse or touch controls.
  */
 Class("z.event.Scroller", {
 
