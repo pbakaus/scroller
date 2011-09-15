@@ -20,7 +20,7 @@ if (!window.zynga) {
 (function() {
 	
 	/**
-	 * A pure logic 'component' for 'virtual' scrolling/zooming through mouse or touch controls.
+	 * A pure logic 'component' for 'virtual' scrolling/zooming.
 	 */
 	zynga.Scroller = function(callback, options) {
 
@@ -34,10 +34,7 @@ if (!window.zynga) {
 			/** Enable scrolling on y-axis */
 			scrollingY: true,
 
-			/** Enable deceleration when moving finger/mouse fast */
-			decelerating: true,
-
-			/** Enable animations for snap back, zooming and scrolling */
+			/** Enable animations for deceleration, snap back, zooming and scrolling */
 			animating: true,
 
 			/** Enable bouncing (content can be slowly moved outside and jumps back after releasing) */
@@ -749,7 +746,7 @@ if (!window.zynga) {
 
 				// Start deceleration
 				// Verify that the last move detected was in some relevant time frame
-				if (self.__isSingleTouch && self.options.decelerating && (timeStamp - self.__lastTouchMove) <= 100) {
+				if (self.__isSingleTouch && self.options.animating && (timeStamp - self.__lastTouchMove) <= 100) {
 
 					// How much velocity is required to start the deceleration
 					var minVelocityToStartDeceleration = self.options.paging || self.options.snapping ? 4 : 1;
