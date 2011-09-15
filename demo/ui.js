@@ -21,7 +21,6 @@ this.scroller = new zynga.Scroller(function(left, top, zoom) {
 	zooming: true
 });
 
-scroller.initElement(container);
 
 var rect = container.getBoundingClientRect();
 scroller.setPosition(rect.left + container.clientLeft, rect.top + container.clientTop);
@@ -37,41 +36,41 @@ var reflow = function() {
 window.addEventListener("resize", reflow, false);
 reflow();
 
-$("#settings input[type=checkbox]").bind("change", function() {
+document.querySelector("#settings input[type=checkbox]").addEventListener("change", function() {
 	scroller.set(this.id, this.checked);
-});
+}, false);
 
-$("#settings #zoom").bind("click", function() {
+document.querySelector("#settings #zoom").addEventListener("click", function() {
 	scroller.zoomTo(parseFloat(document.getElementById("zoomLevel").value));
-});
+}, false);
 
-$("#settings #zoomIn").bind("click", function() {
+document.querySelector("#settings #zoomIn").addEventListener("click", function() {
 	scroller.zoomBy(1.2, true);
-});
+}, false);
 
-$("#settings #zoomOut").bind("click", function() {
+document.querySelector("#settings #zoomOut").addEventListener("click", function() {
 	scroller.zoomBy(0.8, true);
-});
+}, false);
 
-$("#settings #scrollTo").bind("click", function() {
+document.querySelector("#settings #scrollTo").addEventListener("click", function() {
 	scroller.scrollTo(parseFloat(document.getElementById("scrollLeft").value), parseFloat(document.getElementById("scrollTop").value), true);
-});
+}, false);
 
-$("#settings #scrollByUp").bind("click", function() {
+document.querySelector("#settings #scrollByUp").addEventListener("click", function() {
 	scroller.scrollBy(0, -150, true);
-});
+}, false);
 
-$("#settings #scrollByRight").bind("click", function() {
+document.querySelector("#settings #scrollByRight").addEventListener("click", function() {
 	scroller.scrollBy(150, 0, true);
-});
+}, false);
 
-$("#settings #scrollByDown").bind("click", function() {
+document.querySelector("#settings #scrollByDown").addEventListener("click", function() {
 	scroller.scrollBy(0, 150, true);
-});
+}, false);
 
-$("#settings #scrollByLeft").bind("click", function() {
+document.querySelector("#settings #scrollByLeft").addEventListener("click", function() {
 	scroller.scrollBy(-150, 0, true);
-});
+}, false);
 
 
 if ('ontouchstart' in window) {

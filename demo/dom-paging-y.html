@@ -20,14 +20,29 @@
 		position: absolute;
 		top: 20px;
 		left: 20px;
+	
 		-webkit-user-select: none;
 		-moz-user-select: none;
+		-ms-user-select: none;
+		-o-user-select: none;
+		user-select: none;
 	}
 	
 	#content{
 		background: white;
 		height: 4800px;
 		width: 400px;
+		
+		-webkit-transform-origin: left top;
+		-webkit-transform: translateZ(0);
+		-moz-transform-origin: left top;
+		-moz-transform: translateZ(0);
+		-ms-transform-origin: left top;
+		-ms-transform: translateZ(0);
+		-o-transform-origin: left top;
+		-o-transform: translateZ(0);
+		transform-origin: left top;
+		transform: translateZ(0);
 	}
 	
 	.cell{
@@ -75,10 +90,10 @@
 
 
 	// Initialize Scroller
-	var scroller = new zynga.Scroller(callback);
-	scroller.setScrollingX(false);
-	scroller.setPaging(true);
-	scroller.initElement(container);
+	var scroller = new zynga.Scroller(callback, {
+		scrollingX: false,
+		paging: true
+	});
 	
 	
 	// Setup Scroller

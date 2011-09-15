@@ -46,13 +46,13 @@ if (!window.zynga) {
 			locking: true,
 
 			/** Enable pagination mode (switching between full page content panes) */
-			paging: true,
+			paging: false,
 
 			/** Enable snapping of content to a configured pixel grid */
-			snapping: true,
+			snapping: false,
 
 			/** Enable zooming of content via API, fingers and mouse wheel */
-			zooming: true,
+			zooming: false,
 
 			/** Minimum zoom level */
 			minZoom: 0.5,
@@ -236,28 +236,6 @@ if (!window.zynga) {
 		*/
 
 		/**
-		 * Initializes a DOM element to use as a scrolling root. Should have exactly one child
-		 * - the one which is scrolled or better: moved around.
-		 */
-		initElement: function(elem) {
-
-			if (elem.children.length !== 1) {
-				throw new Error("Invalid element for Scroller. Should have exactly one child element!");
-			}
-
-			zynga.Style.set(elem, {
-				overflow: "hidden"
-			});
-
-			zynga.Style.set(elem.children[0], {
-				transformOrigin: "left top",
-				transform: "translateZ(0)"
-			});
-
-		},
-
-
-		/**
 		 * Configures the dimensions of the client (outer) and content (inner) elements.
 		 * Requires the available space for the outer element and the outer size of the inner element.
 		 * All values which are falsy (null or zero etc.) are ignored and the old value is kept.
@@ -366,13 +344,13 @@ if (!window.zynga) {
 
 			var self = this;
 
-			if (!self.getZooming()) {
+			if (!self.options.zooming) {
 				throw new Error("Zooming is not enabled!");
 			}
 
 			// Stop deceleration
 			if (self.__isDecelerating) {
-				z.core.Animate.stop(self.__isDecelerating);
+				zynga.Animate.stop(self.__isDecelerating);
 				self.__isDecelerating = false;
 			}
 
@@ -388,7 +366,7 @@ if (!window.zynga) {
 			}
 
 			// Limit level according to configuration
-			level = Math.max(Math.min(level, self.getMaxZoom()), self.getMinZoom());
+			level = Math.max(Math.min(level, self.options.maxZoom), self.options.minZoom);
 
 			// Recompute maximum values while temporary tweaking maximum scroll ranges
 			self.__computeScrollMax(level);
@@ -447,33 +425,33 @@ if (!window.zynga) {
 
 			// Stop deceleration
 			if (self.__isDecelerating) {
-				z.core.Animate.stop(self.__isDecelerating);
+				zynga.Animate.stop(self.__isDecelerating);
 				self.__isDecelerating = false;
 			}
 
-			if (!self.__options.scrollingX) {
+			if (!self.options.scrollingX) {
 
 				left = self.__scrollLeft;
 
 			} else {
 
-				if (self.getPaging()) {
+				if (self.options.paging) {
 					left = Math.round(left / self.__clientWidth) * self.__clientWidth;
-				} else if (self.getSnapping()) {
+				} else if (self.options.snapping) {
 					left = Math.round(left / self.__snapWidth) * self.__snapWidth;
 				}
 
 			}
 
-			if (!self.__options.scrollingY) {
+			if (!self.options.scrollingY) {
 
 				top = self.__scrollTop;
 
 			} else {
 
-				if (self.getPaging()) {
+				if (self.options.paging) {
 					top = Math.round(top / self.__clientHeight) * self.__clientHeight;
-				} else if (self.getSnapping()) {
+				} else if (self.options.snapping) {
 					top = Math.round(top / self.__snapHeight) * self.__snapHeight;
 				}
 
@@ -543,13 +521,13 @@ if (!window.zynga) {
 
 			// Stop deceleration
 			if (self.__isDecelerating) {
-				z.core.Animate.stop(self.__isDecelerating);
+				zynga.Animate.stop(self.__isDecelerating);
 				self.__isDecelerating = false;
 			}
 
 			// Stop animation
 			if (self.__isAnimating) {
-				z.core.Animate.stop(self.__isAnimating);
+				zynga.Animate.stop(self.__isAnimating);
 				self.__isAnimating = false;
 			}
 
@@ -582,8 +560,8 @@ if (!window.zynga) {
 			self.__lastScale = 1;
 
 			// Reset locking flags
-			self.__enableScrollX = !isSingleTouch && self.__options.scrollingX;
-			self.__enableScrollY = !isSingleTouch && self.__options.scrollingY;
+			self.__enableScrollX = !isSingleTouch && self.options.scrollingX;
+			self.__enableScrollY = !isSingleTouch && self.options.scrollingY;
 
 			// Reset deceleration
 			self.__decelerationVelocityX = 0;
@@ -642,7 +620,7 @@ if (!window.zynga) {
 				var level = self.__zoomLevel;
 
 				// Work with scaling
-				if (scale != null && self.getZooming()) {
+				if (scale != null && self.options.zooming) {
 
 					var oldLevel = level;
 
@@ -650,7 +628,7 @@ if (!window.zynga) {
 					level = level / self.__lastScale * scale;
 
 					// Limit level according to configuration
-					level = Math.max(Math.min(level, self.getMaxZoom()), self.getMinZoom());
+					level = Math.max(Math.min(level, self.options.maxZoom), self.options.minZoom);
 
 					// Only do further compution when change happened
 					if (oldLevel !== level) {
@@ -673,7 +651,7 @@ if (!window.zynga) {
 					if (scrollLeft > maxScrollLeft || scrollLeft < 0) {
 
 						// Slow down on the edges
-						if (self.getBouncing()) {
+						if (self.options.bouncing) {
 
 							scrollLeft += (moveX / 2);
 							self.__decelerationVelocityX /= 2;
@@ -699,7 +677,7 @@ if (!window.zynga) {
 					if (scrollTop > maxScrollTop || scrollTop < 0) {
 
 						// Slow down on the edges
-						if (self.getBouncing()) {
+						if (self.options.bouncing) {
 
 							scrollTop += (moveY / 2);
 							self.__decelerationVelocityY /= 2;
@@ -722,14 +700,14 @@ if (!window.zynga) {
 			// Otherwise figure out whether we are switching into dragging mode now.
 			} else {
 
-				var minimumTrackingForScroll = self.getLocking() ? (z.Capabilities.TOUCH_DEVICE ? 3 : 2)  : 0;
+				var minimumTrackingForScroll = self.options.locking ? 3 : 0;
 				var minimumTrackingForDrag = 5;
 
 				var distanceX = Math.abs(currentTouchLeft - self.__initialTouchLeft);
 				var distanceY = Math.abs(currentTouchTop - self.__initialTouchTop);
 
-				self.__enableScrollX = self.__options.scrollingX && distanceX >= minimumTrackingForScroll;
-				self.__enableScrollY = self.__options.scrollingY && distanceY >= minimumTrackingForScroll;
+				self.__enableScrollX = self.options.scrollingX && distanceX >= minimumTrackingForScroll;
+				self.__enableScrollY = self.options.scrollingY && distanceY >= minimumTrackingForScroll;
 
 				self.__isDragging = (self.__enableScrollX || self.__enableScrollY) && (distanceX >= minimumTrackingForDrag || distanceY >= minimumTrackingForDrag);
 
@@ -769,10 +747,10 @@ if (!window.zynga) {
 
 				// Start deceleration
 				// Verify that the last move detected was in some relevant time frame
-				if (self.__isSingleTouch && self.getDecelerating() && (timeStamp - self.__lastTouchMove) <= 100) {
+				if (self.__isSingleTouch && self.options.decelerating && (timeStamp - self.__lastTouchMove) <= 100) {
 
 					// How much velocity is required to start the deceleration
-					var minVelocityToStartDeceleration = self.getPaging() || self.getSnapping() ? 4 : 1;
+					var minVelocityToStartDeceleration = self.options.paging || self.options.snapping ? 4 : 1;
 
 					// Verify that we have enough velocity to start deceleration
 					if (Math.abs(self.__decelerationVelocityX) > minVelocityToStartDeceleration || Math.abs(self.__decelerationVelocityY) > minVelocityToStartDeceleration) {
@@ -816,11 +794,11 @@ if (!window.zynga) {
 			// Remember whether we had an animation, then we try to continue based on the current "drive" of the animation
 			var wasAnimating = self.__isAnimating;
 			if (wasAnimating) {
-				z.core.Animate.stop(wasAnimating);
+				zynga.Animate.stop(wasAnimating);
 				self.__isAnimating = false;
 			}
 
-			if (animate && self.getAnimating()) {
+			if (animate && self.options.animating) {
 
 				// Keep scheduled positions for scrollBy/zoomBy functionality
 				self.__scheduledLeft = left;
@@ -862,7 +840,7 @@ if (!window.zynga) {
 				};
 				
 				// When continuing based on previous animation we choose an ease-out animation instead of ease-in-out
-				self.__isAnimating = z.core.Animate.start(step, verify, completed, 250, wasAnimating ? easeOutCubic : easeInOutCubic);
+				self.__isAnimating = zynga.Animate.start(step, verify, completed, 250, wasAnimating ? easeOutCubic : easeInOutCubic);
 
 			} else {
 
@@ -909,7 +887,7 @@ if (!window.zynga) {
 
 			var self = this;
 
-			if (self.getPaging()) {
+			if (self.options.paging) {
 
 				var scrollLeft = Math.max(Math.min(self.__scrollLeft, self.__maxScrollLeft), 0);
 				var scrollTop = Math.max(Math.min(self.__scrollTop, self.__maxScrollTop), 0);
@@ -938,7 +916,7 @@ if (!window.zynga) {
 			};
 
 			// How much velocity is required to keep the deceleration running
-			var minVelocityToKeepDecelerating = self.getSnapping() ? 4 : 0.025;
+			var minVelocityToKeepDecelerating = self.options.snapping ? 4 : 0.025;
 
 			// Detect whether it's still worth to continue animating steps
 			// If we are already slow enough to not being user perceivable anymore, we stop the whole process here.
@@ -951,13 +929,13 @@ if (!window.zynga) {
 
 				self.__isDecelerating = false;
 
-				if (self.getSnapping()) {
+				if (self.options.snapping) {
 					self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
 				}
 			};
 
 			// Start animation and switch on flag
-			self.__isDecelerating = z.core.Animate.start(step, verify, completed);
+			self.__isDecelerating = zynga.Animate.start(step, verify, completed);
 
 		},
 
@@ -985,7 +963,7 @@ if (!window.zynga) {
 			// HARD LIMIT SCROLL POSITION FOR NON BOUNCING MODE
 			//
 
-			if (!self.getBouncing()) {
+			if (!self.options.bouncing) {
 
 				var scrollLeftFixed = Math.max(Math.min(self.__maxScrollLeft, scrollLeft), 0);
 				if (scrollLeftFixed !== scrollLeft) {
@@ -1023,7 +1001,7 @@ if (!window.zynga) {
 			//
 
 			// Slow down velocity on every iteration
-			if (!self.getPaging()) {
+			if (!self.options.paging) {
 
 				// This is the factor applied to every iteration of the animation
 				// to slow down the process. This should emulate natural behavior where
@@ -1040,7 +1018,7 @@ if (!window.zynga) {
 			// BOUNCING SUPPORT
 			//
 
-			if (self.getBouncing()) {
+			if (self.options.bouncing) {
 
 				var scrollOutsideX = 0;
 				var scrollOutsideY = 0;
