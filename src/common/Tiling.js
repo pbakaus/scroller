@@ -11,32 +11,32 @@ if (!window.zynga) {
 }
 
 /**
- * Helper class for doing cell distribution and paint callbacks on a predefined area when
+ * Helper class for doing tile distribution and paint callbacks on a predefined area when
  * location to render is being modified.
  */
-zynga.CellDistribution = function() {
-	
+zynga.Tiling = function() {
+
 };
 
 
 /**
- * This method is required to being called every time the cell, outer or inner dimensions are being modified.
+ * This method is required to being called every time the tile, outer or inner dimensions are being modified.
  *
  * @param clientWidth {Number} Inner width of container
  * @param clientHeight {Number} Inner height of container
  * @param contentWidth {Number} Outer width of content
  * @param contentHeight {Number} Outer height of content
- * @param cellWidth {Number} Width of each cell to render
- * @param cellHeight {Number} Height of each cell to render
+ * @param tileWidth {Number} Width of each tile to render
+ * @param tileHeight {Number} Height of each tile to render
  */
-zynga.CellDistribution.prototype.setup = function(clientWidth, clientHeight, contentWidth, contentHeight, cellWidth, cellHeight) {
+zynga.Tiling.prototype.setup = function(clientWidth, clientHeight, contentWidth, contentHeight, tileWidth, tileHeight) {
 
 	this.__clientWidth = clientWidth;
 	this.__clientHeight = clientHeight;
 	this.__contentWidth = contentWidth;
 	this.__contentHeight = contentHeight;
-	this.__cellWidth = cellWidth;
-	this.__cellHeight = cellHeight;
+	this.__tileWidth = tileWidth;
+	this.__tileHeight = tileHeight;
 
 };
 
@@ -48,54 +48,54 @@ zynga.CellDistribution.prototype.setup = function(clientWidth, clientHeight, con
  * @param left {Number} Left position to render
  * @param top {Number} Top position to render
  * @param zoom {Number} Current zoom level (should be applied to `left` and `top` already)
- * @param paint {Function} Callback method for every cell to paint.
+ * @param paint {Function} Callback method for every tile to paint.
  */
-zynga.CellDistribution.prototype.render = function(left, top, zoom, paint) {
+zynga.Tiling.prototype.render = function(left, top, zoom, paint) {
 
 	var clientHeight = this.__clientHeight;
 	var clientWidth = this.__clientWidth;
 
 	// Respect zooming
-	var cellHeight = this.__cellHeight * zoom;
-	var cellWidth = this.__cellWidth * zoom;
+	var tileHeight = this.__tileHeight * zoom;
+	var tileWidth = this.__tileWidth * zoom;
 
 	// Compute starting rows/columns and support out of range scroll positions
-	var startRow = Math.max(Math.floor(top / cellHeight), 0);
-	var startCol = Math.max(Math.floor(left / cellWidth), 0);
+	var startRow = Math.max(Math.floor(top / tileHeight), 0);
+	var startCol = Math.max(Math.floor(left / tileWidth), 0);
 
 	// Compute maximum rows/columns to render for content size
-	var maxRows = (this.__contentHeight * zoom) / cellHeight;
-	var maxCols = (this.__contentWidth * zoom) / cellWidth;
+	var maxRows = (this.__contentHeight * zoom) / tileHeight;
+	var maxCols = (this.__contentWidth * zoom) / tileWidth;
 
 	// Compute initial render offsets
-	// 1. Positive scroll position: We match the starting rows/cell first so we
-	//    just need to take care that the half-visible cell is fully rendered
+	// 1. Positive scroll position: We match the starting rows/tile first so we
+	//    just need to take care that the half-visible tile is fully rendered
 	//    and placed partly outside.
 	// 2. Negative scroll position: We shift the whole render context
-	//    (ignoring the cell dimensions) and effectively reduce the render
+	//    (ignoring the tile dimensions) and effectively reduce the render
 	//    dimensions by the scroll amount.
-	var startTop = top >= 0 ? -top % cellHeight : -top;
-	var startLeft = left >= 0 ? -left % cellWidth : -left;
+	var startTop = top >= 0 ? -top % tileHeight : -top;
+	var startLeft = left >= 0 ? -left % tileWidth : -left;
 
 	// Compute number of rows to render
-	var rows = Math.floor(clientHeight / cellHeight);
+	var rows = Math.floor(clientHeight / tileHeight);
 
-	if ((top % cellHeight) > 0) {
+	if ((top % tileHeight) > 0) {
 		rows += 1;
 	}
 
-	if ((startTop + (rows * cellHeight)) < clientHeight) {
+	if ((startTop + (rows * tileHeight)) < clientHeight) {
 		rows += 1;
 	}
 
 	// Compute number of columns to render
-	var cols = Math.floor(clientWidth / cellWidth);
+	var cols = Math.floor(clientWidth / tileWidth);
 
-	if ((left % cellWidth) > 0) {
+	if ((left % tileWidth) > 0) {
 		cols += 1;
 	}
 
-	if ((startLeft + (cols * cellWidth)) < clientWidth) {
+	if ((startLeft + (cols * tileWidth)) < clientWidth) {
 		cols += 1;
 	}
 
@@ -110,12 +110,12 @@ zynga.CellDistribution.prototype.render = function(left, top, zoom, paint) {
 	// Render new squares
 	for (var row = startRow; row < (rows + startRow); row++) {
 		for (var col = startCol; col < (cols + startCol); col++) {
-			paint(row, col, currentLeft, currentTop, cellWidth, cellHeight, zoom);
-			currentLeft += cellWidth;
+			paint(row, col, currentLeft, currentTop, tileWidth, tileHeight, zoom);
+			currentLeft += tileWidth;
 		}
 
 		currentLeft = startLeft;
-		currentTop += cellHeight;
+		currentTop += tileHeight;
 	}
 	
 };
