@@ -20,6 +20,7 @@
 		position: absolute;
 		top: 20px;
 		left: 20px;
+		overflow: hidden;
 	
 		-webkit-user-select: none;
 		-moz-user-select: none;
@@ -83,14 +84,21 @@
 	}
 	content.appendChild(frag);
 
-	// Scroll Callback
-	var callback = function(left, top) {
-		zynga.Style.set(content, "transform", "translateX(" + (-left) + "px) translateY(" + (-top) + "px)");
-	};
+	// DOM based rendering (Use 3D when available)
+	var render;
+	if (zynga.common.Style.property("perspective")) {
+		render = function(left, top, zoom) {
+			zynga.common.Style.set(content, "transform", "translate3d(" + (-left) + "px," + (-top) + "px,0) scale(" + zoom + ")");
+		};
+	} else {
+		render = function(left, top, zoom) {
+			zynga.common.Style.set(content, "transform", "translate(" + (-left) + "px," + (-top) + "px) scale(" + zoom + ")");
+		};
+	}
 
 
 	// Initialize Scroller
-	var scroller = new zynga.Scroller(callback, {
+	var scroller = new zynga.Scroller(render, {
 		scrollingX: false,
 		paging: true
 	});

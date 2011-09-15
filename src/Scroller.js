@@ -27,6 +27,7 @@ if (!window.zynga) {
 		this.__callback = callback;
 
 		this.options = {
+			
 			/** Enable scrolling on x-axis */
 			scrollingX: true,
 
@@ -59,6 +60,7 @@ if (!window.zynga) {
 
 			/** Maximum zoom level */
 			maxZoom: 3
+			
 		};
 
 		for (var key in options) {
