@@ -72,13 +72,13 @@
 
 		// DOM based rendering (Use 3D when available)
 		var render;
-		if (zynga.Style.property("perspective")) {
+		if (zynga.common.Style.property("perspective")) {
 			render = function(left, top, zoom) {
-				zynga.Style.set(content, "transform", "translate3d(" + (-left) + "px," + (-top) + "px,0) scale(" + zoom + ")");
+				zynga.common.Style.set(content, "transform", "translate3d(" + (-left) + "px," + (-top) + "px,0) scale(" + zoom + ")");
 			};
 		} else {
 			render = function(left, top, zoom) {
-				zynga.Style.set(content, "transform", "translate(" + (-left) + "px," + (-top) + "px) scale(" + zoom + ")");
+				zynga.common.Style.set(content, "transform", "translate(" + (-left) + "px," + (-top) + "px) scale(" + zoom + ")");
 			};
 		}
 
