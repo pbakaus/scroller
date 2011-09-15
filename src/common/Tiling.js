@@ -10,11 +10,15 @@ if (!window.zynga) {
 	zynga = {};
 }
 
+if (!zynga.common) {
+	zynga.common = {};
+}
+
 /**
  * Helper class for doing tile distribution and paint callbacks on a predefined area when
  * location to render is being modified.
  */
-zynga.Tiling = function() {
+zynga.common.Tiling = function() {
 
 };
 
@@ -29,7 +33,7 @@ zynga.Tiling = function() {
  * @param tileWidth {Number} Width of each tile to render
  * @param tileHeight {Number} Height of each tile to render
  */
-zynga.Tiling.prototype.setup = function(clientWidth, clientHeight, contentWidth, contentHeight, tileWidth, tileHeight) {
+zynga.common.Tiling.prototype.setup = function(clientWidth, clientHeight, contentWidth, contentHeight, tileWidth, tileHeight) {
 
 	this.__clientWidth = clientWidth;
 	this.__clientHeight = clientHeight;
@@ -50,7 +54,7 @@ zynga.Tiling.prototype.setup = function(clientWidth, clientHeight, contentWidth,
  * @param zoom {Number} Current zoom level (should be applied to `left` and `top` already)
  * @param paint {Function} Callback method for every tile to paint.
  */
-zynga.Tiling.prototype.render = function(left, top, zoom, paint) {
+zynga.common.Tiling.prototype.render = function(left, top, zoom, paint) {
 
 	var clientHeight = this.__clientHeight;
 	var clientWidth = this.__clientWidth;

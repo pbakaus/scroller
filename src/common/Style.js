@@ -7,15 +7,20 @@
 	if (!window.zynga) {
 		zynga = {};
 	}
+	
 
+	if (!zynga.common) {
+		zynga.common = {};
+	}
+	
 	var vendorPrefix = {
 		trident: 'ms',
 		gecko: 'Moz',
 		webkit: 'Webkit',
 		presto: 'O'
-	}[zynga.Engine.NAME];
+	}[zynga.common.Engine.NAME];
 
-	zynga.Style = {
+	zynga.common.Style = {
 
 		/** {Map} Caches CSS property names to browser specific names. Can be used as a fast lookup alternative to property(name). */
 		names: nameCache,

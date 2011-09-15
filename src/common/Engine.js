@@ -16,7 +16,11 @@ if (!window.zynga) {
 	zynga = {};
 }
 
-zynga.Engine = {
+if (!zynga.common) {
+	zynga.common = {};
+}
+
+zynga.common.Engine = {
 	
 	NAME : (function(global) {
 

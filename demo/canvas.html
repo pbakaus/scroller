@@ -46,7 +46,7 @@
 	<script type="text/javascript">
 
 	var context = content.getContext('2d');
-	var distribution = new z.core.CellDistribution;
+	var tiling = new zynga.common.Tiling;
 
 
 	// Canvas renderer
@@ -59,9 +59,9 @@
 		// Full clearing
 		context.clearRect(0, 0, clientWidth, clientHeight);
 
-		// Use cell distribution
-		distribution.setup(clientWidth, clientHeight, contentWidth, contentHeight, cellWidth, cellHeight);
-		distribution.render(left, top, zoom, paint);
+		// Use tiling
+		tiling.setup(clientWidth, clientHeight, contentWidth, contentHeight, cellWidth, cellHeight);
+		tiling.render(left, top, zoom, paint);
 	};
 	
 	
