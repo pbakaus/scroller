@@ -68,6 +68,28 @@ if (!window.zynga) {
 	};
 	
 	
+	// Easing Equations (c) 2003 Robert Penner, all rights reserved.
+	// Open source under the BSD License.
+	
+	/**
+	 * @param pos {Number} position between 0 (start of effect) and 1 (end of effect)
+	**/
+	var easeOutCubic = function(pos) {
+		return (Math.pow((pos - 1), 3) + 1);
+	};
+
+	/**
+	 * @param pos {Number} position between 0 (start of effect) and 1 (end of effect)
+	**/
+	var easeInOutCubic = function(pos) {
+		if ((pos /= 0.5) < 1) {
+			return 0.5 * Math.pow(pos, 3);
+		}
+
+		return 0.5 * (Math.pow((pos - 2), 3) + 2);
+	};
+	
+	
 	var members = {
 
 		/*
@@ -838,10 +860,9 @@ if (!window.zynga) {
 						self.__isAnimating = false;
 					}
 				};
-
+				
 				// When continuing based on previous animation we choose an ease-out animation instead of ease-in-out
-				var easingMethod = wasAnimating ? z.core.Easing.easeOutCubic : z.core.Easing.easeInOutCubic;
-				self.__isAnimating = z.core.Animate.start(step, verify, completed, 250, easingMethod);
+				self.__isAnimating = z.core.Animate.start(step, verify, completed, 250, wasAnimating ? easeOutCubic : easeInOutCubic);
 
 			} else {
 
