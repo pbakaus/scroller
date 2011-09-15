@@ -6,16 +6,6 @@
 ==================================================================================================
 */
 
-/**
- * Generic animation class with support for dropped frames both optional easing and duration.
- *
- * Optional duration is useful when the lifetime is defined by another condition than time
- * e.g. speed of an animating object, etc.
- *
- * Dropped frame logic allows to keep using the same updater logic independent from the actual
- * rendering. This eases a lot of cases where it might be pretty complex to break down a state
- * based on the pure time difference.
- */
 (function(global) {
 	
 	var time = Date.now || function() { 
@@ -117,6 +107,17 @@
 		zynga = {};
 	}
 
+
+	/**
+	 * Generic animation class with support for dropped frames both optional easing and duration.
+	 *
+	 * Optional duration is useful when the lifetime is defined by another condition than time
+	 * e.g. speed of an animating object, etc.
+	 *
+	 * Dropped frame logic allows to keep using the same updater logic independent from the actual
+	 * rendering. This eases a lot of cases where it might be pretty complex to figure out the state
+	 * on the pure time difference.
+	 */
 	zynga.Animate = {
 
 		/**

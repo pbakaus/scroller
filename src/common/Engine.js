@@ -20,6 +20,9 @@ if (!zynga.common) {
 	zynga.common = {};
 }
 
+/**
+ * Basic engine detection. Useful for vendor extensions etc. Do not rely on user agent string.
+ */
 zynga.common.Engine = {
 	
 	NAME : (function(global) {

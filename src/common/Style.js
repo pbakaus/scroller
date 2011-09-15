@@ -20,6 +20,14 @@
 		presto: 'O'
 	}[zynga.common.Engine.NAME];
 
+
+	/**
+	 * Generic style API for quering and modifiying style properties on 
+	 * DOM elements.
+	 * 
+	 * Basic automatic fixing for cross browser differences through 
+	 * vendor extensions is integrated (property name only).
+	 */
 	zynga.common.Style = {
 
 		/** {Map} Caches CSS property names to browser specific names. Can be used as a fast lookup alternative to property(name). */
@@ -70,7 +78,7 @@
 		 * @param elem {Element} DOM element to modify
 		 * @param name {String|Map} Style name or Map of styles/values to apply
 		 * @param value {String} Style value
-		 * @return {Class} Returns the class for further modifications
+		 * @return {Module} Returns the module for further modifications
 		 */
 		set: function(elem, name, value) {
 			var style = elem.style;
