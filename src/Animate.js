@@ -22,6 +22,11 @@
 		return +new Date(); 
 	};
 	
+	var desiredFrames = 60;
+	var millisecondsPerSecond = 1000;
+	
+	// Polyfill missing requestAnimationFrame
+	
 	if (global.requestAnimationFrame) {
 
 		// pass
@@ -50,7 +55,6 @@
 		} else {
 
 			// Custom implementation
-			var TARGET_FPS = 60;
 			var requests = {};
 			var rafHandle = 1;
 			var timeoutHandle = null;
@@ -84,7 +88,7 @@
 							currentRequests[keys[i]](now);
 						}
 
-					}, 1000 / TARGET_FPS);
+					}, millisecondsPerSecond / desiredFrames);
 
 				}
 
@@ -102,17 +106,13 @@
 				clearTimeout(timeoutHandle);
 				timeoutHandle = null;
 			};
-
 		}
-		
 	}
 
 
-	var desiredFrames = 60;
-	var millisecondsPerSecond = 1000;
 	var running = {};
 	var counter = 1;
-	
+
 	if (!window.zynga) {
 		zynga = {};
 	}
