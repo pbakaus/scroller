@@ -52,9 +52,9 @@ scrollerObj.setDimensions(1000, 1000, 3000, 3000);
 Public API
 ----------
 
-* Setup scroll object dimensions.
+* Setup scroll object dimensions.\
   `scrollerObj.setDimensions(clientWidth, clientHeight, contentWidth, contentHeight);`
-* Setup scroll object position (in relation to the document)
+* Setup scroll object position (in relation to the document)\
   `scrollerObj.setPosition(clientLeft, clientTop);`
 * XXX
 
