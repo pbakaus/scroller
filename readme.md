@@ -17,12 +17,42 @@ Features
 * Locking (locks drag direction based on initial movement)
 * Configurable regarding whether animation should be used.
 
-Animation
----------
+Options
+-------
 
-The Zynga Scroller uses our animation class. This class uses requestAnimationFrame (or an automatic polyfill).
+These are the available options with their defaults. Options can be modified using the second constructor parameter or during runtime by modification of `scrollerObj.options.optionName`.
 
-Is supports the following features:
+* scrollingX = `true`
+* scrollingY = `true`
+* animating = `true`
+* bouncing = `true`
+* locking = `true`
+* paging = `false`
+* snapping = `false`
+* zooming = `false`
+* minZoom = `0.5`
+* maxZoom = `3`
+
+Usage
+-----
+
+```js
+Scroller(function(left, top, zoom) {
+	// apply coordinates/zooming
+}, {
+	scrollingY: false
+});
+```
+
+
+
+Zynga Animate
+=============
+
+The Zynga Scroller uses our Zynga Animate class. This class uses requestAnimationFrame (or an automatic polyfill).
+
+Features
+--------
  
 * Automatic dropped frame handling
 * Frames per second are computed (and returned on complete event). Target frame rate is 60.
@@ -33,3 +63,7 @@ Is supports the following features:
   * completion (with reached frame rate and info about whether the animation was completed)
   * validation to continue animation (useful for endless animations)
 * The animation can be cancelled by the ID returned by calling start()
+
+Usage
+-----
+
