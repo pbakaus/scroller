@@ -52,11 +52,19 @@ scrollerObj.setDimensions(1000, 1000, 3000, 3000);
 Public API
 ----------
 
-* Setup scroll object dimensions.\
+* Setup scroll object dimensions.  
   `scrollerObj.setDimensions(clientWidth, clientHeight, contentWidth, contentHeight);`
-* Setup scroll object position (in relation to the document)\
+* Setup scroll object position (in relation to the document)  
   `scrollerObj.setPosition(clientLeft, clientTop);`
-* XXX
+* Setup snap dimensions (only needed when `snapping` is enabled)  
+  `scrollerObj.setSnapSize(width, height);`
+* Get current scroll positions and zooming.  
+  `scrollerObj.getValues() => { left, top, zoom }`
+* Zoom to a specific level. Origin defines the pixel position where zooming should centering to. Defaults to center of scrollerObj.  
+  `scrollerObj.zoomTo(level, animate ? false, originLeft ? center, originTop ? center)`
+* Zoom by a given amount. Same as `zoomTo` but by a relative value.
+  `scrollerObj.zoomBy(factor, animate ? false, originLeft ? center, originTop ? center);`
+ 
 
 
 
