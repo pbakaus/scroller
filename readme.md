@@ -113,7 +113,13 @@ Usage
 -----
 
 * Start an animation:  
-  `zynga.Animate.start(stepCallback, verifyCallback, completedCallback, duration, easingMethod, root) => animationId`
+  `zynga.Animate.start(stepCallback, verifyCallback?, completedCallback?, duration?, easingMethod?, root?) => animationId`
+  * stepCallback: Executed on every step
+  * verifyCallback(id): Executed before each animation step
+  * completedCallback(fps, id, finished): Executed when animation is completed
+  * duration: Milliseconds to run the animation
+  * easingMethod: Function reference to use for easing
+  * root: Root element of animation
 * Stop an animation:  
   `zynga.Animate.stop(animationId)`
 * Querying whether an animation is running:  
