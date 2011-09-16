@@ -74,10 +74,10 @@ Event API
 
 This API part can be used to pass event data to the `scrollerObj` to react on user actions. 
 
-* doMouseZoom(wheelDelta, timeStamp, pageX, pageY);
-* doTouchStart(touches, timeStamp)
-* doTouchMove(touches, timeStamp, scale)
-* doTouchEnd(touches, timeStamp)
+* `doMouseZoom(wheelDelta, timeStamp, pageX, pageY)`
+* `doTouchStart(touches, timeStamp)`
+* `doTouchMove(touches, timeStamp, scale)`
+* `doTouchEnd(touches, timeStamp)`
 
 For a touch device just pass the native `touches` event data to the doTouch* methods. On mouse systems one can emulate this data using an array with just one element:
 
