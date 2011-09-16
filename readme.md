@@ -62,10 +62,33 @@ Public API
   `scrollerObj.getValues() => { left, top, zoom }`
 * Zoom to a specific level. Origin defines the pixel position where zooming should centering to. Defaults to center of scrollerObj.  
   `scrollerObj.zoomTo(level, animate ? false, originLeft ? center, originTop ? center)`
-* Zoom by a given amount. Same as `zoomTo` but by a relative value.
+* Zoom by a given amount. Same as `zoomTo` but by a relative value.  
   `scrollerObj.zoomBy(factor, animate ? false, originLeft ? center, originTop ? center);`
- 
+* Scroll to a specific position.  
+  `scrollerObj.scrollTo(left, top, animate ? false);`
+* Scroll by the given amount.  
+  `scrollerObj.scrollBy(leftOffset, topOffset, animate ? false);`
 
+Event API
+---------
+
+This API part can be used to pass event data to the `scrollerObj` to react on user actions. 
+
+* doMouseZoom(wheelDelta, timeStamp, pageX, pageY);
+* doTouchStart(touches, timeStamp)
+* doTouchMove(touches, timeStamp, scale)
+* doTouchEnd(touches, timeStamp)
+
+For a touch device just pass the native `touches` event data to the doTouch* methods. On mouse systems one can emulate this data using an array with just one element:
+
+* Touch device: `doTouchMove(e.touches, e.timeStamp);`
+* Mouse device: `doTouchMove([e], e.timeStamp);`
+
+To zoom using the `mousewheel` event just pass the data like this:
+
+* `doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);`
+
+For more information about this please take a look at the demos.
 
 
 Zynga Animate
@@ -89,3 +112,9 @@ Features
 Usage
 -----
 
+* Start an animation:  
+  `zynga.Animate.start(stepCallback, verifyCallback, completedCallback, duration, easingMethod, root) => animationId`
+* Stop an animation:  
+  `zynga.Animate.stop(animationId)`
+* Querying whether an animation is running:  
+  `zynga.Animate.isRunning(animationId) => bool`
