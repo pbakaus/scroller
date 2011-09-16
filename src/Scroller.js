@@ -537,8 +537,8 @@ if (!window.zynga) {
 				currentTouchLeft = touches[0].pageX;
 				currentTouchTop = touches[0].pageY;
 			} else {
-				currentTouchLeft = (Math.abs(touches[0].pageX + touches[1].pageX) - (self.__clientLeft * 2)) / 2;
-				currentTouchTop = (Math.abs(touches[0].pageY + touches[1].pageY) - (self.__clientTop * 2)) / 2;
+				currentTouchLeft = Math.abs(touches[0].pageX + touches[1].pageX) / 2;
+				currentTouchTop = Math.abs(touches[0].pageY + touches[1].pageY) / 2;
 			}
 
 			// Store initial positions
@@ -594,8 +594,8 @@ if (!window.zynga) {
 
 			// Compute move based around of center of fingers
 			if (touches.length === 2) {
-				currentTouchLeft = (Math.abs(touches[0].pageX + touches[1].pageX) - (self.__clientLeft * 2)) / 2;
-				currentTouchTop = (Math.abs(touches[0].pageY + touches[1].pageY) - (self.__clientTop * 2)) / 2;
+				currentTouchLeft = Math.abs(touches[0].pageX + touches[1].pageX) / 2;
+				currentTouchTop = Math.abs(touches[0].pageY + touches[1].pageY) / 2;
 			} else {
 				currentTouchLeft = touches[0].pageX;
 				currentTouchTop = touches[0].pageY;
@@ -632,9 +632,13 @@ if (!window.zynga) {
 					// Only do further compution when change happened
 					if (oldLevel !== level) {
 
+						// Compute relative event position to container
+						var currentTouchLeftRel = currentTouchLeft - self.__clientLeft;
+						var currentTouchTopRel = currentTouchTop - self.__clientTop;
+						
 						// Recompute left and top coordinates based on new zoom level
-						scrollLeft = ((currentTouchLeft + scrollLeft) * level / oldLevel) - currentTouchLeft;
-						scrollTop = ((currentTouchTop + scrollTop) * level / oldLevel) - currentTouchTop;
+						scrollLeft = ((currentTouchLeftRel + scrollLeft) * level / oldLevel) - currentTouchLeftRel;
+						scrollTop = ((currentTouchTopRel + scrollTop) * level / oldLevel) - currentTouchTopRel;
 
 						// Recompute max scroll values
 						self.__computeScrollMax(level);

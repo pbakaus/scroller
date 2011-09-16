@@ -54,7 +54,7 @@ Public API
 
 * Setup scroll object dimensions.  
   `scrollerObj.setDimensions(clientWidth, clientHeight, contentWidth, contentHeight);`
-* Setup scroll object position (in relation to the document)  
+* Setup scroll object position (in relation to the document). Required for zooming to event position (mousewheel, touchmove).  
   `scrollerObj.setPosition(clientLeft, clientTop);`
 * Setup snap dimensions (only needed when `snapping` is enabled)  
   `scrollerObj.setSnapSize(width, height);`
