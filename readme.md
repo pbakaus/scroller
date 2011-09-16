@@ -1,11 +1,12 @@
-Event Scroller
+Zynga Scroller
 ==============
 
-A pure logic component for scrolling/zooming. Independent of any specific kind of rendering or event system. 
+A pure logic component for scrolling/zooming. It is independent of any specific kind of rendering or event system. 
 
 The "demo" folder contains examples for usage with DOM and Canvas renderings which works both, on mouse and touch driven devices.
 
-The component supports advanced features like:
+Features
+--------
 
 * Customizable enabling/disabling of scrolling for x-axis and y-axis
 * Deceleration (decelerates when user action ends in motion)
@@ -16,7 +17,12 @@ The component supports advanced features like:
 * Locking (locks drag direction based on initial movement)
 * Configurable regarding whether animation should be used.
 
-It uses our acceleration class which is based on requestAnimationFrame (or an automatic polyfill) with:
+Animation
+---------
+
+The Zynga Scroller uses our animation class. This class uses requestAnimationFrame (or an automatic polyfill).
+
+Is supports the following features:
  
 * Automatic dropped frame handling
 * Frames per second are computed (and returned on complete event). Target frame rate is 60.
