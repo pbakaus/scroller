@@ -36,13 +36,27 @@ These are the available options with their defaults. Options can be modified usi
 Usage
 -----
 
+Callback (first parameter of constructor) is required. Options are optional. Defaults are listed above. The created instance must have proper dimensions using a `setDimensions()` call. Afterwards you can pass in event data or manually control scrolling/zooming via the API.
+
 ```js
-Scroller(function(left, top, zoom) {
+var scrollerObj = Scroller(function(left, top, zoom) {
 	// apply coordinates/zooming
 }, {
 	scrollingY: false
 });
+
+// Configure to have an outer dimension of 1000px and inner dimension of 3000px
+scrollerObj.setDimensions(1000, 1000, 3000, 3000);
 ```
+
+Public API
+----------
+
+* Setup scroll object dimensions.
+  `scrollerObj.setDimensions(clientWidth, clientHeight, contentWidth, contentHeight);`
+* Setup scroll object position (in relation to the document)
+  `scrollerObj.setPosition(clientLeft, clientTop);`
+* XXX
 
 
 
