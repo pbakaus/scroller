@@ -919,7 +919,7 @@ if (!window.zynga) {
 			};
 
 			// How much velocity is required to keep the deceleration running
-			var minVelocityToKeepDecelerating = self.options.snapping ? 4 : 0.025;
+			var minVelocityToKeepDecelerating = self.options.snapping ? 4 : 0.1;
 
 			// Detect whether it's still worth to continue animating steps
 			// If we are already slow enough to not being user perceivable anymore, we stop the whole process here.
@@ -932,9 +932,8 @@ if (!window.zynga) {
 
 				self.__isDecelerating = false;
 
-				if (self.options.snapping) {
-					self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
-				}
+				// Animate to grid when snapping is active, otherwise just fix out-of-boundary positions
+				self.scrollTo(self.__scrollLeft, self.__scrollTop, self.options.snapping);
 			};
 
 			// Start animation and switch on flag
