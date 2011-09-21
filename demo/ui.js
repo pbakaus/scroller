@@ -79,7 +79,10 @@ document.querySelector("#settings #scrollByLeft").addEventListener("click", func
 if ('ontouchstart' in window) {
 
 	container.addEventListener("touchstart", function(e) {
-		var target = e.target;
+		// Don't react if initial down happens on a form element
+		if (e.target.tagName.match(/input|textarea|select/i)) {
+			return;
+		}
 
 		scroller.doTouchStart(e.touches, e.timeStamp);
 		e.preventDefault();
@@ -102,6 +105,10 @@ if ('ontouchstart' in window) {
 	var mousedown = false;
 
 	container.addEventListener("mousedown", function(e) {
+		if (e.target.tagName.match(/input|textarea|select/i)) {
+			return;
+		}
+		
 		scroller.doTouchStart([{
 			pageX: e.pageX,
 			pageY: e.pageY
