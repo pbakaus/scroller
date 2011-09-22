@@ -89,38 +89,3 @@ To zoom using the `mousewheel` event just pass the data like this:
 * `doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);`
 
 For more information about this please take a look at the demos.
-
-
-Zynga Animate
-=============
-
-The Zynga Scroller uses our Zynga Animate class. This class uses requestAnimationFrame (or an automatic polyfill).
-
-Features
---------
- 
-* Automatic dropped frame handling
-* Frames per second are computed (and returned on complete event). Target frame rate is 60.
-* Animations with duration or infinite animations
-* Custom easing methods are supported
-* Callbacks for:
-  * each step (containing the current percent position)
-  * completion (with reached frame rate and info about whether the animation was completed)
-  * validation to continue animation (useful for endless animations)
-* The animation can be cancelled by the ID returned by calling start()
-
-Usage
------
-
-* Start an animation:  
-  `zynga.Animate.start(stepCallback, verifyCallback?, completedCallback?, duration?, easingMethod?, root?) => animationId`
-  * stepCallback: Executed on every step
-  * verifyCallback(id): Executed before each animation step
-  * completedCallback(fps, id, finished): Executed when animation is completed
-  * duration: Milliseconds to run the animation
-  * easingMethod: Function reference to use for easing
-  * root: Root element of animation
-* Stop an animation:  
-  `zynga.Animate.stop(animationId)`
-* Querying whether an animation is running:  
-  `zynga.Animate.isRunning(animationId) => bool`

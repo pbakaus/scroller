@@ -13,16 +13,13 @@
 ==================================================================================================
 */
 
-if (!window.zynga) {
-	zynga = {};
-}
-
+var Scroller;
 (function() {
 	
 	/**
 	 * A pure logic 'component' for 'virtual' scrolling/zooming.
 	 */
-	zynga.Scroller = function(callback, options) {
+	Scroller = function(callback, options) {
 
 		this.__callback = callback;
 
@@ -1064,7 +1061,7 @@ if (!window.zynga) {
 	
 	// Copy over members to prototype
 	for (var key in members) {
-		zynga.Scroller.prototype[key] = members[key];
+		Scroller.prototype[key] = members[key];
 	}
 		
 })();

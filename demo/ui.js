@@ -11,7 +11,7 @@ var clientWidth = 0;
 var clientHeight = 0;
 
 // Initialize Scroller
-this.scroller = new zynga.Scroller(function(left, top, zoom) {
+this.scroller = new Scroller(function(left, top, zoom) {
 	render(left, top, zoom);
 
 	document.getElementById("scrollLeft").value = left.toFixed(2);
