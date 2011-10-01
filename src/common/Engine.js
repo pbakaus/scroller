@@ -1,17 +1,11 @@
-/* 
-==================================================================================================
-  
-	Copyright Zynga Inc
-
---------------------------------------------------------------------------------------------------
-
-	Based on the work of:
-	Jasy JavaScript Tooling Framework (http://github.com/wpbasti/jasy)
-	License: MIT + Apache (V2)
-
-==================================================================================================
-*/
-
+/*
+ * Scroller
+ * http://github.com/zynga/scroller
+ *
+ * Copyright 2011, Zynga Inc.
+ * Licensed under the MIT License.
+ * https://raw.github.com/zynga/scroller/master/MIT-LICENSE.txt
+ */
 if (!window.zynga) {
 	zynga = {};
 }

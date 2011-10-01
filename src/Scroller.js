@@ -1,18 +1,16 @@
-/* 
-==================================================================================================
-
-	Copyright Zynga Inc
-
---------------------------------------------------------------------------------------------------
-
-	Based on the work of:
-	Unify Project (unify-project.org)
-	License: MIT + Apache (V2)
-	Copyright: 2009-2011 Deutsche Telekom AG, Germany, http://telekom.com
-
-==================================================================================================
-*/
-
+/*
+ * Scroller
+ * http://github.com/zynga/scroller
+ *
+ * Copyright 2011, Zynga Inc.
+ * Licensed under the MIT License.
+ * https://raw.github.com/zynga/scroller/master/MIT-LICENSE.txt
+ *
+ * Based on the work of: Unify Project (unify-project.org)
+ * http://unify-project.org
+ * Copyright 2011, Deutsche Telekom AG
+ * License: MIT + Apache (V2)
+ */
 var Scroller;
 (function() {
 	

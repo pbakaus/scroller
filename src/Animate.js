@@ -1,11 +1,11 @@
-/* 
-==================================================================================================
-
-  Copyright Zynga Inc
-
-==================================================================================================
-*/
-
+/*
+ * Scroller
+ * http://github.com/zynga/scroller
+ *
+ * Copyright 2011, Zynga Inc.
+ * Licensed under the MIT License.
+ * https://raw.github.com/zynga/scroller/master/MIT-LICENSE.txt
+ */
 (function(global) {
 	
 	var time = Date.now || function() { 
