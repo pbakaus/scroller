@@ -89,3 +89,8 @@ To zoom using the `mousewheel` event just pass the data like this:
 * `doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);`
 
 For more information about this please take a look at the demos.
+
+License
+-------
+
+Zynga Scroller is released under both, the MIT and the Apache (V2) license.
