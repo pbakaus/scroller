@@ -37,7 +37,7 @@ test("Query values", function() {
 
 });
 
-test("Scrolling via API", function() {
+test("Scrolling", function() {
 
 	var scroller = new Scroller();
 	equal(typeof scroller, "object");	
@@ -52,7 +52,7 @@ test("Scrolling via API", function() {
 
 });
 
-test("Zooming via API", function() {
+test("Zooming", function() {
 
 	var scroller = new Scroller(null, {
 		zooming: true
@@ -67,7 +67,7 @@ test("Zooming via API", function() {
 
 });
 
-test("Zooming + Scrolling via API", function() {
+test("Zooming + Scrolling", function() {
 
 	var scroller = new Scroller(null, {
 		zooming: true
@@ -85,7 +85,7 @@ test("Zooming + Scrolling via API", function() {
 
 });
 
-test("Scrolling + Zooming via API", function() {
+test("Scrolling + Zooming", function() {
 
 	var scroller = new Scroller(null, {
 		zooming: true
@@ -103,7 +103,7 @@ test("Scrolling + Zooming via API", function() {
 
 });
 
-test("Scrolling + Zooming via API (Auto Origin)", function() {
+test("Scrolling + Zooming (Auto Origin)", function() {
 
 	var scroller = new Scroller(null, {
 		zooming: true
@@ -128,7 +128,7 @@ test("Scrolling + Zooming via API (Auto Origin)", function() {
 
 });
 
-test("Scrolling + Zooming + Scrolling via API", function() {
+test("Scrolling + Zooming + Scrolling", function() {
 
 	var scroller = new Scroller(null, {
 		zooming: true
@@ -168,7 +168,6 @@ test("Snapping", function() {
 	
 });
 
-
 test("Paging", function() {
 	
 	var scroller = new Scroller(null, {
@@ -188,3 +187,43 @@ test("Paging", function() {
 	equal(values.top, 1200);
 	
 });
+
+test("ZoomBy", function() {
+	
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	
+	scroller.zoomBy(1.5);
+	var values = scroller.getValues();
+	equal(values.zoom, 1.5);
+
+	scroller.zoomBy(1.2);
+	var values = scroller.getValues();
+	equal(values.zoom, 1.5 * 1.2);
+	
+});
+
+test("ScrollBy", function() {
+	
+	var scroller = new Scroller();
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	
+	scroller.scrollBy(200, 300);
+	var values = scroller.getValues();
+	equal(values.left, 200);
+	equal(values.top, 300);
+	
+	scroller.scrollBy(300, 400);
+	var values = scroller.getValues();
+	equal(values.left, 500);
+	equal(values.top, 700);
+	
+});
+
+
+
+
+
+
+
