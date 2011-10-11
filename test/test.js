@@ -249,6 +249,52 @@ test("Out Of Boundaries", function() {
 });
 
 
+test("Scroll Axis Limited", function() {
+	
+	var scroller = new Scroller(null, {
+		scrollingX: false
+	});
+	
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.scrollTo(300, 400);
+	var values = scroller.getValues();
+	equal(values.left, 0);
+	equal(values.top, 400);
+	
+	var scroller = new Scroller(null, {
+		scrollingY: false
+	});
+	
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.scrollTo(300, 400);
+	var values = scroller.getValues();
+	equal(values.left, 300);
+	equal(values.top, 0);	
+	
+});
+
+test("Zoom Limits", function() {
+	
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	
+	scroller.setDimensions(1000, 600, 5000, 5000);
+
+	scroller.zoomTo(2);
+	var values = scroller.getValues();
+	equal(values.zoom, 2);
+
+	scroller.zoomTo(20);
+	var values = scroller.getValues();
+	equal(values.zoom, 3);
+
+	scroller.zoomTo(0.1);
+	var values = scroller.getValues();
+	equal(values.zoom, 0.5);
+	
+});
+
 
 
 
