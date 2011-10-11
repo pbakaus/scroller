@@ -19,7 +19,7 @@ var Scroller;
 	 */
 	Scroller = function(callback, options) {
 
-		this.__callback = callback;
+		this.__callback = callback || new Function;
 
 		this.options = {
 			
