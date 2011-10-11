@@ -13,14 +13,18 @@ var clientHeight = 0;
 // Initialize Scroller
 this.scroller = new Scroller(function(left, top, zoom) {
 	render(left, top, zoom);
-
-	document.getElementById("scrollLeft").value = left.toFixed(2);
-	document.getElementById("scrollTop").value = top.toFixed(2);
-	document.getElementById("zoomLevel").value = zoom.toFixed(2);
+	
+	
+	// don't run those updates on iOS etc. as they're very CPU heavy. See http://paulbakaus.com/2011/10/10/scroller-vs-scrollability-deathmatch/ for details
+	if(!/android|iphone|ipad|webos/i.test(navigator.userAgent)) {
+		document.getElementById("scrollLeft").value = left.toFixed(2);
+		document.getElementById("scrollTop").value = top.toFixed(2);
+		document.getElementById("zoomLevel").value = zoom.toFixed(2);
+	}
+	
 }, {
 	zooming: true
 });
-
 
 var rect = container.getBoundingClientRect();
 scroller.setPosition(rect.left + container.clientLeft, rect.top + container.clientTop);
