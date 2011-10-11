@@ -1,4 +1,4 @@
-test("Basic Initialization", function() {
+test("Initialization", function() {
 	var scroller1 = new Scroller();
 	equal(typeof scroller1, "object");
 
@@ -37,7 +37,7 @@ test("Query values", function() {
 
 });
 
-test("Scrolling", function() {
+test("Scroll", function() {
 
 	var scroller = new Scroller();
 	equal(typeof scroller, "object");	
@@ -52,7 +52,7 @@ test("Scrolling", function() {
 
 });
 
-test("Zooming", function() {
+test("Zoom", function() {
 
 	var scroller = new Scroller(null, {
 		zooming: true
@@ -67,7 +67,7 @@ test("Zooming", function() {
 
 });
 
-test("Zooming + Scrolling", function() {
+test("Zoom + Scroll", function() {
 
 	var scroller = new Scroller(null, {
 		zooming: true
@@ -85,7 +85,7 @@ test("Zooming + Scrolling", function() {
 
 });
 
-test("Scrolling + Zooming", function() {
+test("Scroll + Zoom", function() {
 
 	var scroller = new Scroller(null, {
 		zooming: true
@@ -103,7 +103,7 @@ test("Scrolling + Zooming", function() {
 
 });
 
-test("Scrolling + Zooming (Auto Origin)", function() {
+test("Scroll + Zoom (Auto Origin)", function() {
 
 	var scroller = new Scroller(null, {
 		zooming: true
@@ -128,7 +128,7 @@ test("Scrolling + Zooming (Auto Origin)", function() {
 
 });
 
-test("Scrolling + Zooming + Scrolling", function() {
+test("Scroll + Zoom + Scroll", function() {
 
 	var scroller = new Scroller(null, {
 		zooming: true
@@ -221,7 +221,32 @@ test("ScrollBy", function() {
 	
 });
 
+test("Out Of Boundaries", function() {
+	
+	var scroller = new Scroller();
 
+	// Scroll without dimensions
+	scroller.scrollTo(200, 300);
+	var values = scroller.getValues();
+	equal(values.left, 0);
+	equal(values.top, 0);
+	
+	// Setup
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	
+	// Scroll out of max
+	scroller.scrollTo(10000, 10000);
+	var values = scroller.getValues();
+	equal(values.left, 4000);
+	equal(values.top, 4400);
+
+	// Scroll out of min
+	scroller.scrollTo(-30, -100);
+	var values = scroller.getValues();
+	equal(values.left, 0);
+	equal(values.top, 0);
+	
+});
 
 
 
