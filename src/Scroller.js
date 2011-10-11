@@ -356,7 +356,7 @@ var Scroller;
 			}
 
 			if (originTop == null) {
-				originTop = self.__clientWidth / 2;
+				originTop = self.__clientHeight / 2;
 			}
 
 			// Limit level according to configuration
