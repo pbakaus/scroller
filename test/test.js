@@ -127,3 +127,22 @@ test("Scrolling + Zooming via API (Auto Origin)", function() {
 	equal(values.zoom, 1.7);
 
 });
+
+test("Scrolling + Zooming + Scrolling via API", function() {
+
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	equal(typeof scroller, "object");	
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.scrollTo(300, 500);
+	scroller.zoomTo(1.7);
+	scroller.scrollTo(500, 700);
+	
+	var values = scroller.getValues();
+	equal(typeof values, "object");
+	equal(values.left, 500);
+	equal(values.top, 700);
+	equal(values.zoom, 1.7);
+
+});
