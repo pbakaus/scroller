@@ -454,7 +454,7 @@ var Scroller;
 			}
 			
 			// Correct coordinates based on new zoom level
-			if (zoom != null) {
+			if (zoom != null && zoom != self.__zoomLevel) {
 				
 				if (!self.options.zooming) {
 					throw new Error("Zooming is not enabled!");
