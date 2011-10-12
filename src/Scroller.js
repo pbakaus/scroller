@@ -264,14 +264,26 @@ var Scroller;
 			self.__computeScrollMax();
 
 			// Respect new boundaries (debounced update)
-			if (self.__rectDebounce) {
-				clearTimeout(self.__rectDebounce);
-			}
+			// But only do this when there was scrolled before and
+			// the scroll position has not been modified between 
+			// configuring dimensions and debouncing call.
+			var oldLeft = self.__scrollLeft;
+			var oldTop = self.__scrollTop;
 
-			self.__rectDebounce = setTimeout(function() {
-				self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
-				self.__rectDebounce = null;
-			}, 100);
+			if (oldLeft != 0 && oldTop != 0) 
+			{
+				if (self.__rectDebounce) {
+					clearTimeout(self.__rectDebounce);
+				}
+
+				self.__rectDebounce = setTimeout(function() {
+					if (oldLeft == self.__scrollLeft && oldTop == self.__scrollTop && !self.__isAnimating) {
+						self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
+					}
+
+					self.__rectDebounce = null;
+				}, 100);
+			}
 		},
 
 
@@ -416,7 +428,7 @@ var Scroller;
 		scrollTo: function(left, top, animate) {
 
 			var self = this;
-
+			
 			// Stop deceleration
 			if (self.__isDecelerating) {
 				zynga.Animate.stop(self.__isDecelerating);
@@ -460,7 +472,7 @@ var Scroller;
 			if (left === self.__scrollLeft && top === self.__scrollTop) {
 				animate = false;
 			}
-
+			
 			// Publish new values
 			self.__publish(left, top, self.__zoomLevel, animate);
 
@@ -788,7 +800,7 @@ var Scroller;
 		__publish: function(left, top, zoom, animate) {
 
 			var self = this;
-
+			
 			// Remember whether we had an animation, then we try to continue based on the current "drive" of the animation
 			var wasAnimating = self.__isAnimating;
 			if (wasAnimating) {
@@ -830,8 +842,6 @@ var Scroller;
 				};
 
 				var completed = function(renderedFramesPerSecond, animationId, wasFinished) {
-					// console.debug("Rendered FPS: " + renderedFramesPerSecond);
-
 					if (animationId === self.__isAnimating) {
 						self.__isAnimating = false;
 					}
@@ -923,8 +933,6 @@ var Scroller;
 			};
 
 			var completed = function(renderedFramesPerSecond, animationId, wasFinished) {
-				// console.debug("Rendered FPS: " + renderedFramesPerSecond);
-
 				self.__isDecelerating = false;
 
 				// Animate to grid when snapping is active, otherwise just fix out-of-boundary positions
