@@ -335,6 +335,23 @@ var Scroller;
 			};
 
 		},
+		
+		
+		/**
+		 * Returns the maximum scroll values
+		 *
+		 * @return {Map} `left` and `top` maximum scroll values
+		 */
+		getScrollMax: function() {
+			
+			var self = this;
+			
+			return {
+				left: self.__maxScrollLeft,
+				top: self.__maxScrollTop
+			};
+			
+		},
 
 
 		/**
@@ -421,11 +438,12 @@ var Scroller;
 		/**
 		 * Scrolls to the given position. Respect limitations and snapping automatically.
 		 *
-		 * @param left {Integer?null} Horizontal scroll position, keeps current if value is <code>null</code>
-		 * @param top {Integer?null} Vertical scroll position, keeps current if value is <code>null</code>
+		 * @param left {Number?null} Horizontal scroll position, keeps current if value is <code>null</code>
+		 * @param top {Number?null} Vertical scroll position, keeps current if value is <code>null</code>
 		 * @param animate {Boolean?false} Whether the scrolling should happen using an animation
+		 * @param zoom {Number?null} Zoom level to go to
 		 */
-		scrollTo: function(left, top, animate) {
+		scrollTo: function(left, top, animate, zoom) {
 
 			var self = this;
 			
@@ -433,6 +451,22 @@ var Scroller;
 			if (self.__isDecelerating) {
 				zynga.Animate.stop(self.__isDecelerating);
 				self.__isDecelerating = false;
+			}
+			
+			// Correct coordinates based on new zoom level
+			if (zoom != null) {
+				
+				left *= zoom;
+				top *= zoom;
+				
+				// Recompute maximum values while temporary tweaking maximum scroll ranges
+				self.__computeScrollMax(zoom);
+				
+			} else {
+				
+				// Keep zoom when not defined
+				zoom = self.__zoomLevel;
+				
 			}
 
 			if (!self.options.scrollingX) {
@@ -474,7 +508,7 @@ var Scroller;
 			}
 			
 			// Publish new values
-			self.__publish(left, top, self.__zoomLevel, animate);
+			self.__publish(left, top, zoom, animate);
 
 		},
 
