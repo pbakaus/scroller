@@ -346,7 +346,7 @@ asyncTest("Scroll Animated", 4, function() {
 		equal(values.top, 400);
 		equal(values.zoom, 1);
 		start();
-	}, 500);
+	}, 400);
 	
 });
 
@@ -369,7 +369,7 @@ asyncTest("Zoom Animated", 4, function() {
 		equal(values.top, 300);
 		equal(values.zoom, 2);
 		start();
-	}, 500);
+	}, 400);
 	
 });
 
@@ -400,7 +400,7 @@ asyncTest("Scroll + Zoom Animated", 8, function() {
 		equal(max.top, (5000*2)-600);
 
 		start();
-	}, 500);
+	}, 400);
 	
 });
 
@@ -429,7 +429,7 @@ asyncTest("Scroll Animated + Scroll Animated", 4, function() {
 		equal(values.top, 800);
 		equal(values.zoom, 1);
 		start();
-	}, 1000);
+	}, 500);
 	
 });
 
@@ -461,7 +461,7 @@ asyncTest("Scroll Animated + Zoom Animated", 6, function() {
 		equal(max.top, (5000*2)-600);
 				
 		start();
-	}, 1000);
+	}, 500);
 	
 });
 
@@ -483,7 +483,7 @@ asyncTest("Zoom Animated + Zoom Animated", 2, function() {
 		var values = scroller.getValues();
 		equal(values.zoom, 3);
 		start();
-	}, 1000);
+	}, 500);
 	
 });
 
@@ -516,7 +516,7 @@ asyncTest("Zoom Animated +  Scroll Animated", 6, function() {
 		notEqual(max.top, (5000*2)-600);
 				
 		start();
-	}, 1000);
+	}, 500);
 	
 });
 
@@ -627,4 +627,38 @@ asyncTest("Zoom Animated + Scroll Static", 6, function() {
 module("Events");
 // ========================================================================
 
+test("Scroll via Events", function() {
+	
+	var scroller = new Scroller(null, {
+		animating: false
+	});
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	
+	scroller.doTouchStart([{
+		pageX: 500,
+		pageY: 700
+	}], Date.now());
+
+	// Measurement starts from here
+
+	scroller.doTouchMove([{
+		pageX: 490,
+		pageY: 690
+	}], Date.now());
+
+	scroller.doTouchMove([{
+		pageX: 450,
+		pageY: 650
+	}], Date.now());
+
+	scroller.doTouchEnd([{
+		pageX: 450,
+		pageY: 650
+	}], Date.now());
+	
+	var values = scroller.getValues();
+	equal(values.left, 40);
+	equal(values.top, 40);
+	
+});
 
