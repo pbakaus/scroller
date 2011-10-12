@@ -627,38 +627,47 @@ asyncTest("Zoom Animated + Scroll Static", 6, function() {
 module("Events");
 // ========================================================================
 
-test("Scroll via Events", function() {
+asyncTest("Scroll via Events", function() {
 	
 	var scroller = new Scroller(null, {
-		animating: false
+		animating: true
 	});
 	scroller.setDimensions(1000, 600, 5000, 5000);
+	
+	var now = 0;
 	
 	scroller.doTouchStart([{
 		pageX: 500,
 		pageY: 700
-	}], Date.now());
+	}], now+=100);
 
 	// Measurement starts from here
 
 	scroller.doTouchMove([{
 		pageX: 490,
 		pageY: 690
-	}], Date.now());
+	}], now+=100);
 
 	scroller.doTouchMove([{
 		pageX: 450,
 		pageY: 650
-	}], Date.now());
+	}], now+=100);
 
 	scroller.doTouchEnd([{
 		pageX: 450,
 		pageY: 650
-	}], Date.now());
+	}], now+=100);
 	
 	var values = scroller.getValues();
 	equal(values.left, 40);
 	equal(values.top, 40);
+	
+	window.setTimeout(function() {
+		var values = scroller.getValues();
+		equal(values.left, 167.49782546165267);
+		equal(values.top, 167.49782546165267);
+		start();
+	}, 1000);
 	
 });
 
