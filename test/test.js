@@ -303,18 +303,39 @@ asyncTest("Scroll Animated", 3, function() {
 		top = t;
 	});
 	
+	equal(typeof scroller, "object");
+
 	scroller.setDimensions(1000, 600, 5000, 5000);
 	scroller.scrollTo(300, 400, true);
 	
-	equal(typeof scroller, "object");
 	window.setTimeout(function() {
 		equal(left, 300);
 		equal(top, 400);
 		start();
 	}, 500);
 	
-})
+});
 
+asyncTest("Zoom Animated", 2, function() {
+	
+	var zoom;
+	var scroller = new Scroller(function(l, t, z) {
+		zoom = z;
+	}, {
+		zooming: true
+	});
+
+	equal(typeof scroller, "object");
+	
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.zoomTo(2, true);
+	
+	window.setTimeout(function() {
+		equal(zoom, 2);
+		start();
+	}, 500);
+	
+});
 
 
 
