@@ -456,6 +456,10 @@ var Scroller;
 			// Correct coordinates based on new zoom level
 			if (zoom != null) {
 				
+				if (!self.options.zooming) {
+					throw new Error("Zooming is not enabled!");
+				}
+				
 				left *= zoom;
 				top *= zoom;
 				
@@ -879,6 +883,10 @@ var Scroller;
 					if (animationId === self.__isAnimating) {
 						self.__isAnimating = false;
 					}
+					
+					if (self.options.zooming) {
+						self.__computeScrollMax();
+					}
 				};
 				
 				// When continuing based on previous animation we choose an ease-out animation instead of ease-in-out
@@ -893,6 +901,10 @@ var Scroller;
 				// Push values out
 				self.__callback(left, top, zoom);
 
+				// Fix max scroll ranges
+				if (self.options.zooming) {
+					self.__computeScrollMax();
+				}
 			}
 		},
 
