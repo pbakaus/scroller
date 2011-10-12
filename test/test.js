@@ -295,6 +295,26 @@ test("Zoom Limits", function() {
 	
 });
 
+asyncTest("Scroll Animated", 3, function() {
+	
+	var left, top;
+	var scroller = new Scroller(function(l, t, z) {
+		left = l;
+		top = t;
+	});
+	
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.scrollTo(300, 400, true);
+	
+	equal(typeof scroller, "object");
+	window.setTimeout(function() {
+		equal(left, 300);
+		equal(top, 400);
+		start();
+	}, 500);
+	
+})
+
 
 
 
