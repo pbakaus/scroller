@@ -295,13 +295,9 @@ test("Zoom Limits", function() {
 	
 });
 
-asyncTest("Scroll Animated", 3, function() {
+asyncTest("Scroll Animated", 4, function() {
 	
-	var left, top;
-	var scroller = new Scroller(function(l, t, z) {
-		left = l;
-		top = t;
-	});
+	var scroller = new Scroller();
 	
 	equal(typeof scroller, "object");
 
@@ -309,19 +305,18 @@ asyncTest("Scroll Animated", 3, function() {
 	scroller.scrollTo(300, 400, true);
 	
 	window.setTimeout(function() {
-		equal(left, 300);
-		equal(top, 400);
+		var values = scroller.getValues();
+		equal(values.left, 300);
+		equal(values.top, 400);
+		equal(values.zoom, 1);
 		start();
 	}, 500);
 	
 });
 
-asyncTest("Zoom Animated", 2, function() {
+asyncTest("Zoom Animated", 4, function() {
 	
-	var zoom;
-	var scroller = new Scroller(function(l, t, z) {
-		zoom = z;
-	}, {
+	var scroller = new Scroller(null, {
 		zooming: true
 	});
 
@@ -331,7 +326,43 @@ asyncTest("Zoom Animated", 2, function() {
 	scroller.zoomTo(2, true);
 	
 	window.setTimeout(function() {
-		equal(zoom, 2);
+		var values = scroller.getValues();
+		
+		// zooming is centered automatically
+		equal(values.left, 500);
+		equal(values.top, 300);
+		equal(values.zoom, 2);
+		start();
+	}, 500);
+	
+});
+
+asyncTest("Scroll + Zoom Animated", 8, function() {
+	
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	
+	equal(typeof scroller, "object");
+
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	
+	var max = scroller.getScrollMax();
+	equal(max.left, 5000-1000);
+	equal(max.top, 5000-600);
+	
+	scroller.scrollTo(300, 400, true, 2);
+	
+	window.setTimeout(function() {
+		var values = scroller.getValues();
+		equal(values.left, 600);
+		equal(values.top, 800);
+		equal(values.zoom, 2);
+
+		var max = scroller.getScrollMax();
+		equal(max.left, (5000*2)-1000);
+		equal(max.top, (5000*2)-600);
+
 		start();
 	}, 500);
 	
