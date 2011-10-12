@@ -1,3 +1,5 @@
+module("Basics");
+
 test("Initialization", function() {
 	var scroller1 = new Scroller();
 	equal(typeof scroller1, "object");
@@ -36,6 +38,9 @@ test("Query values", function() {
 	equal(values.zoom, 1);
 
 });
+
+
+module("Scrolling/Zooming");
 
 test("Scroll", function() {
 
@@ -147,6 +152,9 @@ test("Scroll + Zoom + Scroll", function() {
 
 });
 
+
+module("Snapping/Paging");
+
 test("Snapping", function() {
 	
 	var scroller = new Scroller(null, {
@@ -188,6 +196,9 @@ test("Paging", function() {
 	
 });
 
+
+module("Scroll/Zoom Relative");
+
 test("ZoomBy", function() {
 	
 	var scroller = new Scroller(null, {
@@ -220,6 +231,10 @@ test("ScrollBy", function() {
 	equal(values.top, 700);
 	
 });
+
+
+
+module("Boundaries");
 
 test("Out Of Boundaries", function() {
 	
@@ -295,16 +310,19 @@ test("Zoom Limits", function() {
 	
 });
 
+
+
+module("Animations");
+
 asyncTest("Scroll Animated", 4, function() {
 	
 	var scroller = new Scroller();
-	
 	equal(typeof scroller, "object");
 
 	scroller.setDimensions(1000, 600, 5000, 5000);
 	scroller.scrollTo(300, 400, true);
 	
-	window.setTimeout(function() {
+	setTimeout(function() {
 		var values = scroller.getValues();
 		equal(values.left, 300);
 		equal(values.top, 400);
@@ -325,7 +343,7 @@ asyncTest("Zoom Animated", 4, function() {
 	scroller.setDimensions(1000, 600, 5000, 5000);
 	scroller.zoomTo(2, true);
 	
-	window.setTimeout(function() {
+	setTimeout(function() {
 		var values = scroller.getValues();
 		
 		// zooming is centered automatically
@@ -353,7 +371,7 @@ asyncTest("Scroll + Zoom Animated", 8, function() {
 	
 	scroller.scrollTo(300, 400, true, 2);
 	
-	window.setTimeout(function() {
+	setTimeout(function() {
 		var values = scroller.getValues();
 		equal(values.left, 600);
 		equal(values.top, 800);
@@ -369,4 +387,215 @@ asyncTest("Scroll + Zoom Animated", 8, function() {
 });
 
 
+module("Animation Interrupted");
+
+asyncTest("Scroll Animated + Scroll Animated", 4, function() {
+	
+	var scroller = new Scroller();
+	equal(typeof scroller, "object");
+
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.scrollTo(300, 400, true);
+	
+	setTimeout(function() {
+		scroller.scrollTo(500, 800, true);
+	}, 150);
+	
+	setTimeout(function() {
+		var values = scroller.getValues();
+		equal(values.left, 500);
+		equal(values.top, 800);
+		equal(values.zoom, 1);
+		start();
+	}, 1000);
+	
+});
+
+asyncTest("Scroll Animated + Zoom Animated", 6, function() {
+	
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	equal(typeof scroller, "object");
+
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.scrollTo(300, 400, true);
+	
+	setTimeout(function() {
+		scroller.zoomTo(2, true);
+	}, 150);
+	
+	setTimeout(function() {
+		var values = scroller.getValues();
+		
+		// Scroll position can not have reached final position yet
+		notEqual(values.left, 300);
+		notEqual(values.top, 400);
+		equal(values.zoom, 2);
+		
+		// Scroll max need have values based on final zoom
+		var max = scroller.getScrollMax();
+		equal(max.left, (5000*2)-1000);
+		equal(max.top, (5000*2)-600);
+				
+		start();
+	}, 1000);
+	
+});
+
+asyncTest("Zoom Animated + Zoom Animated", 2, function() {
+	
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	equal(typeof scroller, "object");
+
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.zoomTo(2, true);
+	
+	setTimeout(function() {
+		scroller.zoomTo(3, true);
+	}, 150);
+	
+	setTimeout(function() {
+		var values = scroller.getValues();
+		equal(values.zoom, 3);
+		start();
+	}, 1000);
+	
+});
+
+asyncTest("Zoom Animated +  Scroll Animated", 6, function() {
+	
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	equal(typeof scroller, "object");
+
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.zoomTo(2, true);
+	
+	setTimeout(function() {
+		scroller.scrollTo(300, 400, true);
+	}, 150);
+	
+	setTimeout(function() {
+		var values = scroller.getValues();
+
+		// Zoom level can not have reached final position yet
+		equal(values.left, 300);
+		equal(values.top, 400);
+		notEqual(values.zoom, 2);
+		
+		// Scroll max need have values different as 
+		// they must not be based of final zoom, but current zoom
+		var max = scroller.getScrollMax();
+		notEqual(max.left, (5000*2)-1000);
+		notEqual(max.top, (5000*2)-600);
+				
+		start();
+	}, 1000);
+	
+});
+
+asyncTest("Scroll Animated + Scroll Static", 4, function() {
+	
+	var scroller = new Scroller();
+	equal(typeof scroller, "object");
+
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.scrollTo(300, 400, true);
+	
+	setTimeout(function() {
+		scroller.scrollTo(500, 800);
+
+		var values = scroller.getValues();
+		equal(values.left, 500);
+		equal(values.top, 800);
+		equal(values.zoom, 1);
+		start();
+	}, 150);
+	
+});
+
+asyncTest("Scroll Animated + Zoom Static", 6, function() {
+	
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	equal(typeof scroller, "object");
+
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.scrollTo(300, 400, true);
+	
+	setTimeout(function() {
+		scroller.zoomTo(2);
+
+		var values = scroller.getValues();
+		
+		// Scroll position can not have reached final position yet
+		notEqual(values.left, 300);
+		notEqual(values.top, 400);
+		equal(values.zoom, 2);
+		
+		// Scroll max need have values based on final zoom
+		var max = scroller.getScrollMax();
+		equal(max.left, (5000*2)-1000);
+		equal(max.top, (5000*2)-600);
+				
+		start();
+	}, 150);
+	
+});
+
+asyncTest("Zoom Animated + Zoom Static", 2, function() {
+	
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	equal(typeof scroller, "object");
+
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.zoomTo(2, true);
+	
+	setTimeout(function() {
+		scroller.zoomTo(3);
+
+		var values = scroller.getValues();
+		equal(values.zoom, 3);
+		start();
+	}, 150);
+	
+});
+
+asyncTest("Zoom Animated + Scroll Static", 6, function() {
+	
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	equal(typeof scroller, "object");
+
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	scroller.zoomTo(2, true);
+	
+	setTimeout(function() {
+		scroller.scrollTo(300, 400);
+
+		var values = scroller.getValues();
+
+		// Zoom level can not have reached final position yet
+		equal(values.left, 300);
+		equal(values.top, 400);
+		notEqual(values.zoom, 2);
+		
+		// Scroll max need have values different as 
+		// they must not be based of final zoom, but current zoom
+		var max = scroller.getScrollMax();
+		notEqual(max.left, (5000*2)-1000);
+		notEqual(max.top, (5000*2)-600);
+				
+		start();
+	}, 150);
+	
+});
 
