@@ -607,10 +607,6 @@ var Scroller;
 			self.__enableScrollX = !isSingleTouch && self.options.scrollingX;
 			self.__enableScrollY = !isSingleTouch && self.options.scrollingY;
 
-			// Reset deceleration
-			self.__decelerationVelocityX = 0;
-			self.__decelerationVelocityY = 0;
-
 			// Reset tracking flag
 			self.__isTracking = true;
 
@@ -619,6 +615,9 @@ var Scroller;
 
 			// Some features are disabled in multi touch scenarios
 			self.__isSingleTouch = isSingleTouch;
+
+			// Clearing data structure
+			self.__positions = [];
 
 		},
 
@@ -645,11 +644,6 @@ var Scroller;
 				currentTouchLeft = touches[0].pageX;
 				currentTouchTop = touches[0].pageY;
 			}
-
-			// Compute velocity
-			var steps = (timeStamp - self.__lastTouchMove) / (1000 / 60);
-			self.__decelerationVelocityX = self.__enableScrollX && self.__isSingleTouch ? (self.__lastTouchLeft - currentTouchLeft) / steps : 0;
-			self.__decelerationVelocityY = self.__enableScrollY && self.__isSingleTouch ? (self.__lastTouchTop - currentTouchTop) / steps : 0;
 
 			// Are we already is dragging mode?
 			if (self.__isDragging) {
@@ -702,7 +696,6 @@ var Scroller;
 						if (self.options.bouncing) {
 
 							scrollLeft += (moveX / 2);
-							self.__decelerationVelocityX /= 2;
 
 						} else if (scrollLeft > maxScrollLeft) {
 
@@ -728,7 +721,6 @@ var Scroller;
 						if (self.options.bouncing) {
 
 							scrollTop += (moveY / 2);
-							self.__decelerationVelocityY /= 2;
 
 						} else if (scrollTop > maxScrollTop) {
 
@@ -741,6 +733,9 @@ var Scroller;
 						}
 					}
 				}
+				
+				// Track scroll movement for decleration
+				self.__positions.push(scrollLeft, scrollTop, timeStamp);
 
 				// Sync scroll position
 				self.__publish(scrollLeft, scrollTop, level);
@@ -756,6 +751,8 @@ var Scroller;
 
 				self.__enableScrollX = self.options.scrollingX && distanceX >= minimumTrackingForScroll;
 				self.__enableScrollY = self.options.scrollingY && distanceY >= minimumTrackingForScroll;
+				
+				self.__positions.push(self.__scrollLeft, self.__scrollTop, timeStamp);
 
 				self.__isDragging = (self.__enableScrollX || self.__enableScrollY) && (distanceX >= minimumTrackingForDrag || distanceY >= minimumTrackingForDrag);
 
@@ -774,7 +771,7 @@ var Scroller;
 		 * Touch end handler for scrolling support
 		 */
 		doTouchEnd: function(touches, timeStamp) {
-
+			
 			var self = this;
 
 			// Ignore event when tracking is not enabled (no touchstart event on element)
@@ -782,7 +779,7 @@ var Scroller;
 			if (!self.__isTracking) {
 				return;
 			}
-
+			
 			// Not touching anymore (when two finger hit the screen there are two touch end events)
 			self.__isTracking = false;
 
@@ -797,12 +794,37 @@ var Scroller;
 				// Verify that the last move detected was in some relevant time frame
 				if (self.__isSingleTouch && self.options.animating && (timeStamp - self.__lastTouchMove) <= 100) {
 
-					// How much velocity is required to start the deceleration
-					var minVelocityToStartDeceleration = self.options.paging || self.options.snapping ? 4 : 1;
+					// Then figure out what the scroll position was about 100ms ago
+					var positions = self.__positions;
+					var endPos = positions.length - 1;
+					var startPos = endPos;
+					
+					// Move pointer to position measured 100ms ago
+					for (var i=endPos; i>2 && positions[i] > (timeStamp - 100); i-=3) {
+						startPos = i;
+					}
+					
+					// If start and stop position is identical in a 100ms timeframe, 
+					// we cannot compute any useful deceleration.
+					if (startPos != endPos) {
+						
+						// Compute relative movement between these two points
+						var timeOffset = positions[endPos] - positions[startPos];
+						var movedLeft = self.__scrollLeft - positions[startPos - 2]
+						var movedTop = self.__scrollTop - positions[startPos - 1];
 
-					// Verify that we have enough velocity to start deceleration
-					if (Math.abs(self.__decelerationVelocityX) > minVelocityToStartDeceleration || Math.abs(self.__decelerationVelocityY) > minVelocityToStartDeceleration) {
-						self.__startDeceleration(timeStamp);
+						// Based on 50ms compute the movement to apply for each render step
+						self.__decelerationVelocityX = movedLeft / timeOffset * (1000 / 60);
+						self.__decelerationVelocityY = movedTop / timeOffset * (1000 / 60);
+
+						// How much velocity is required to start the deceleration
+						var minVelocityToStartDeceleration = self.options.paging || self.options.snapping ? 4 : 1;
+
+						// Verify that we have enough velocity to start deceleration
+						if (Math.abs(self.__decelerationVelocityX) > minVelocityToStartDeceleration || Math.abs(self.__decelerationVelocityY) > minVelocityToStartDeceleration) {
+							self.__startDeceleration(timeStamp);
+						}
+
 					}
 				}
 			}
@@ -814,7 +836,7 @@ var Scroller;
 			// have modified the scroll positions or even showed the scrollbars though.
 			if (!self.__isDecelerating) {
 
-				self.scrollTo(this.__scrollLeft, this.__scrollTop, this.__zoomLevel, true);
+				self.scrollTo(self.__scrollLeft, self.__scrollTop, true, self.__zoomLevel);
 
 			}
 
