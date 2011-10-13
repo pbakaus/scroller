@@ -139,7 +139,7 @@
 		}, false);
 
 		document.addEventListener("touchend", function(e) {
-			scroller.doTouchEnd(e.touches, e.timeStamp);
+			scroller.doTouchEnd(e.timeStamp);
 		}, false);
 		
 	} else {
@@ -178,10 +178,7 @@
 				return;
 			}
 
-			scroller.doTouchEnd([{
-				pageX: e.pageX,
-				pageY: e.pageY
-			}], e.timeStamp);
+			scroller.doTouchEnd(e.timeStamp);
 
 			mousedown = false;
 		}, false);

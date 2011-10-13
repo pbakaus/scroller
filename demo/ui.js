@@ -101,11 +101,11 @@ if ('ontouchstart' in window) {
 	}, false);
 
 	document.addEventListener("touchend", function(e) {
-		scroller.doTouchEnd(e.touches, e.timeStamp, e.scale);
+		scroller.doTouchEnd(e.timeStamp);
 	}, false);
 
 	document.addEventListener("touchcancel", function(e) {
-		scroller.doTouchEnd(e.touches, e.timeStamp, e.scale);
+		scroller.doTouchEnd(e.timeStamp);
 	}, false);
 
 } else {
@@ -129,7 +129,7 @@ if ('ontouchstart' in window) {
 		if (!mousedown) {
 			return;
 		}
-
+		
 		scroller.doTouchMove([{
 			pageX: e.pageX,
 			pageY: e.pageY
@@ -142,11 +142,8 @@ if ('ontouchstart' in window) {
 		if (!mousedown) {
 			return;
 		}
-
-		scroller.doTouchEnd([{
-			pageX: e.pageX,
-			pageY: e.pageY
-		}], e.timeStamp);
+		
+		scroller.doTouchEnd(e.timeStamp);
 
 		mousedown = false;
 	}, false);
@@ -156,3 +153,13 @@ if ('ontouchstart' in window) {
 	}, false);
 
 }
+
+/*
+// Test for background activity (slow down scrolling)
+setInterval(function() {
+	var arr = [];
+	for (var i=0, l=Math.random()*600; i<l; i++) {
+		arr.push.call(arr, document.querySelectorAll(".abc" + i));
+	}
+}, 50);
+*/

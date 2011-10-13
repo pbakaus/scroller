@@ -54,6 +54,9 @@
 		padding-top: 160px;
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
+		-ms-box-sizing: border-box;
+		-o-box-sizing: border-box;
+		box-sizing: border-box;
 		font-family: sans-serif;
 		font-size: 50px;
 	}
@@ -133,7 +136,7 @@
 		}, false);
 
 		document.addEventListener("touchend", function(e) {
-			scroller.doTouchEnd(e.touches, e.timeStamp);
+			scroller.doTouchEnd(e.timeStamp);
 		}, false);
 		
 	} else {
@@ -172,10 +175,7 @@
 				return;
 			}
 
-			scroller.doTouchEnd([{
-				pageX: e.pageX,
-				pageY: e.pageY
-			}], e.timeStamp);
+			scroller.doTouchEnd(e.timeStamp);
 
 			mousedown = false;
 		}, false);

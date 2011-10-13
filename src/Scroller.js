@@ -561,6 +561,15 @@ var Scroller;
 		 */
 		doTouchStart: function(touches, timeStamp) {
 
+			// Array-like check is enough here
+			if (touches.length == null) {
+				throw new Error("Invalid touch list: " + touches);
+			}
+
+			if (typeof timeStamp !== "number") {
+				throw new Error("Invalid timestamp value: " + timeStamp);
+			}
+			
 			var self = this;
 
 			// Stop deceleration
@@ -627,6 +636,15 @@ var Scroller;
 		 */
 		doTouchMove: function(touches, timeStamp, scale) {
 
+			// Array-like check is enough here
+			if (touches.length == null) {
+				throw new Error("Invalid touch list: " + touches);
+			}
+
+			if (typeof timeStamp !== "number") {
+				throw new Error("Invalid timestamp value: " + timeStamp);
+			}
+			
 			var self = this;
 
 			// Ignore event when tracking is not enabled (event might be outside of element)
@@ -770,7 +788,11 @@ var Scroller;
 		/**
 		 * Touch end handler for scrolling support
 		 */
-		doTouchEnd: function(touches, timeStamp) {
+		doTouchEnd: function(timeStamp) {
+			
+			if (typeof timeStamp !== "number") {
+				throw new Error("Invalid timestamp value: " + timeStamp);
+			}
 			
 			var self = this;
 
@@ -800,7 +822,7 @@ var Scroller;
 					var startPos = endPos;
 					
 					// Move pointer to position measured 100ms ago
-					for (var i=endPos; i>0 && positions[i] > (timeStamp - 100); i-=3) {
+					for (var i=endPos; i>0 && positions[i] > (self.__lastTouchMove - 100); i-=3) {
 						startPos = i;
 					}
 					
