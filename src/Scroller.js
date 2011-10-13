@@ -752,6 +752,11 @@ var Scroller;
 					}
 				}
 				
+				// Keep list from growing infinitely (holding min 10, max 20 measure points)
+				if (self.__positions.length > 60) {
+					self.__positions.splice(0, 30);
+				}
+				
 				// Track scroll movement for decleration
 				self.__positions.push(scrollLeft, scrollTop, timeStamp);
 
@@ -861,6 +866,9 @@ var Scroller;
 				self.scrollTo(self.__scrollLeft, self.__scrollTop, true, self.__zoomLevel);
 
 			}
+			
+			// Fully cleanup list
+			self.__positions.length = 0;
 
 		},
 
