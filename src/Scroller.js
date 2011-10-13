@@ -19,7 +19,7 @@ var Scroller;
 	 */
 	Scroller = function(callback, options) {
 
-		this.__callback = callback || new Function;
+		this.__callback = callback;
 
 		this.options = {
 			
@@ -194,6 +194,9 @@ var Scroller;
 
 		/** {Date} Timestamp of last move of finger. Used to limit tracking range for deceleration speed. */
 		__lastTouchMove: null,
+		
+		/** {Array} List of positions, uses three indexes for each state: left, top, timestamp */
+		__positions: null,
 
 
 
@@ -263,27 +266,9 @@ var Scroller;
 			// Refresh maximums
 			self.__computeScrollMax();
 
-			// Respect new boundaries (debounced update)
-			// But only do this when there was scrolled before and
-			// the scroll position has not been modified between 
-			// configuring dimensions and debouncing call.
-			var oldLeft = self.__scrollLeft;
-			var oldTop = self.__scrollTop;
-
-			if (oldLeft != 0 && oldTop != 0) 
-			{
-				if (self.__rectDebounce) {
-					clearTimeout(self.__rectDebounce);
-				}
-
-				self.__rectDebounce = setTimeout(function() {
-					if (oldLeft == self.__scrollLeft && oldTop == self.__scrollTop && !self.__isAnimating) {
-						self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
-					}
-
-					self.__rectDebounce = null;
-				}, 100);
-			}
+			// Refresh scroll position
+			self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
+			
 		},
 
 
@@ -454,7 +439,7 @@ var Scroller;
 			}
 			
 			// Correct coordinates based on new zoom level
-			if (zoom != null && zoom != self.__zoomLevel) {
+			if (zoom != null && zoom !== self.__zoomLevel) {
 				
 				if (!self.options.zooming) {
 					throw new Error("Zooming is not enabled!");
@@ -651,7 +636,8 @@ var Scroller;
 			if (!self.__isTracking) {
 				return;
 			}
-
+			
+			
 			var currentTouchLeft, currentTouchTop;
 
 			// Compute move based around of center of fingers
@@ -662,6 +648,8 @@ var Scroller;
 				currentTouchLeft = touches[0].pageX;
 				currentTouchTop = touches[0].pageY;
 			}
+
+			var positions = self.__positions;
 
 			// Are we already is dragging mode?
 			if (self.__isDragging) {
@@ -753,12 +741,12 @@ var Scroller;
 				}
 				
 				// Keep list from growing infinitely (holding min 10, max 20 measure points)
-				if (self.__positions.length > 60) {
-					self.__positions.splice(0, 30);
+				if (positions.length > 60) {
+					positions.splice(0, 30);
 				}
 				
 				// Track scroll movement for decleration
-				self.__positions.push(scrollLeft, scrollTop, timeStamp);
+				positions.push(scrollLeft, scrollTop, timeStamp);
 
 				// Sync scroll position
 				self.__publish(scrollLeft, scrollTop, level);
@@ -775,7 +763,7 @@ var Scroller;
 				self.__enableScrollX = self.options.scrollingX && distanceX >= minimumTrackingForScroll;
 				self.__enableScrollY = self.options.scrollingY && distanceY >= minimumTrackingForScroll;
 				
-				self.__positions.push(self.__scrollLeft, self.__scrollTop, timeStamp);
+				positions.push(self.__scrollLeft, self.__scrollTop, timeStamp);
 
 				self.__isDragging = (self.__enableScrollX || self.__enableScrollY) && (distanceX >= minimumTrackingForDrag || distanceY >= minimumTrackingForDrag);
 
@@ -827,17 +815,17 @@ var Scroller;
 					var startPos = endPos;
 					
 					// Move pointer to position measured 100ms ago
-					for (var i=endPos; i>0 && positions[i] > (self.__lastTouchMove - 100); i-=3) {
+					for (var i = endPos; i > 0 && positions[i] > (self.__lastTouchMove - 100); i -= 3) {
 						startPos = i;
 					}
 					
 					// If start and stop position is identical in a 100ms timeframe, 
 					// we cannot compute any useful deceleration.
-					if (startPos != endPos) {
+					if (startPos !== endPos) {
 						
 						// Compute relative movement between these two points
 						var timeOffset = positions[endPos] - positions[startPos];
-						var movedLeft = self.__scrollLeft - positions[startPos - 2]
+						var movedLeft = self.__scrollLeft - positions[startPos - 2];
 						var movedTop = self.__scrollTop - positions[startPos - 1];
 						
 						// Based on 50ms compute the movement to apply for each render step
@@ -922,7 +910,9 @@ var Scroller;
 						self.__zoomLevel = oldZoom + (diffZoom * percent);
 
 						// Push values out
-						self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel);
+						if (self.__callback) {
+							self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel);
+						}
 
 					}
 				};
@@ -951,7 +941,9 @@ var Scroller;
 				self.__scheduledZoom = self.__zoomLevel = zoom;
 
 				// Push values out
-				self.__callback(left, top, zoom);
+				if (self.__callback) {
+					self.__callback(left, top, zoom);
+				}
 
 				// Fix max scroll ranges
 				if (self.options.zooming) {
