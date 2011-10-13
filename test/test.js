@@ -639,35 +639,86 @@ asyncTest("Scroll via Events", function() {
 	scroller.doTouchStart([{
 		pageX: 500,
 		pageY: 700
-	}], now+=100);
+	}], now+=30);
 
 	// Measurement starts from here
+	// Initial movement should be ignored
 
 	scroller.doTouchMove([{
 		pageX: 490,
 		pageY: 690
-	}], now+=100);
+	}], now+=50);
 
 	scroller.doTouchMove([{
-		pageX: 450,
-		pageY: 650
-	}], now+=100);
+		pageX: 470,
+		pageY: 670
+	}], now+=50);
 
 	scroller.doTouchEnd([{
-		pageX: 450,
-		pageY: 650
-	}], now+=100);
+		pageX: 470,
+		pageY: 670
+	}], now+=50);
 	
 	var values = scroller.getValues();
-	equal(values.left, 40);
-	equal(values.top, 40);
+	equal(values.left, 20);
+	equal(values.top, 20);
 	
 	window.setTimeout(function() {
 		var values = scroller.getValues();
-		equal(values.left, 167.49782546165267);
-		equal(values.top, 167.49782546165267);
+		equal(values.left, 151.3459832823367);
+		equal(values.top, 151.3459832823367);
 		start();
-	}, 1000);
+	}, 1400);
+	
+});
+
+
+
+
+
+
+asyncTest("Scroll via Events", function() {
+	
+	var scroller = new Scroller(null, {
+		animating: true
+	});
+	scroller.setDimensions(1000, 600, 5000, 5000);
+	
+	var now = 0;
+	
+	scroller.doTouchStart([{
+		pageX: 500,
+		pageY: 700
+	}], now+=30);
+
+	// Measurement starts from here
+	// Initial movement should be ignored
+
+	scroller.doTouchMove([{
+		pageX: 490,
+		pageY: 690
+	}], now+=50);
+
+	scroller.doTouchMove([{
+		pageX: 470,
+		pageY: 670
+	}], now+=50);
+
+	scroller.doTouchEnd([{
+		pageX: 470,
+		pageY: 670
+	}], now+=50);
+	
+	var values = scroller.getValues();
+	equal(values.left, 20);
+	equal(values.top, 20);
+	
+	window.setTimeout(function() {
+		var values = scroller.getValues();
+		equal(values.left, 151.3459832823367);
+		equal(values.top, 151.3459832823367);
+		start();
+	}, 1400);
 	
 });
 
