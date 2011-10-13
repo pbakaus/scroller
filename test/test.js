@@ -627,11 +627,9 @@ asyncTest("Zoom Animated + Scroll Static", 6, function() {
 module("Events");
 // ========================================================================
 
-asyncTest("Scroll via Events", function() {
+asyncTest("Scroll via Move Events and Acceleration", function() {
 	
-	var scroller = new Scroller(null, {
-		animating: true
-	});
+	var scroller = new Scroller();
 	scroller.setDimensions(1000, 600, 5000, 5000);
 	
 	var now = 0;
@@ -669,6 +667,58 @@ asyncTest("Scroll via Events", function() {
 	
 });
 
+test("Zoom via Wheel Events", function() {
+	
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	scroller.setDimensions(1000, 600, 5000, 5000);
 
+	var values = scroller.getValues();
+	equal(values.left, 0);
+	equal(values.top, 0);
+	equal(values.zoom, 1);
+	
+	scroller.doMouseZoom(3, null, 0, 0);
+	
+	var values = scroller.getValues();
+	equal(values.left, 0);
+	equal(values.top, 0);
+	equal(values.zoom, 0.97);
+
+	scroller.doMouseZoom(-3, null, 0, 0);
+		
+	var values = scroller.getValues();
+	equal(values.left, 0);
+	equal(values.top, 0);
+	equal(values.zoom, 0.9991);
+	
+	
+	
+	// Reset
+	scroller.zoomTo(1);
+	
+	scroller.doMouseZoom(-3, null, 200, 200);
+	
+	var values = scroller.getValues();
+	equal(values.left, 6.463917525773184);
+	equal(values.top, 6.278350515463927);
+	equal(values.zoom, 1.03);
+
+
+	// Reset
+	scroller.zoomTo(1);
+	scroller.scrollTo(0, 0);
+	
+	scroller.doMouseZoom(-3, null, 200, 200);
+	scroller.doMouseZoom(-3, null, 200, 200);
+	scroller.doMouseZoom(-3, null, 200, 200);
+	
+	var values = scroller.getValues();
+	equal(values.left, 18.5454);
+	equal(values.top, 18.5454);
+	equal(values.zoom, 1.092727);
+
+});
 
 
