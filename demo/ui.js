@@ -1,9 +1,3 @@
-// Settings
-var contentWidth = 2000;
-var contentHeight = 2000;
-var cellWidth = 100;
-var cellHeight = 100;
-
 // Intialize layout
 var container = document.getElementById("container");
 var content = document.getElementById("content");
@@ -11,9 +5,7 @@ var clientWidth = 0;
 var clientHeight = 0;
 
 // Initialize Scroller
-this.scroller = new Scroller(function(left, top, zoom) {
-	render(left, top, zoom);
-}, {
+this.scroller = new Scroller(render, {
 	zooming: true
 });
 

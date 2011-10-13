@@ -35,12 +35,16 @@
 		<div><button id="scrollByUp">&uarr;</button><button id="scrollByDown">&darr;</button><button id="scrollByLeft">&larr;</button><button id="scrollByRight">&rarr;</button></div>
 	</div>
 	
-	<!-- Create Scroller, bind UI layer and mouse/touch events -->
-	<script src="ui.js"></script>
-
 	<!-- Custom rendering code -->
 	<script type="text/javascript">
 
+	// Settings
+	var contentWidth = 2000;
+	var contentHeight = 2000;
+	var cellWidth = 100;
+	var cellHeight = 100;
+	
+	
 	var context = content.getContext('2d');
 	var tiling = new zynga.common.Tiling;
 
@@ -76,10 +80,11 @@
 	};
 
 
-	// Initial rendering
-	render(0, 0, 1);
-	
 	</script>
+	
+	<!-- Create Scroller, bind UI layer and mouse/touch events -->
+	<script src="ui.js"></script>
+	
 	
 </body>
 </html>
