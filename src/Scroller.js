@@ -800,7 +800,7 @@ var Scroller;
 					var startPos = endPos;
 					
 					// Move pointer to position measured 100ms ago
-					for (var i=endPos; i>2 && positions[i] > (timeStamp - 100); i-=3) {
+					for (var i=endPos; i>0 && positions[i] > (timeStamp - 100); i-=3) {
 						startPos = i;
 					}
 					
@@ -812,7 +812,7 @@ var Scroller;
 						var timeOffset = positions[endPos] - positions[startPos];
 						var movedLeft = self.__scrollLeft - positions[startPos - 2]
 						var movedTop = self.__scrollTop - positions[startPos - 1];
-
+						
 						// Based on 50ms compute the movement to apply for each render step
 						self.__decelerationVelocityX = movedLeft / timeOffset * (1000 / 60);
 						self.__decelerationVelocityY = movedTop / timeOffset * (1000 / 60);

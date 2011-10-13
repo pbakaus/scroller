@@ -639,25 +639,25 @@ asyncTest("Scroll via Events", function() {
 	scroller.doTouchStart([{
 		pageX: 500,
 		pageY: 700
-	}], now+=30);
-
-	// Measurement starts from here
-	// Initial movement should be ignored
+	}], now+=40);
 
 	scroller.doTouchMove([{
 		pageX: 490,
 		pageY: 690
-	}], now+=50);
+	}], now+=40);
+
+	// Measurement between these two
+	// Initial movement is ignored
 
 	scroller.doTouchMove([{
 		pageX: 470,
 		pageY: 670
-	}], now+=50);
+	}], now+=40);
 
 	scroller.doTouchEnd([{
 		pageX: 470,
 		pageY: 670
-	}], now+=50);
+	}], now+=20);
 	
 	var values = scroller.getValues();
 	equal(values.left, 20);
@@ -665,10 +665,10 @@ asyncTest("Scroll via Events", function() {
 	
 	window.setTimeout(function() {
 		var values = scroller.getValues();
-		equal(values.left, 151.3459832823367);
-		equal(values.top, 151.3459832823367);
+		equal(Math.round(values.left), 185);
+		equal(Math.round(values.top), 185);
 		start();
-	}, 1400);
+	}, 2000);
 	
 });
 
@@ -676,49 +676,4 @@ asyncTest("Scroll via Events", function() {
 
 
 
-
-asyncTest("Scroll via Events", function() {
-	
-	var scroller = new Scroller(null, {
-		animating: true
-	});
-	scroller.setDimensions(1000, 600, 5000, 5000);
-	
-	var now = 0;
-	
-	scroller.doTouchStart([{
-		pageX: 500,
-		pageY: 700
-	}], now+=30);
-
-	// Measurement starts from here
-	// Initial movement should be ignored
-
-	scroller.doTouchMove([{
-		pageX: 490,
-		pageY: 690
-	}], now+=50);
-
-	scroller.doTouchMove([{
-		pageX: 470,
-		pageY: 670
-	}], now+=50);
-
-	scroller.doTouchEnd([{
-		pageX: 470,
-		pageY: 670
-	}], now+=50);
-	
-	var values = scroller.getValues();
-	equal(values.left, 20);
-	equal(values.top, 20);
-	
-	window.setTimeout(function() {
-		var values = scroller.getValues();
-		equal(values.left, 151.3459832823367);
-		equal(values.top, 151.3459832823367);
-		start();
-	}, 1400);
-	
-});
 
