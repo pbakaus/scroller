@@ -721,4 +721,49 @@ test("Zoom via Wheel Events", function() {
 
 });
 
+test("Zoom via Touch Events", function() {
+	
+	var scroller = new Scroller(null, {
+		zooming: true
+	});
+	
+	var values = scroller.getValues();
+	equal(values.left, 0);
+	equal(values.top, 0);
+	equal(values.zoom, 1);
+	
+	var now = 0;
+	
+	var first = {
+		pageX: 250,
+		pageY: 300
+	};
+	
+	var second = {
+		pageX: 350,
+		pageY: 400
+	};
+	
+	// Connect first finger
+	scroller.doTouchStart([first], now+=20);
+	
+	// Connect second finger
+	scroller.doTouchStart([first, second], now+=20);
+	
+	// Move fingers by 20px to middle (equal movement)
+	first.pageX = 270;
+	first.pageY = 320;
+	second.pageX = 330;
+	second.pageY = 380;
+	
+	scroller.doTouchMove([first, second], now+=20);
+	
+	scroller.doTouchEnd(now);
 
+	var values = scroller.getValues();
+	equal(values.left, 0);
+	equal(values.top, 0);
+	equal(values.zoom, 1);
+		
+	
+});
