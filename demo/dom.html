@@ -35,8 +35,9 @@
 
 		<div><button id="scrollByUp">&uarr;</button><button id="scrollByDown">&darr;</button><button id="scrollByLeft">&larr;</button><button id="scrollByRight">&rarr;</button></div>
 	</div>
-	
+
 	<!-- Custom rendering code -->
+	<script src="dom-render.js"></script>
 	<script type="text/javascript">
 
 		// Settings
@@ -70,21 +71,10 @@
 		}
 		content.appendChild(frag);
 
-
-		// DOM based rendering (Use 3D when available)
-		var render;
-		if (zynga.common.Style.property("perspective")) {
-			render = function(left, top, zoom) {
-				zynga.common.Style.set(content, "transform", "translate3d(" + (-left) + "px," + (-top) + "px,0) scale(" + zoom + ")");
-			};
-		} else {
-			render = function(left, top, zoom) {
-				zynga.common.Style.set(content, "transform", "translate(" + (-left) + "px," + (-top) + "px) scale(" + zoom + ")");
-			};
-		}
-		
+		var render = function(left, top, zoom) {
+			domRender(content, left, top, zoom)
+		};
 	</script>
-	
 	
 	<!-- Create Scroller, bind UI layer and mouse/touch events -->
 	<script src="ui.js"></script>
