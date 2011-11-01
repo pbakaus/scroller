@@ -72,6 +72,7 @@
 		</div>
 	</div>
 
+	<script src="dom-render.js"></script>
 	<script type="text/javascript">
 
 	var container = document.getElementById("container");
@@ -92,16 +93,9 @@
 	content.appendChild(frag);
 
 	// DOM based rendering (Use 3D when available)
-	var render;
-	if (zynga.common.Style.property("perspective")) {
-		render = function(left, top, zoom) {
-			zynga.common.Style.set(content, "transform", "translate3d(" + (-left) + "px," + (-top) + "px,0) scale(" + zoom + ")");
-		};
-	} else {
-		render = function(left, top, zoom) {
-			zynga.common.Style.set(content, "transform", "translate(" + (-left) + "px," + (-top) + "px) scale(" + zoom + ")");
-		};
-	}
+	var render = function(left, top, zoom) {
+		domRender(content, left, top, zoom);
+	};
 
 	// Initialize Scroller
 	var scroller = new Scroller(render, {
