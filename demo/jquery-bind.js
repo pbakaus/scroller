@@ -1,10 +1,6 @@
-/*global jQuery */
-
 /* jQuery-based UI bindings */
 
-var bindEvents = (function(win, doc, $) {
-
-	'use strict';
+var bindEvents = (function(win, doc) {
 
 	// the active scroller
 	var active;

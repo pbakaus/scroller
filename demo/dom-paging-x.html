@@ -88,11 +88,6 @@
 	}
 	content.appendChild(frag);
 
-	// DOM based rendering (Use 3D when available)
-	var render = function(left, top, zoom) {
-		domRender(content, left, top, zoom);
-	};
-
 	// Initialize Scroller
 	var scroller = new Scroller(render, {
 		scrollingY: false,

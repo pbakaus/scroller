@@ -33,6 +33,10 @@
 	<script type="text/javascript" src="../src/Animate.js"></script>
 	<script type="text/javascript" src="../src/Scroller.js"></script>
 
+	<!-- Common Library -->
+	<script type="text/javascript" src="../src/common/Engine.js"></script>
+	<script type="text/javascript" src="../src/common/Style.js"></script>
+
 	<!-- DOM-based rendering -->
 	<script type="text/javascript" src="dom-render.js"></script>
 
@@ -45,20 +49,15 @@
 		var container = document.getElementById('container');
 		var content = document.getElementById('content');
 
-		// the rendering method
-		var render = function(left, top, zoom) {
-			domRender(content, left, top, zoom);
-		};
-
-		// the Scroller options
+		// The Scroller options
 		var options = {
 			scrollingX: false
 		};
 
-		// Initialize Scroller using defaults
+		// Initialize Scroller
 		var scroller = new Scroller(render, options);
 
-		// bind mouse/touch events
+		// Bind mouse/touch events
 		bindEvents(scroller, container, content);
 	</script>
 </body>
