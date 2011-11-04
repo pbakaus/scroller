@@ -7,12 +7,6 @@ var bindEvents = (function(win, doc) {
 
 	// event listeners shared between Scrollers
 
-	function ignore(e) {
-		// suppress inadvertent selection of text on desktop
-		// or dragging of whole window on iOS
-		e.preventDefault();
-	}
-
 	function endscroll(e) {
 		if (!active) { return; }
 
@@ -42,13 +36,13 @@ var bindEvents = (function(win, doc) {
 	if ('ontouchstart' in doc) {
 		// NOTE: touch events must use addEventListener
 
-		doc.addEventListener('touchstart', ignore, false);
-
 		doc.addEventListener('touchmove', function(e) {
+			// suppress dragging of whole window on iOS
+			e.preventDefault();
+
 			if (!active) { return; }
 
 			active.doTouchMove(e.touches, e.timeStamp, e.scale);
-			e.preventDefault();
 
 		}, false);
 
@@ -74,22 +68,27 @@ var bindEvents = (function(win, doc) {
 		};
 
 	} else {
-		var onmousemove = function(e) {
-			if (!active) { return; }
-
-			active.doTouchMove([e], e.timeStamp);
-			e.preventDefault();
-		};
+		var onmousedown = function(e) {
+				// suppress inadvertent selection of text
+				e.preventDefault();
+			},
+			onmousemove = function(e) {
+				if (!active) { return; }
+	
+				active.doTouchMove([e], e.timeStamp);
+	
+				e.preventDefault();
+			};
 
 		if (doc.addEventListener) {
-			doc.addEventListener('mousedown', ignore, false);
+			doc.addEventListener('mousedown', onmousedown, false);
 			doc.addEventListener('mousemove', onmousemove, true);
 			doc.addEventListener('mouseup', endscroll, true);
 
 		} else {
 			// only incur overhead of jQuery events for older IE
 			$(doc)
-				.bind('mousedown', ignore)
+				.bind('mousedown', onmousedown)
 				.bind('mousemove', onmousemove)
 				.bind('mouseup', endscroll);
 		}
