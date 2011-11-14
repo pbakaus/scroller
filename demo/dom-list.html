@@ -20,6 +20,7 @@
 		top: 20px;
 		left: 20px;
 		overflow: hidden;
+		font-family: sans-serif;
 	
 		-webkit-user-select: none;
 		-moz-user-select: none;
@@ -30,8 +31,7 @@
 	
 	#content{
 		background: white;
-		height: 4800px;
-		width: 400px;
+    width: 100%;
 		
 		-webkit-transform-origin: left top;
 		-webkit-transform: translateZ(0);
@@ -45,14 +45,24 @@
 		transform: translateZ(0);
 	}
 	
-	.cell{
-		height: 400px;
+	.row{
+		height: 50px;
 		width: 100%;
 		display: block;
 		text-align: center;
-		padding-top: 160px;
-		font-family: sans-serif;
-		font-size: 50px;
+		font-size: 20px;
+		line-height: 50px;
+	}
+	
+	.refresh{
+		background: #aaa;
+		color: white;
+		font-weight: bold;
+		height: 50px;
+		margin-top: -50px;
+		text-align: center;
+		font-size: 16px;
+		line-height: 50px;
 	}
 	
 	</style>
@@ -61,6 +71,7 @@
 <body>
 	<div id="container">
 		<div id="content">
+			<div class="refresh">Release to Refresh</div>
 		</div>
 	</div>
 
@@ -71,21 +82,19 @@
 	var content = document.getElementById("content");
 
 	// Content Generator
-	var size = 400;
 	var frag = document.createDocumentFragment();
-	for (var row=0, cl=content.clientHeight/size; row<cl; row++) {
+	for (var row=1; row<=50; row++) {
 		elem = document.createElement("div");
-		elem.className = "cell";
+		elem.className = "row";
 		elem.style.backgroundColor = row%2 > 0 ? "#ddd" : "";
-		elem.innerHTML = row;
+		elem.innerHTML = "Item " + row;
 		frag.appendChild(elem);
 	}
 	content.appendChild(frag);
 
 	// Initialize Scroller
 	var scroller = new Scroller(render, {
-		scrollingX: false,
-		paging: true
+		scrollingX: false
 	});
 	
 	
