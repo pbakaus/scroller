@@ -767,3 +767,158 @@ test("Zoom via Touch Events", function() {
 		
 	
 });
+
+
+asyncTest("Pull-to-Refresh", function() {
+	
+	var scroller = new Scroller(null, {
+		scrollingX: false
+	});
+	
+	var phase = 0;
+	
+	// Activate => Start => Done => Deactivate
+	
+	var activateFunc = function() {
+		equal(phase, 0);
+		phase = 1;
+	};
+	
+	var deactivateFunc = function() {
+		equal(phase, 3);
+		phase = 4;
+		start();
+	};
+	
+	var startFunc = function() {
+		equal(phase, 1);
+		phase = 2;
+		
+		setTimeout(function() {
+			equal(phase, 2);
+			phase = 3;
+
+			scroller.finishPullToRefresh();
+		}, 1000);
+	};
+
+	scroller.activatePullToRefresh(50, activateFunc, deactivateFunc, startFunc);
+
+	var now = 0;
+	
+	scroller.doTouchStart([{
+		pageX: 250,
+		pageY: 300
+	}], now+=20);
+	
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 310
+	}], now+=20);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 330
+	}], now+=20);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 350
+	}], now+=100);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 370
+	}], now+=100);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 390
+	}], now+=100);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 410
+	}], now+=100);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 430
+	}], now+=100);
+	
+	scroller.doTouchEnd(now);
+
+});
+
+
+asyncTest("Pull-to-Refresh Fast Fail", function() {
+	
+	var scroller = new Scroller(null, {
+		scrollingX: false
+	});
+	
+	var phase = 0;
+	
+	// Activate => Start => Done => Deactivate
+	
+	var activateFunc = function() {
+		equal(phase, 0);
+		phase = 1;
+	};
+	
+	var deactivateFunc = function() {
+		equal(phase, 1);
+		start();
+	};
+	
+	var startFunc = function() {
+		ok(false, "Should not start");
+	};
+
+	scroller.activatePullToRefresh(50, activateFunc, deactivateFunc, startFunc);
+
+	var now = 0;
+	
+	scroller.doTouchStart([{
+		pageX: 250,
+		pageY: 300
+	}], now+=20);
+	
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 310
+	}], now+=20);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 330
+	}], now+=20);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 350
+	}], now+=10);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 370
+	}], now+=10);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 390
+	}], now+=10);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 410
+	}], now+=10);
+
+	scroller.doTouchMove([{
+		pageX: 250,
+		pageY: 430
+	}], now+=10);
+	
+	scroller.doTouchEnd(now);
+
+});
