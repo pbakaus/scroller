@@ -71,14 +71,16 @@
 		background: #006eb3;
 	}
 	
+	.refresh.running{
+		background: #00b373;
+	}
+	
 	</style>
 
 </head>
 <body>
 	<div id="container">
-		<div id="content">
-			<div class="refresh">Release to Refresh</div>
-		</div>
+		<div id="content"><div class="refresh">Release to Refresh</div></div>
 	</div>
 
 	<script src="dom-render.js"></script>
@@ -86,19 +88,8 @@
 
 	var container = document.getElementById("container");
 	var content = document.getElementById("content");
-
 	var refreshElem = content.getElementsByTagName("div")[0];
 
-	// Content Generator
-	var frag = document.createDocumentFragment();
-	for (var row=1; row<=50; row++) {
-		elem = document.createElement("div");
-		elem.className = "row";
-		elem.style.backgroundColor = row%2 > 0 ? "#ddd" : "";
-		elem.innerHTML = "Item " + row;
-		frag.appendChild(elem);
-	}
-	content.appendChild(frag);
 
 	// Initialize Scroller
 	var scroller = new Scroller(render, {
@@ -111,9 +102,12 @@
 	}, function() {
 		refreshElem.className = refreshElem.className.replace(" active", "");
 	}, function() {
-		window.setTimeout(function() {
+		refreshElem.className += " running";
+		setTimeout(function() {
+			refreshElem.className = refreshElem.className.replace(" running", "");
+			insertItems();
 			scroller.finishPullToRefresh();
-		}, 3000);
+		}, 2000);
 	});
 	
 	
@@ -122,7 +116,34 @@
 	var rect = container.getBoundingClientRect();
 
 	scroller.setPosition(rect.left+container.clientLeft, rect.top+container.clientTop);
-	scroller.setDimensions(container.clientWidth, container.clientHeight, content.offsetWidth, content.offsetHeight);
+	
+	
+	
+	// Fill Scroller
+	
+	var insertItems = function() {
+		
+		for (var i=0; i<15; i++) {
+			
+			var row = document.createElement("div");
+			row.className = "row";
+			row.style.backgroundColor = i%2 > 0 ? "#ddd" : "";
+			row.innerHTML = Math.random();
+			
+			if (content.firstChild == content.lastChild) {
+				content.appendChild(row);
+			} else {
+				content.insertBefore(row, content.childNodes[1])
+			}
+		}
+
+		// Update Scroller dimensions for changed content
+		scroller.setDimensions(container.clientWidth, container.clientHeight, content.offsetWidth, content.offsetHeight-50);
+		
+	};
+
+	insertItems();	
+	
 	
 	
 	// Event Handler

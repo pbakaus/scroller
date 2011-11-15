@@ -156,6 +156,18 @@ var Scroller;
 
 		/** {Integer} Height to assign to refresh area */
 		__refreshHeight: null,
+		
+		/** {Boolean} Whether the refresh process is enabled when the event is released now */
+		__refreshActive: false,
+		
+		/** {Function} Callback to execute on activation. This is for signalling the user about a refresh is about to happen when he release */
+		__refreshActivate: null,
+
+		/** {Function} Callback to execute on deactivation. This is for signalling the user about the refresh being cancelled */
+		__refreshDeactivate: null,
+		
+		/** {Function} Callback to execute to start the actual refresh. Call {@link #refreshFinish} when done */
+		__refreshStart: null,
 
 		/** {Number} Zoom level */
 		__zoomLevel: 1,
@@ -307,23 +319,43 @@ var Scroller;
 		},
 
 
-		__refreshActive: false,
-		__refreshActivate: null,
-		__refreshDeactivate: null,
-		__refreshStart: null,
-
+		/**
+		 * Activates pull-to-refresh. A special zone on the top of the list to start a list refresh whenever
+		 * the user event is released during visibility of this zone. This was introduced by some apps on iOS like
+		 * the official Twitter client.
+		 *
+		 * @param height {Integer} Height of pull-to-refresh zone on top of rendered list
+		 * @param activateCallback {Function} Callback to execute on activation. This is for signalling the user about a refresh is about to happen when he release.
+		 * @param deactivateCallback {Function} Callback to execute on deactivation. This is for signalling the user about the refresh being cancelled.
+		 * @param startCallback {Function} Callback to execute to start the real async refresh action. Call {@link #finishPullToRefresh} after finish of refresh.
+		 */
 		activatePullToRefresh: function(height, activateCallback, deactivateCallback, startCallback) {
-			this.__refreshHeight = height;
-			this.__refreshActivate = activateCallback;
-			this.__refreshDeactivate = deactivateCallback;
-			this.__refreshStart = startCallback;
+
+			var self = this;
+
+			self.__refreshHeight = height;
+			self.__refreshActivate = activateCallback;
+			self.__refreshDeactivate = deactivateCallback;
+			self.__refreshStart = startCallback;
+
 		},
 		
 		
+		/**
+		 * Signalizes that pull-to-refresh is finished. 
+		 * 
+		 */
 		finishPullToRefresh: function() {
-			console.debug("Finished Refresh")
-			this.__refreshActive = false;
-			this.scrollTo(this.__scrollLeft, this.__scrollTop, true);
+			
+			var self = this;
+			
+			self.__refreshActive = false;
+			if (self.__refreshDeactivate) {
+				self.__refreshDeactivate();
+			}
+			
+			self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
+			
 		},
 
 
@@ -905,16 +937,29 @@ var Scroller;
 			// have modified the scroll positions or even showed the scrollbars though.
 			if (!self.__isDecelerating) {
 
-				if (this.__refreshActive) {
+				if (self.__refreshActive && self.__refreshStart) {
 					
 					// Use publish instead of scrollTo to allow scrolling to out of boundary position
-					// We don't need to normalize scrollLeft, zoomLevel, etc. here because we only scrollY when supporting pull-to-refresh
+					// We don't need to normalize scrollLeft, zoomLevel, etc. here because we only y-scrolling when pull-to-refresh is enabled
 					self.__publish(self.__scrollLeft, -self.__refreshHeight, self.__zoomLevel, true);
+					
+					if (self.__refreshStart) {
+						self.__refreshStart();
+					}
 					
 				} else {
 					
 					self.scrollTo(self.__scrollLeft, self.__scrollTop, true, self.__zoomLevel);
 					
+					// Directly signalize deactivation (nothing todo on refresh?)
+					if (self.__refreshActive) {
+						
+						self.__refreshActive = false;
+						if (self.__refreshDeactivate) {
+							self.__refreshDeactivate();
+						}
+						
+					}
 				}
 			}
 			
