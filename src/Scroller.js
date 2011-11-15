@@ -783,8 +783,8 @@ var Scroller;
 
 							scrollTop += (moveY / 2);
 							
-							// Support pull-to-refresh
-							if (self.__refreshHeight != null) {
+							// Support pull-to-refresh (only when only y is scrollable)
+							if (!self.__enableScrollX && self.__refreshHeight != null) {
 
 								if (!self.__refreshActive && scrollTop <= -self.__refreshHeight) {
 
@@ -914,17 +914,11 @@ var Scroller;
 						if (Math.abs(self.__decelerationVelocityX) > minVelocityToStartDeceleration || Math.abs(self.__decelerationVelocityY) > minVelocityToStartDeceleration) {
 							
 							// Deactivate pull-to-refresh when decelerating
-							if (self.__refreshActive) {
+							if (!self.__refreshActive) {
 
-								self.__refreshActive = false;
-								if (self.__refreshDeactivate) {
-									self.__refreshDeactivate();
-								}
+								self.__startDeceleration(timeStamp);
 
 							}
-							
-							self.__startDeceleration(timeStamp);
-							
 						}
 					}
 				}
