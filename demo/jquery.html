@@ -2,10 +2,18 @@
 <html>
 <head>
 	<title>Scroll Demo - Simple jQuery example</title>
+	<!-- Scroller -->
+	<script src="../src/Animate.js"></script>
+	<script src="../src/Scroller.js"></script>
+
+	<!-- jQuery-based event bindings -->
+	<script src="asset/jquery.min.js"></script>
+	<script src="asset/jquery-bind.js"></script>
+
 	<style type="text/css">
 		body { background-color: #EEE; overflow: hidden; padding: 0; }
-		#container { background-color: #FFF; border: 5px solid #000; height: 480px; margin: 10% auto 0 auto; overflow: hidden; width: 80%; }
-		#content { padding: 10px; }
+		#container { background-color: #FFF; border: 5px solid #000; height: 480px; margin: 10% auto 0 auto; overflow: hidden; width: 80%; position: relative;}
+		#content { padding: 10px; position: absolute; }
 	</style>
 </head>
 <body>
@@ -29,21 +37,6 @@
 		</div>
 	</div>
 
-	<!-- Scroller -->
-	<script type="text/javascript" src="../src/Animate.js"></script>
-	<script type="text/javascript" src="../src/Scroller.js"></script>
-
-	<!-- Common Library -->
-	<script type="text/javascript" src="../src/common/Engine.js"></script>
-	<script type="text/javascript" src="../src/common/Style.js"></script>
-
-	<!-- DOM-based rendering -->
-	<script type="text/javascript" src="dom-render.js"></script>
-
-	<!-- jQuery-based event bindings -->
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-	<script type="text/javascript" src="jquery-bind.js"></script>
-
 	<!-- Initialization -->
 	<script type="text/javascript">
 		var container = document.getElementById('container');
@@ -53,8 +46,14 @@
 		var options = {
 			scrollingX: false
 		};
+		
+		var render = function(left, top, zoom) {
+			content.style.left = (-left) + "px";
+			content.style.top = (-top) + "px";
+		};
 
 		// Initialize Scroller
+		// As soon as jQuery supports cross-engine transforms, we should prefer them here.
 		var scroller = new Scroller(render, options);
 
 		// Bind mouse/touch events

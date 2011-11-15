@@ -2,13 +2,14 @@
 <html>
 <head>
 	<title>Scroll Demo - Paging X</title>
+          
+  <script src="../src/Animate.js"></script>
+	<script src="../src/Scroller.js"></script>
+          
+	<script src="asset/Engine.js"></script>
+	<script src="asset/Style.js"></script>
 
-	<script type="text/javascript" src="../src/Animate.js"></script>
-	<script type="text/javascript" src="../src/Scroller.js"></script>
-
-	<!-- Common Library -->
-	<script type="text/javascript" src="../src/common/Engine.js"></script>
-	<script type="text/javascript" src="../src/common/Style.js"></script>
+	<script src="asset/dom-render.js"></script>
 
 	<style type="text/css">
 	
@@ -48,10 +49,10 @@
 	
 	.cell{
 		width: 400px;
+		line-height: 400px;
 		height: 100%;
 		display: inline-block;
 		text-align: center;
-		padding-top: 160px;
 		font-family: sans-serif;
 		font-size: 50px;
 	}
@@ -65,7 +66,6 @@
 		</div>
 	</div>
 
-	<script src="dom-render.js"></script>
 	<script type="text/javascript">
 
 	var container = document.getElementById("container");
