@@ -15,6 +15,7 @@ Features
 * Snapping (snap to an user definable pixel grid)
 * Zooming (automatic centered zooming or based on a point in the view with configurable min/max zoom)
 * Locking (locks drag direction based on initial movement)
+* Pull-to-Refresh (Pull top out of the boundaries to start refresh of list)
 * Configurable regarding whether animation should be used.
 
 Options
@@ -58,6 +59,10 @@ Public API
   `scrollerObj.setPosition(clientLeft, clientTop);`
 * Setup snap dimensions (only needed when `snapping` is enabled)  
   `scrollerObj.setSnapSize(width, height);`
+* Setup pull-to-refresh.
+  `scrollerObj.activatePullToRefresh(height, activate, deactivate, start);`
+* Stop pull-to-refresh session. Called inside the logic started by start callback for activatePullToRefresh call.
+  `scrollerObj.finishPullToRefresh();`
 * Get current scroll positions and zooming.  
   `scrollerObj.getValues() => { left, top, zoom }`
 * Zoom to a specific level. Origin defines the pixel position where zooming should centering to. Defaults to center of scrollerObj.  
