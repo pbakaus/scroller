@@ -80,7 +80,7 @@
 </head>
 <body>
 	<div id="container">
-		<div id="content"><div class="refresh">Release to Refresh</div></div>
+		<div id="content"><div class="refresh">Pull to Refresh</div></div>
 	</div>
 
 	<script src="dom-render.js"></script>
@@ -99,10 +99,13 @@
 	// Activate pull-to-refresh
 	scroller.activatePullToRefresh(50, function() {
 		refreshElem.className += " active";
+		refreshElem.innerHTML = "Release to Refresh";
 	}, function() {
 		refreshElem.className = refreshElem.className.replace(" active", "");
+		refreshElem.innerHTML = "Pull to Refresh";
 	}, function() {
 		refreshElem.className += " running";
+		refreshElem.innerHTML = "Refreshing...";
 		setTimeout(function() {
 			refreshElem.className = refreshElem.className.replace(" running", "");
 			insertItems();
