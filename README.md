@@ -59,7 +59,7 @@ Public API
   `scrollerObj.setPosition(clientLeft, clientTop);`
 * Setup snap dimensions (only needed when `snapping` is enabled)  
   `scrollerObj.setSnapSize(width, height);`
-* Setup pull-to-refresh.  
+* Setup pull-to-refresh. Height of the info region plus three callbacks which are executed on the different stages.  
   `scrollerObj.activatePullToRefresh(height, activate, deactivate, start);`
 * Stop pull-to-refresh session. Called inside the logic started by start callback for activatePullToRefresh call.  
   `scrollerObj.finishPullToRefresh();`
