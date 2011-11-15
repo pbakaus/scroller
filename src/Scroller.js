@@ -154,6 +154,9 @@ var Scroller;
 		/** {Integer} Snapping height for content */
 		__snapHeight: 100,
 
+		/** {Integer} Height to assign to refresh area */
+		__refreshHeight: null,
+
 		/** {Number} Zoom level */
 		__zoomLevel: 1,
 
@@ -301,6 +304,26 @@ var Scroller;
 			self.__snapWidth = width;
 			self.__snapHeight = height;
 
+		},
+
+
+		__refreshActive: false,
+		__refreshActivate: null,
+		__refreshDeactivate: null,
+		__refreshStart: null,
+
+		activatePullToRefresh: function(height, activateCallback, deactivateCallback, startCallback) {
+			this.__refreshHeight = height;
+			this.__refreshActivate = activateCallback;
+			this.__refreshDeactivate = deactivateCallback;
+			this.__refreshStart = startCallback;
+		},
+		
+		
+		finishPullToRefresh: function() {
+			console.debug("Finished Refresh")
+			this.__refreshActive = false;
+			this.scrollTo(this.__scrollLeft, this.__scrollTop, true);
 		},
 
 
@@ -727,6 +750,26 @@ var Scroller;
 						if (self.options.bouncing) {
 
 							scrollTop += (moveY / 2);
+							
+							// Support pull-to-refresh
+							if (self.__refreshHeight != null) {
+
+								if (!self.__refreshActive && scrollTop <= -self.__refreshHeight) {
+
+									self.__refreshActive = true;
+									if (self.__refreshActivate) {
+										self.__refreshActivate();
+									}
+
+								} else if (self.__refreshActive && scrollTop > -self.__refreshHeight) {
+
+									self.__refreshActive = false;
+									if (self.__refreshDeactivate) {
+										self.__refreshDeactivate();
+									}
+
+								}
+							}
 
 						} else if (scrollTop > maxScrollTop) {
 
@@ -837,9 +880,20 @@ var Scroller;
 
 						// Verify that we have enough velocity to start deceleration
 						if (Math.abs(self.__decelerationVelocityX) > minVelocityToStartDeceleration || Math.abs(self.__decelerationVelocityY) > minVelocityToStartDeceleration) {
-							self.__startDeceleration(timeStamp);
-						}
+							
+							// Deactivate pull-to-refresh when decelerating
+							if (self.__refreshActive) {
 
+								self.__refreshActive = false;
+								if (self.__refreshDeactivate) {
+									self.__refreshDeactivate();
+								}
+
+							}
+							
+							self.__startDeceleration(timeStamp);
+							
+						}
 					}
 				}
 			}
@@ -851,8 +905,17 @@ var Scroller;
 			// have modified the scroll positions or even showed the scrollbars though.
 			if (!self.__isDecelerating) {
 
-				self.scrollTo(self.__scrollLeft, self.__scrollTop, true, self.__zoomLevel);
-
+				if (this.__refreshActive) {
+					
+					// Use publish instead of scrollTo to allow scrolling to out of boundary position
+					// We don't need to normalize scrollLeft, zoomLevel, etc. here because we only scrollY when supporting pull-to-refresh
+					self.__publish(self.__scrollLeft, -self.__refreshHeight, self.__zoomLevel, true);
+					
+				} else {
+					
+					self.scrollTo(self.__scrollLeft, self.__scrollTop, true, self.__zoomLevel);
+					
+				}
 			}
 			
 			// Fully cleanup list
