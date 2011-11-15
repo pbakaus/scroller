@@ -59,9 +59,9 @@ Public API
   `scrollerObj.setPosition(clientLeft, clientTop);`
 * Setup snap dimensions (only needed when `snapping` is enabled)  
   `scrollerObj.setSnapSize(width, height);`
-* Setup pull-to-refresh.
+* Setup pull-to-refresh.  
   `scrollerObj.activatePullToRefresh(height, activate, deactivate, start);`
-* Stop pull-to-refresh session. Called inside the logic started by start callback for activatePullToRefresh call.
+* Stop pull-to-refresh session. Called inside the logic started by start callback for activatePullToRefresh call.  
   `scrollerObj.finishPullToRefresh();`
 * Get current scroll positions and zooming.  
   `scrollerObj.getValues() => { left, top, zoom }`
