@@ -22,17 +22,18 @@ var render = (function(global) {
 	}[engine];
 	
 	var helperElem = document.createElement("div");
+	var undef;
 	
-	var perspectiveProperty = vendorPrefix + "perspective";
-	var transformProperty = vendorPrefix + "transform";
+	var perspectiveProperty = vendorPrefix + "Perspective";
+	var transformProperty = vendorPrefix + "Transform";
 	
-	if (helperElem.style[perspectiveProperty]) {
+	if (helperElem.style[perspectiveProperty] !== undef) {
 		
 		return function(left, top, zoom) {
-			content.style[perspectiveProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0) scale(' + zoom + ')';
+			content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0) scale(' + zoom + ')';
 		};	
 		
-	} else if (helperElem.style[transformProperty]) {
+	} else if (helperElem.style[transformProperty] !== undef) {
 		
 		return function(left, top, zoom) {
 			content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px) scale(' + zoom + ')';
@@ -41,8 +42,8 @@ var render = (function(global) {
 	} else {
 		
 		return function(left, top, zoom) {
-			content.style.marginLeft = left ? (-left) + 'px' : '';
-			content.style.marginTop = top ? (-top) + 'px' : '';
+			content.style.marginLeft = left ? (-left/zoom) + 'px' : '';
+			content.style.marginTop = top ? (-top/zoom) + 'px' : '';
 			content.style.zoom = zoom || '';
 		};
 		

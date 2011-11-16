@@ -345,7 +345,6 @@ var Scroller;
 		
 		/**
 		 * Signalizes that pull-to-refresh is finished. 
-		 * 
 		 */
 		finishPullToRefresh: function() {
 			
@@ -1063,14 +1062,14 @@ var Scroller;
 		__computeScrollMax: function(zoomLevel) {
 
 			var self = this;
-
+			
 			if (zoomLevel == null) {
 				zoomLevel = self.__zoomLevel;
 			}
 
 			self.__maxScrollLeft = Math.max((self.__contentWidth * zoomLevel) - self.__clientWidth, 0);
 			self.__maxScrollTop = Math.max((self.__contentHeight * zoomLevel) - self.__clientHeight, 0);
-
+			
 		},
 
 
