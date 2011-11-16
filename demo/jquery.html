@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Scroller - jQuery</title>
+	<!-- Scroller -->
+	<script src="../src/Raf.js"></script>
+	<script src="../src/Animate.js"></script>
+	<script src="../src/Scroller.js"></script>
+
+  <script src="asset/render.js"></script>
+
+	<!-- jQuery-based event bindings -->
+	<script src="asset/jquery.min.js"></script>
+	<script src="asset/jquery-bind.js"></script>
+
+	<style type="text/css">
+		body { background-color: #EEE; overflow: hidden; padding: 0; }
+		#container { background-color: #FFF; border: 5px solid #000; height: 480px; margin: 10% auto 0 auto; overflow: hidden; width: 80%; position: relative;}
+		#content { padding: 10px; position: absolute; }
+	</style>
+</head>
+<body>
+	<div id="container">
+		<div id="content">
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat neque vel mi pellentesque laoreet. Praesent in nisi ut lacus fringilla fringilla id eget orci. Maecenas eget varius dolor. Pellentesque dignissim, libero at convallis aliquet, nibh mauris aliquam lacus, nec ornare libero arcu eget risus. Quisque quis nulla quis felis convallis feugiat sed tempus erat. Cras nec ante leo, vel aliquam dui. Vestibulum ut magna velit, eget luctus mi. Nullam eget sapien sit amet velit sagittis gravida ut in neque. Sed fermentum dui sed lorem malesuada nec adipiscing diam tempor. Etiam at augue ut ipsum scelerisque ullamcorper. Integer vehicula orci posuere sem tristique ac tempus odio facilisis. In mattis felis sed lacus consequat aliquet mollis lacus porta. Nullam ullamcorper risus et purus vulputate nec dignissim mauris imperdiet.</p>
+			<p>Nam sem lorem, porttitor posuere elementum et, mattis non diam. Donec non augue odio, at pellentesque augue. Integer egestas, sapien lacinia ullamcorper suscipit, purus orci mollis nisl, eget vulputate elit libero vel diam. Suspendisse sodales nisl in est volutpat vitae tempus mauris vulputate. Pellentesque purus augue, scelerisque sit amet rutrum non, lobortis sed magna. Proin ultricies, nisl id cursus dignissim, odio erat feugiat erat, sed mollis libero nisl sit amet ante. Aliquam ante urna, ultricies id euismod sed, gravida ultrices neque. Curabitur viverra odio ultrices quam dapibus a cursus mi malesuada.</p>
+			<p>Sed iaculis, felis non rhoncus accumsan, augue lectus condimentum ligula, in lacinia ipsum nibh id velit. Nam pellentesque, erat quis posuere vestibulum, tellus elit tristique lacus, ac elementum mauris felis at ipsum. Proin eget ante ante, nec faucibus turpis. Fusce in odio augue, eu malesuada sem. Nulla eu nulla eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum at justo ipsum. Maecenas iaculis hendrerit sem eu adipiscing. Aenean in sapien eu mi aliquam posuere. Ut facilisis rutrum lectus eu laoreet. Aliquam dictum nulla a eros aliquam mattis.</p>
+			<p>Maecenas eget ante velit, vitae commodo ligula. In hac habitasse platea dictumst. Proin id lectus justo. Praesent sollicitudin justo eu urna rhoncus pellentesque. In blandit elit a dui pellentesque ut congue dui malesuada. Pellentesque non eros porttitor nunc consectetur condimentum. Aliquam nec nunc eu justo rhoncus tempor in sed velit.</p>
+			<p>Sed est mauris, pulvinar at viverra vel, mollis eget ipsum. Sed porta lorem sed odio elementum quis imperdiet quam varius. In iaculis justo et odio interdum vel imperdiet nunc scelerisque. Phasellus semper blandit dolor ac egestas. Donec sit amet mauris nec sem ultricies tincidunt vel vel mauris. Phasellus pellentesque, erat sit amet ullamcorper ultrices, quam justo pharetra ante, ac lobortis arcu metus id nunc. Praesent at risus arcu.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat neque vel mi pellentesque laoreet. Praesent in nisi ut lacus fringilla fringilla id eget orci. Maecenas eget varius dolor. Pellentesque dignissim, libero at convallis aliquet, nibh mauris aliquam lacus, nec ornare libero arcu eget risus. Quisque quis nulla quis felis convallis feugiat sed tempus erat. Cras nec ante leo, vel aliquam dui. Vestibulum ut magna velit, eget luctus mi. Nullam eget sapien sit amet velit sagittis gravida ut in neque. Sed fermentum dui sed lorem malesuada nec adipiscing diam tempor. Etiam at augue ut ipsum scelerisque ullamcorper. Integer vehicula orci posuere sem tristique ac tempus odio facilisis. In mattis felis sed lacus consequat aliquet mollis lacus porta. Nullam ullamcorper risus et purus vulputate nec dignissim mauris imperdiet.</p>
+			<p>Nam sem lorem, porttitor posuere elementum et, mattis non diam. Donec non augue odio, at pellentesque augue. Integer egestas, sapien lacinia ullamcorper suscipit, purus orci mollis nisl, eget vulputate elit libero vel diam. Suspendisse sodales nisl in est volutpat vitae tempus mauris vulputate. Pellentesque purus augue, scelerisque sit amet rutrum non, lobortis sed magna. Proin ultricies, nisl id cursus dignissim, odio erat feugiat erat, sed mollis libero nisl sit amet ante. Aliquam ante urna, ultricies id euismod sed, gravida ultrices neque. Curabitur viverra odio ultrices quam dapibus a cursus mi malesuada.</p>
+			<p>Sed iaculis, felis non rhoncus accumsan, augue lectus condimentum ligula, in lacinia ipsum nibh id velit. Nam pellentesque, erat quis posuere vestibulum, tellus elit tristique lacus, ac elementum mauris felis at ipsum. Proin eget ante ante, nec faucibus turpis. Fusce in odio augue, eu malesuada sem. Nulla eu nulla eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum at justo ipsum. Maecenas iaculis hendrerit sem eu adipiscing. Aenean in sapien eu mi aliquam posuere. Ut facilisis rutrum lectus eu laoreet. Aliquam dictum nulla a eros aliquam mattis.</p>
+			<p>Maecenas eget ante velit, vitae commodo ligula. In hac habitasse platea dictumst. Proin id lectus justo. Praesent sollicitudin justo eu urna rhoncus pellentesque. In blandit elit a dui pellentesque ut congue dui malesuada. Pellentesque non eros porttitor nunc consectetur condimentum. Aliquam nec nunc eu justo rhoncus tempor in sed velit.</p>
+			<p>Sed est mauris, pulvinar at viverra vel, mollis eget ipsum. Sed porta lorem sed odio elementum quis imperdiet quam varius. In iaculis justo et odio interdum vel imperdiet nunc scelerisque. Phasellus semper blandit dolor ac egestas. Donec sit amet mauris nec sem ultricies tincidunt vel vel mauris. Phasellus pellentesque, erat sit amet ullamcorper ultrices, quam justo pharetra ante, ac lobortis arcu metus id nunc. Praesent at risus arcu.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat neque vel mi pellentesque laoreet. Praesent in nisi ut lacus fringilla fringilla id eget orci. Maecenas eget varius dolor. Pellentesque dignissim, libero at convallis aliquet, nibh mauris aliquam lacus, nec ornare libero arcu eget risus. Quisque quis nulla quis felis convallis feugiat sed tempus erat. Cras nec ante leo, vel aliquam dui. Vestibulum ut magna velit, eget luctus mi. Nullam eget sapien sit amet velit sagittis gravida ut in neque. Sed fermentum dui sed lorem malesuada nec adipiscing diam tempor. Etiam at augue ut ipsum scelerisque ullamcorper. Integer vehicula orci posuere sem tristique ac tempus odio facilisis. In mattis felis sed lacus consequat aliquet mollis lacus porta. Nullam ullamcorper risus et purus vulputate nec dignissim mauris imperdiet.</p>
+			<p>Nam sem lorem, porttitor posuere elementum et, mattis non diam. Donec non augue odio, at pellentesque augue. Integer egestas, sapien lacinia ullamcorper suscipit, purus orci mollis nisl, eget vulputate elit libero vel diam. Suspendisse sodales nisl in est volutpat vitae tempus mauris vulputate. Pellentesque purus augue, scelerisque sit amet rutrum non, lobortis sed magna. Proin ultricies, nisl id cursus dignissim, odio erat feugiat erat, sed mollis libero nisl sit amet ante. Aliquam ante urna, ultricies id euismod sed, gravida ultrices neque. Curabitur viverra odio ultrices quam dapibus a cursus mi malesuada.</p>
+			<p>Sed iaculis, felis non rhoncus accumsan, augue lectus condimentum ligula, in lacinia ipsum nibh id velit. Nam pellentesque, erat quis posuere vestibulum, tellus elit tristique lacus, ac elementum mauris felis at ipsum. Proin eget ante ante, nec faucibus turpis. Fusce in odio augue, eu malesuada sem. Nulla eu nulla eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum at justo ipsum. Maecenas iaculis hendrerit sem eu adipiscing. Aenean in sapien eu mi aliquam posuere. Ut facilisis rutrum lectus eu laoreet. Aliquam dictum nulla a eros aliquam mattis.</p>
+			<p>Maecenas eget ante velit, vitae commodo ligula. In hac habitasse platea dictumst. Proin id lectus justo. Praesent sollicitudin justo eu urna rhoncus pellentesque. In blandit elit a dui pellentesque ut congue dui malesuada. Pellentesque non eros porttitor nunc consectetur condimentum. Aliquam nec nunc eu justo rhoncus tempor in sed velit.</p>
+			<p>Sed est mauris, pulvinar at viverra vel, mollis eget ipsum. Sed porta lorem sed odio elementum quis imperdiet quam varius. In iaculis justo et odio interdum vel imperdiet nunc scelerisque. Phasellus semper blandit dolor ac egestas. Donec sit amet mauris nec sem ultricies tincidunt vel vel mauris. Phasellus pellentesque, erat sit amet ullamcorper ultrices, quam justo pharetra ante, ac lobortis arcu metus id nunc. Praesent at risus arcu.</p>
+		</div>
+	</div>
+
+	<!-- Initialization -->
+	<script type="text/javascript">
+		var container = document.getElementById('container');
+		var content = document.getElementById('content');
+
+		// The Scroller options
+		var options = {
+			scrollingX: false
+		};
+		
+		// Initialize Scroller
+		// As soon as jQuery supports cross-engine transforms, we should prefer them here.
+		var scroller = new Scroller(render, options);
+
+		// Bind mouse/touch events
+		bindEvents(scroller, container, content);
+	</script>
+</body>
+</html>

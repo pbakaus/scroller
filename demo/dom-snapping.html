@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Scroller - Snapping</title>
+
+	<script src="../src/Raf.js"></script>
+	<script src="../src/Animate.js"></script>
+	<script src="../src/Scroller.js"></script>
+          
+	<script src="asset/render.js"></script>
+
+	<style type="text/css">
+	
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	
+	body{
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-size: 12px;
+	}
+		
+	#container{
+		width: 700px;
+		height: 400px;
+		border: 5px solid black;
+		position: absolute;
+		top: 20px;
+		left: 20px;
+		overflow: hidden;
+		
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-o-user-select: none;
+		user-select: none;
+	}
+	
+	#content{
+		background: white;
+		width: 4000px;
+		height: 2000px;
+		
+		-webkit-transform-origin: left top;
+		-webkit-transform: translateZ(0);
+		-moz-transform-origin: left top;
+		-moz-transform: translateZ(0);
+		-ms-transform-origin: left top;
+		-ms-transform: translateZ(0);
+		-o-transform-origin: left top;
+		-o-transform: translateZ(0);
+		transform-origin: left top;
+		transform: translateZ(0);
+	}
+	
+	.cell{
+		width: 100px;
+		height: 100px;
+		display: inline-block;
+		text-align: center;
+		line-height: 100px;
+	}
+	
+	</style>
+
+</head>
+<body>
+	<div id="container">
+		<div id="content">
+		</div>
+	</div>
+
+	<script type="text/javascript">
+
+	var container = document.getElementById("container");
+	var content = document.getElementById("content");
+
+	// Content Generator
+	var size = 100;
+	var frag = document.createDocumentFragment();
+	for (var row=0, rl=content.clientHeight/size; row<rl; row++) {
+		for (var cell=0, cl=content.clientWidth/size; cell<cl; cell++) {
+			elem = document.createElement("div");
+			elem.className = "cell";
+			elem.style.backgroundColor = row%2 + cell%2 > 0 ? "#ddd" : "";
+			elem.innerHTML = row+","+cell;
+			frag.appendChild(elem);
+		}
+	}
+	content.appendChild(frag);
+
+	// Initialize Scroller
+	var scroller = new Scroller(render, {
+		snapping: true
+	});
+	
+	
+	// Setup Scroller
+
+	var rect = container.getBoundingClientRect();
+
+	scroller.setPosition(rect.left+container.clientLeft, rect.top+container.clientTop);
+	scroller.setDimensions(container.clientWidth, container.clientHeight, content.offsetWidth, content.offsetHeight);
+	scroller.setSnapSize(100, 100);
+	
+	
+	// Event Handler
+	
+	if ('ontouchstart' in window) {
+		
+		container.addEventListener("touchstart", function(e) {
+			// Don't react if initial down happens on a form element
+			if (e.target.tagName.match(/input|textarea|select/i)) {
+				return;
+			}
+			
+			scroller.doTouchStart(e.touches, e.timeStamp);
+			e.preventDefault();
+		}, false);
+
+		document.addEventListener("touchmove", function(e) {
+			scroller.doTouchMove(e.touches, e.timeStamp);
+		}, false);
+
+		document.addEventListener("touchend", function(e) {
+			scroller.doTouchEnd(e.timeStamp);
+		}, false);
+		
+	} else {
+		
+		var mousedown = false;
+
+		container.addEventListener("mousedown", function(e) {
+			// Don't react if initial down happens on a form element
+			if (e.target.tagName.match(/input|textarea|select/i)) {
+				return;
+			}
+			
+			scroller.doTouchStart([{
+				pageX: e.pageX,
+				pageY: e.pageY
+			}], e.timeStamp);
+
+			mousedown = true;
+		}, false);
+
+		document.addEventListener("mousemove", function(e) {
+			if (!mousedown) {
+				return;
+			}
+
+			scroller.doTouchMove([{
+				pageX: e.pageX,
+				pageY: e.pageY
+			}], e.timeStamp);
+
+			mousedown = true;
+		}, false);
+
+		document.addEventListener("mouseup", function(e) {
+			if (!mousedown) {
+				return;
+			}
+
+			scroller.doTouchEnd(e.timeStamp);
+
+			mousedown = false;
+		}, false);
+		
+	}
+	
+	</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Scroller - Canvas</title>
+	<link rel="stylesheet" href="asset/ui.css" />
+	
+	<script src="../src/Raf.js"></script>
+	<script src="../src/Animate.js"></script>
+	<script src="../src/Scroller.js"></script>
+
+	<script src="asset/Tiling.js"></script>
+</head>
+<body>
+	<div id="container">
+		<canvas id="content"></canvas>
+	</div>
+	
+	<div id="settings">
+		<div><label for="scrollingX">ScrollingX: </label><input type="checkbox" id="scrollingX" checked/></div>
+		<div><label for="scrollingY">ScrollingY: </label><input type="checkbox" id="scrollingY" checked/></div>
+		<div><label for="animating">Animating: </label><input type="checkbox" id="animating" checked/></div>
+		<div><label for="bouncing">Bouncing: </label><input type="checkbox" id="bouncing" checked/></div>
+		<div><label for="locking">Locking: </label><input type="checkbox" id="locking" checked/></div>
+
+		<div><label for="zooming">Zooming: </label><input type="checkbox" id="zooming" checked/></div>
+		<div><label for="minZoom">Min Zoom: </label><input type="text" id="minZoom" size="5" value="0.5"/></div>
+		<div><label for="maxZoom">Max Zoom: </label><input type="text" id="maxZoom" size="5" value="3"/></div>
+		<div><label for="zoomLevel">Zoom Level: </label><input type="text" id="zoomLevel" size="5"/></div>
+		<div><button id="zoom">Zoom to Level</button><button id="zoomIn">+</button><button id="zoomOut">-</button></div>
+		
+		<div><label for="scrollLeft">Scroll Left: </label><input type="text" id="scrollLeft" size="9"/></div>
+		<div><label for="scrollTop">Scroll Top: </label><input type="text" id="scrollTop" size="9"/></div>
+		<div><button id="scrollTo">Scroll to Coords</button></div>
+
+		<div><button id="scrollByUp">&uarr;</button><button id="scrollByDown">&darr;</button><button id="scrollByLeft">&larr;</button><button id="scrollByRight">&rarr;</button></div>
+	</div>
+	
+	<!-- Custom rendering code -->
+	<script type="text/javascript">
+
+	// Settings
+	var contentWidth = 2000;
+	var contentHeight = 2000;
+	var cellWidth = 100;
+	var cellHeight = 100;
+	
+	
+	var context = content.getContext('2d');
+	var tiling = new Tiling;
+
+
+	// Canvas renderer
+	var render = function(left, top, zoom) {
+		
+		// Sync current dimensions with canvas
+		content.width = clientWidth;
+		content.height = clientHeight;
+		
+		// Full clearing
+		context.clearRect(0, 0, clientWidth, clientHeight);
+
+		// Use tiling
+		tiling.setup(clientWidth, clientHeight, contentWidth, contentHeight, cellWidth, cellHeight);
+		tiling.render(left, top, zoom, paint);
+	};
+	
+	
+	// Cell Paint Logic
+	var paint = function(row, col, left, top, width, height, zoom) {
+		
+		context.fillStyle = row%2 + col%2 > 0 ? "#ddd" : "#fff";
+		context.fillRect(left, top, width, height);
+		
+		context.fillStyle = "black";
+		context.font = (14 * zoom).toFixed(2) + 'px "Helvetica Neue", Helvetica, Arial, sans-serif';
+		
+		// Pretty primitive text positioning :)
+		context.fillText(row + "," + col, left + (6 * zoom), top + (18 * zoom));
+		
+	};
+
+
+	</script>
+	
+	<!-- Create Scroller, bind UI layer and mouse/touch events -->
+	<script src="asset/ui.js"></script>
+	
+	
+</body>
+</html>

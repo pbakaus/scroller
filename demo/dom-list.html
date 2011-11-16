@@ -1,0 +1,224 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Scroller - Pull-to-Refresh</title>
+
+	<script src="../src/Raf.js"></script>
+	<script src="../src/Animate.js"></script>
+	<script src="../src/Scroller.js"></script>
+          
+	<script src="asset/render.js"></script>
+
+	<style type="text/css">
+	
+	#container{
+		width: 300px;
+		height: 400px;
+		border: 5px solid black;
+		position: absolute;
+		top: 20px;
+		left: 20px;
+		overflow: hidden;
+		font-family: sans-serif;
+		cursor: default;
+	
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-o-user-select: none;
+		user-select: none;
+	}
+	
+	#content{
+		background: white;
+    width: 100%;
+		
+		-webkit-transform-origin: left top;
+		-webkit-transform: translateZ(0);
+		-moz-transform-origin: left top;
+		-moz-transform: translateZ(0);
+		-ms-transform-origin: left top;
+		-ms-transform: translateZ(0);
+		-o-transform-origin: left top;
+		-o-transform: translateZ(0);
+		transform-origin: left top;
+		transform: translateZ(0);
+	}
+	
+	.row{
+		height: 50px;
+		width: 100%;
+		display: block;
+		text-align: left;
+		font-size: 20px;
+		line-height: 50px;
+		text-indent: 10px;
+	}
+	
+	.refresh{
+		background: #7b91aa;
+		color: white;
+		font-weight: bold;
+		height: 50px;
+		margin-top: -50px;
+		text-align: center;
+		font-size: 16px;
+		line-height: 50px;
+
+		-webkit-transition: background-color 300ms;
+		-moz-transition: background-color 300ms;
+		-ms-transition: background-color 300ms;
+		-o-transition: background-color 300ms;
+		transition: background-color 300ms;
+	}
+	
+	.refresh.active{
+		background: #006eb3;
+	}
+	
+	.refresh.running{
+		background: #00b373;
+	}
+	
+	</style>
+
+</head>
+<body>
+	<div id="container">
+		<div id="content"><div class="refresh">Pull to Refresh</div></div>
+	</div>
+
+	<script type="text/javascript">
+
+	var container = document.getElementById("container");
+	var content = document.getElementById("content");
+	var refreshElem = content.getElementsByTagName("div")[0];
+
+
+	// Initialize Scroller
+	var scroller = new Scroller(render, {
+		scrollingX: false
+	});
+	
+	// Activate pull-to-refresh
+	scroller.activatePullToRefresh(50, function() {
+		refreshElem.className += " active";
+		refreshElem.innerHTML = "Release to Refresh";
+	}, function() {
+		refreshElem.className = refreshElem.className.replace(" active", "");
+		refreshElem.innerHTML = "Pull to Refresh";
+	}, function() {
+		refreshElem.className += " running";
+		refreshElem.innerHTML = "Refreshing...";
+		setTimeout(function() {
+			refreshElem.className = refreshElem.className.replace(" running", "");
+			insertItems();
+			scroller.finishPullToRefresh();
+		}, 2000);
+	});
+	
+	
+	
+	// Setup Scroller
+
+	var rect = container.getBoundingClientRect();
+
+	scroller.setPosition(rect.left+container.clientLeft, rect.top+container.clientTop);
+	
+	
+	
+	// Fill Scroller
+	
+	var insertItems = function() {
+		
+		for (var i=0; i<15; i++) {
+			
+			var row = document.createElement("div");
+			row.className = "row";
+			row.style.backgroundColor = i%2 > 0 ? "#ddd" : "";
+			row.innerHTML = Math.random();
+			
+			if (content.firstChild == content.lastChild) {
+				content.appendChild(row);
+			} else {
+				content.insertBefore(row, content.childNodes[1])
+			}
+		}
+
+		// Update Scroller dimensions for changed content
+		scroller.setDimensions(container.clientWidth, container.clientHeight, content.offsetWidth, content.offsetHeight-50);
+		
+	};
+
+	insertItems();	
+	
+	
+	
+	// Event Handler
+	
+	if ('ontouchstart' in window) {
+		
+		container.addEventListener("touchstart", function(e) {
+			// Don't react if initial down happens on a form element
+			if (e.target.tagName.match(/input|textarea|select/i)) {
+				return;
+			}
+			
+			scroller.doTouchStart(e.touches, e.timeStamp);
+			e.preventDefault();
+		}, false);
+
+		document.addEventListener("touchmove", function(e) {
+			scroller.doTouchMove(e.touches, e.timeStamp);
+		}, false);
+
+		document.addEventListener("touchend", function(e) {
+			scroller.doTouchEnd(e.timeStamp);
+		}, false);
+		
+	} else {
+		
+		var mousedown = false;
+
+		container.addEventListener("mousedown", function(e) {
+			// Don't react if initial down happens on a form element
+			if (e.target.tagName.match(/input|textarea|select/i)) {
+				return;
+			}
+			
+			scroller.doTouchStart([{
+				pageX: e.pageX,
+				pageY: e.pageY
+			}], e.timeStamp);
+
+			mousedown = true;
+		}, false);
+
+		document.addEventListener("mousemove", function(e) {
+			if (!mousedown) {
+				return;
+			}
+
+			scroller.doTouchMove([{
+				pageX: e.pageX,
+				pageY: e.pageY
+			}], e.timeStamp);
+
+			mousedown = true;
+		}, false);
+
+		document.addEventListener("mouseup", function(e) {
+			if (!mousedown) {
+				return;
+			}
+
+			scroller.doTouchEnd(e.timeStamp);
+
+			mousedown = false;
+		}, false);
+		
+	}
+	
+	</script>
+</body>
+</html>
