@@ -1,5 +1,7 @@
 /* DOM-based rendering (Uses 3D when available, falls back on margin when transform not available) */
-var render = (function() {
+var render = (function(global) {
+	
+	var docStyle = document.documentElement.style;
 	
 	var engine;
 	if (global.opera && Object.prototype.toString.call(opera) === '[object Opera]') {
@@ -45,5 +47,5 @@ var render = (function() {
 		};
 		
 	}
-})();
+})(this);
 
