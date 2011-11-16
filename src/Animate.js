@@ -5,120 +5,38 @@
  * Copyright 2011, Zynga Inc.
  * Licensed under the MIT License.
  * https://raw.github.com/zynga/scroller/master/MIT-LICENSE.txt
+ *
+ * Based on the work of: Unify Project (unify-project.org)
+ * http://unify-project.org
+ * Copyright 2011, Deutsche Telekom AG
+ * License: MIT + Apache (V2)
+ */
+
+/**
+ * Generic animation class with support for dropped frames both optional easing and duration.
+ *
+ * Optional duration is useful when the lifetime is defined by another condition than time
+ * e.g. speed of an animating object, etc.
+ *
+ * Dropped frame logic allows to keep using the same updater logic independent from the actual
+ * rendering. This eases a lot of cases where it might be pretty complex to break down a state
+ * based on the pure time difference.
  */
 (function(global) {
-	
-	var time = Date.now || function() { 
-		return +new Date(); 
-	};
-	
+	var time = Date.now;
 	var desiredFrames = 60;
 	var millisecondsPerSecond = 1000;
-	
-	// Polyfill missing requestAnimationFrame
-	
-	if (global.requestAnimationFrame) {
-
-		// pass
-		
-	} else {
-		
-		// requestAnimationFrame polyfill
-		// http://webstuff.nfshost.com/anim-timing/Overview.html
-
-		var postfix = "RequestAnimationFrame";
-		var prefix = (function() {
-			var all = "webkit,moz,o,ms".split(",");
-			for (var i=0; i<4; i++) {
-				if (global[all[i]+postfix] != null) {
-					return all[i];
-				}
-			}
-		})();
-		
-		if (prefix) {
-
-			// Vendor specific implementation
-			global.requestAnimationFrame = global[prefix+postfix];
-			global.cancelRequestAnimationFrame = global[prefix+"Cancel"+postfix];
-
-		} else {
-
-			// Custom implementation
-			var requests = {};
-			var rafHandle = 1;
-			var timeoutHandle = null;
-
-			global.requestAnimationFrame = function(callback, root) 
-			{
-				var callbackHandle = rafHandle++;
-
-				// Store callback
-				requests[callbackHandle] = callback;
-
-				// Create timeout at first request
-				if (timeoutHandle === null) {
-
-					timeoutHandle = setTimeout(function() {
-
-						var now = time();
-						var currentRequests = requests;
-
-						var keys = [];
-						for (var key in currentRequests) {
-							keys.push(key);
-						}
-
-						// Reset data structure before executing callbacks
-						requests = {};
-						timeoutHandle = null;
-
-						// Process all callbacks
-						for (var i=0, l=keys.length; i<l; i++) {
-							currentRequests[keys[i]](now);
-						}
-
-					}, millisecondsPerSecond / desiredFrames);
-
-				}
-
-				return callbackHandle;
-			};
-
-			global.cancelRequestAnimationFrame = function(handle) {
-				delete requests[handle];
-
-				// Stop timeout if all where removed
-				for (var key in requests) {
-					return;
-				}
-
-				clearTimeout(timeoutHandle);
-				timeoutHandle = null;
-			};
-		}
-	}
-
-
 	var running = {};
 	var counter = 1;
 
-	if (!window.zynga) {
-		zynga = {};
+	// Create namespaces
+	if (!global.core) {
+		global.core = { effect : {} };
+	} else if (!core.effect) {
+		core.effect = {};
 	}
 
-
-	/**
-	 * Generic animation class with support for dropped frames both optional easing and duration.
-	 *
-	 * Optional duration is useful when the lifetime is defined by another condition than time
-	 * e.g. speed of an animating object, etc.
-	 *
-	 * Dropped frame logic allows to keep using the same updater logic independent from the actual
-	 * rendering. This eases a lot of cases where it might be pretty complex to figure out the state
-	 * on the pure time difference.
-	 */
-	zynga.Animate = {
+	core.effect.Animate = {
 
 		/**
 		 * Stops the given animation.
@@ -197,7 +115,7 @@
 				if (!running[id] || (verifyCallback && !verifyCallback(id))) {
 
 					running[id] = null;
-					completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, false);
+					completedCallback && completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, false);
 					return;
 
 				}
@@ -207,7 +125,7 @@
 				if (render) {
 
 					var droppedFrames = Math.round((now - lastFrame) / (millisecondsPerSecond / desiredFrames)) - 1;
-					for (var j = 0; j < droppedFrames; j++) {
+					for (var j = 0; j < Math.min(droppedFrames, 4); j++) {
 						step(true);
 						dropCounter++;
 					}
@@ -226,7 +144,7 @@
 				var value = easingMethod ? easingMethod(percent) : percent;
 				if ((stepCallback(value, now, render) === false || percent === 1) && render) {
 					running[id] = null;
-					completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, percent === 1 || duration == null);
+					completedCallback && completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, percent === 1 || duration == null);
 				} else if (render) {
 					lastFrame = now;
 					requestAnimationFrame(step, root);

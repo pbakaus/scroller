@@ -3,8 +3,11 @@
 <head>
 	<title>Scroll Demo - Simple jQuery example</title>
 	<!-- Scroller -->
+	<script src="../src/Raf.js"></script>
 	<script src="../src/Animate.js"></script>
 	<script src="../src/Scroller.js"></script>
+
+  <script src="asset/render.js"></script>
 
 	<!-- jQuery-based event bindings -->
 	<script src="asset/jquery.min.js"></script>
@@ -47,11 +50,6 @@
 			scrollingX: false
 		};
 		
-		var render = function(left, top, zoom) {
-			content.style.left = (-left) + "px";
-			content.style.top = (-top) + "px";
-		};
-
 		// Initialize Scroller
 		// As soon as jQuery supports cross-engine transforms, we should prefer them here.
 		var scroller = new Scroller(render, options);

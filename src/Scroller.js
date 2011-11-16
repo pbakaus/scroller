@@ -11,7 +11,9 @@
  * Copyright 2011, Deutsche Telekom AG
  * License: MIT + Apache (V2)
  */
+
 var Scroller;
+
 (function() {
 	
 	/**
@@ -413,7 +415,7 @@ var Scroller;
 
 			// Stop deceleration
 			if (self.__isDecelerating) {
-				zynga.Animate.stop(self.__isDecelerating);
+				core.effect.Animate.stop(self.__isDecelerating);
 				self.__isDecelerating = false;
 			}
 
@@ -489,7 +491,7 @@ var Scroller;
 			
 			// Stop deceleration
 			if (self.__isDecelerating) {
-				zynga.Animate.stop(self.__isDecelerating);
+				core.effect.Animate.stop(self.__isDecelerating);
 				self.__isDecelerating = false;
 			}
 			
@@ -614,13 +616,13 @@ var Scroller;
 
 			// Stop deceleration
 			if (self.__isDecelerating) {
-				zynga.Animate.stop(self.__isDecelerating);
+				core.effect.Animate.stop(self.__isDecelerating);
 				self.__isDecelerating = false;
 			}
 
 			// Stop animation
 			if (self.__isAnimating) {
-				zynga.Animate.stop(self.__isAnimating);
+				core.effect.Animate.stop(self.__isAnimating);
 				self.__isAnimating = false;
 			}
 
@@ -984,7 +986,7 @@ var Scroller;
 			// Remember whether we had an animation, then we try to continue based on the current "drive" of the animation
 			var wasAnimating = self.__isAnimating;
 			if (wasAnimating) {
-				zynga.Animate.stop(wasAnimating);
+				core.effect.Animate.stop(wasAnimating);
 				self.__isAnimating = false;
 			}
 
@@ -1034,7 +1036,7 @@ var Scroller;
 				};
 				
 				// When continuing based on previous animation we choose an ease-out animation instead of ease-in-out
-				self.__isAnimating = zynga.Animate.start(step, verify, completed, 250, wasAnimating ? easeOutCubic : easeInOutCubic);
+				self.__isAnimating = core.effect.Animate.start(step, verify, completed, 250, wasAnimating ? easeOutCubic : easeInOutCubic);
 
 			} else {
 
@@ -1132,7 +1134,7 @@ var Scroller;
 			};
 
 			// Start animation and switch on flag
-			self.__isDecelerating = zynga.Animate.start(step, verify, completed);
+			self.__isDecelerating = core.effect.Animate.start(step, verify, completed);
 
 		},
 
