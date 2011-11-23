@@ -23,7 +23,9 @@
  * based on the pure time difference.
  */
 (function(global) {
-	var time = Date.now;
+	var time = Date.now || function() {
+		return +new Date();
+	};
 	var desiredFrames = 60;
 	var millisecondsPerSecond = 1000;
 	var running = {};
