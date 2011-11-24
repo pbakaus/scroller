@@ -5,6 +5,13 @@ A pure logic component for scrolling/zooming. It is independent of any specific 
 
 The "demo" folder contains examples for usage with DOM and Canvas renderings which works both, on mouse and touch driven devices.
 
+
+Demos
+-----
+
+See our demos online here: http://zynga.github.com/scroller/
+
+
 Features
 --------
 
