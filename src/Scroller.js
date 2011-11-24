@@ -945,6 +945,9 @@ var Scroller;
 				} else {
 					
 					self.scrollTo(self.__scrollLeft, self.__scrollTop, true, self.__zoomLevel);
+					if (self.__callback) {
+						self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel, "stop");
+					}
 					
 					// Directly signalize deactivation (nothing todo on refresh?)
 					if (self.__refreshActive) {
@@ -1130,6 +1133,9 @@ var Scroller;
 
 				// Animate to grid when snapping is active, otherwise just fix out-of-boundary positions
 				self.scrollTo(self.__scrollLeft, self.__scrollTop, self.options.snapping);
+				if (self.__callback) {
+					self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel, "stop_deceleration");
+				}
 			};
 
 			// Start animation and switch on flag
