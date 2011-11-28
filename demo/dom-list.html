@@ -164,16 +164,16 @@
 				return;
 			}
 			
-			scroller.doTouchStart(e.touches, e.timeStamp);
+			scroller.doTouchStart(e.touches, +e.timeStamp);
 			e.preventDefault();
 		}, false);
 
 		document.addEventListener("touchmove", function(e) {
-			scroller.doTouchMove(e.touches, e.timeStamp);
+			scroller.doTouchMove(e.touches, +e.timeStamp);
 		}, false);
 
 		document.addEventListener("touchend", function(e) {
-			scroller.doTouchEnd(e.timeStamp);
+			scroller.doTouchEnd(+e.timeStamp);
 		}, false);
 		
 	} else {
