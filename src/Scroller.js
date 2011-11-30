@@ -608,7 +608,7 @@ var Scroller;
 			}
 
 			if (timeStamp instanceof Date) {
-				timeStamp = +timeStamp;
+				timeStamp = timeStamp.valueOf();
 			}
 			if (typeof timeStamp !== "number") {
 				throw new Error("Invalid timestamp value: " + timeStamp);
@@ -686,7 +686,7 @@ var Scroller;
 			}
 
 			if (timeStamp instanceof Date) {
-				timeStamp = +timeStamp;
+				timeStamp = timeStamp.valueOf();
 			}
 			if (typeof timeStamp !== "number") {
 				throw new Error("Invalid timestamp value: " + timeStamp);
@@ -866,7 +866,7 @@ var Scroller;
 		doTouchEnd: function(timeStamp) {
 			
 			if (timeStamp instanceof Date) {
-				timeStamp = +timeStamp;
+				timeStamp = timeStamp.valueOf();
 			}
 			if (typeof timeStamp !== "number") {
 				throw new Error("Invalid timestamp value: " + timeStamp);
