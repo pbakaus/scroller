@@ -607,6 +607,9 @@ var Scroller;
 				throw new Error("Invalid touch list: " + touches);
 			}
 
+			if (timeStamp instanceof Date) {
+				timeStamp = +timeStamp;
+			}
 			if (typeof timeStamp !== "number") {
 				throw new Error("Invalid timestamp value: " + timeStamp);
 			}
@@ -682,6 +685,9 @@ var Scroller;
 				throw new Error("Invalid touch list: " + touches);
 			}
 
+			if (timeStamp instanceof Date) {
+				timeStamp = +timeStamp;
+			}
 			if (typeof timeStamp !== "number") {
 				throw new Error("Invalid timestamp value: " + timeStamp);
 			}
@@ -859,6 +865,9 @@ var Scroller;
 		 */
 		doTouchEnd: function(timeStamp) {
 			
+			if (timeStamp instanceof Date) {
+				timeStamp = +timeStamp;
+			}
 			if (typeof timeStamp !== "number") {
 				throw new Error("Invalid timestamp value: " + timeStamp);
 			}
