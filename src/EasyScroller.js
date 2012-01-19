@@ -170,6 +170,7 @@ EasyScroller.prototype.bindEvents = function() {
 		this.container.addEventListener("mousewheel", function(e) {
 			if(that.options.zooming) {
 				that.scroller.doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);	
+				e.preventDefault();
 			}
 		}, false);
 
@@ -187,8 +188,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		var scrollable = element.dataset.scrollable;
 		var zoomable = element.dataset.zoomable || '';
 		var zoomOptions = zoomable.split('-');
-		var minZoom = zoomOptions.length > 1 && parseInt(zoomOptions[0]);
-		var maxZoom = zoomOptions.length > 1 && parseInt(zoomOptions[1]);
+		var minZoom = zoomOptions.length > 1 && parseFloat(zoomOptions[0]);
+		var maxZoom = zoomOptions.length > 1 && parseFloat(zoomOptions[1]);
 
 		new EasyScroller(element, {
 			scrollingX: scrollable === 'true' || scrollable === 'x',
