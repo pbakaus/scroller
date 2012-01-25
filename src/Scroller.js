@@ -1172,7 +1172,7 @@ var Scroller;
 
 			if (!self.options.bouncing) {
 
-				var scrollLeftFixed = Math.max(Math.min(self.__maxScrollLeft, scrollLeft), 0);
+				var scrollLeftFixed = Math.max(Math.min(self.__maxDecelerationScrollLeft, scrollLeft), self.__minDecelerationScrollLeft);
 				if (scrollLeftFixed !== scrollLeft) {
 					scrollLeft = scrollLeftFixed;
 					self.__decelerationVelocityX = 0;
