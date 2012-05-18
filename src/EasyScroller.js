@@ -102,21 +102,21 @@ EasyScroller.prototype.bindEvents = function() {
 				return;
 			}
 
-			that.scroller.doTouchStart(e.touches, e.timeStamp);
+			that.scroller.doTouchStart(e.touches, Date.getTime());
 			e.preventDefault();
 
 		}, false);
 
 		document.addEventListener("touchmove", function(e) {
-			that.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
+			that.scroller.doTouchMove(e.touches, new Date().getTime(), e.scale);
 		}, false);
 
 		document.addEventListener("touchend", function(e) {
-			that.scroller.doTouchEnd(e.timeStamp);
+			that.scroller.doTouchEnd(new Date().getTime());
 		}, false);
 
 		document.addEventListener("touchcancel", function(e) {
-			that.scroller.doTouchEnd(e.timeStamp);
+			that.scroller.doTouchEnd(new Date().getTime());
 		}, false);
 
 	// non-touch bind mouse events
@@ -129,11 +129,12 @@ EasyScroller.prototype.bindEvents = function() {
 			if (e.target.tagName.match(/input|textarea|select/i)) {
 				return;
 			}
+
 		
 			that.scroller.doTouchStart([{
 				pageX: e.pageX,
 				pageY: e.pageY
-			}], e.timeStamp);
+			}], new Date().getTime());
 
 			mousedown = true;
 			e.preventDefault();
@@ -145,11 +146,12 @@ EasyScroller.prototype.bindEvents = function() {
 			if (!mousedown) {
 				return;
 			}
+
 			
 			that.scroller.doTouchMove([{
 				pageX: e.pageX,
 				pageY: e.pageY
-			}], e.timeStamp);
+			}], new Date().getTime());
 
 			mousedown = true;
 
@@ -161,7 +163,7 @@ EasyScroller.prototype.bindEvents = function() {
 				return;
 			}
 			
-			that.scroller.doTouchEnd(e.timeStamp);
+			that.scroller.doTouchEnd(new Date().getTime());
 
 			mousedown = false;
 
@@ -169,7 +171,7 @@ EasyScroller.prototype.bindEvents = function() {
 
 		this.container.addEventListener("mousewheel", function(e) {
 			if(that.options.zooming) {
-				that.scroller.doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);	
+				that.scroller.doMouseZoom(e.wheelDelta, new Date().getTime(), e.pageX, e.pageY);
 				e.preventDefault();
 			}
 		}, false);
