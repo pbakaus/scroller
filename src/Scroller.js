@@ -1172,13 +1172,13 @@ var Scroller;
 
 			if (!self.options.bouncing) {
 
-				var scrollLeftFixed = Math.max(Math.min(self.__maxScrollLeft, scrollLeft), 0);
+				var scrollLeftFixed = Math.max(Math.min(self.__maxDecelerationScrollLeft, scrollLeft), self.__minDecelerationScrollLeft);
 				if (scrollLeftFixed !== scrollLeft) {
 					scrollLeft = scrollLeftFixed;
 					self.__decelerationVelocityX = 0;
 				}
 
-				var scrollTopFixed = Math.max(Math.min(self.__maxScrollTop, scrollTop), 0);
+				var scrollTopFixed = Math.max(Math.min(self.__maxDecelerationScrollTop, scrollTop), self.__minDecelerationScrollTop);
 				if (scrollTopFixed !== scrollTop) {
 					scrollTop = scrollTopFixed;
 					self.__decelerationVelocityY = 0;
