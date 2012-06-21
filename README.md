@@ -33,6 +33,7 @@ These are the available options with their defaults. Options can be modified usi
 * scrollingX = `true`
 * scrollingY = `true`
 * animating = `true`
+* animationDuration = `250`
 * bouncing = `true`
 * locking = `true`
 * paging = `false`
