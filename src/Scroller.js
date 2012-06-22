@@ -34,6 +34,9 @@ var Scroller;
 			/** Enable animations for deceleration, snap back, zooming and scrolling */
 			animating: true,
 
+			/** duration for animations triggered by scrollTo/zoomTo */
+			animationDuration: 250,
+
 			/** Enable bouncing (content can be slowly moved outside and jumps back after releasing) */
 			bouncing: true,
 
@@ -1044,7 +1047,7 @@ var Scroller;
 				};
 				
 				// When continuing based on previous animation we choose an ease-out animation instead of ease-in-out
-				self.__isAnimating = core.effect.Animate.start(step, verify, completed, 250, wasAnimating ? easeOutCubic : easeInOutCubic);
+				self.__isAnimating = core.effect.Animate.start(step, verify, completed, self.options.animationDuration, wasAnimating ? easeOutCubic : easeInOutCubic);
 
 			} else {
 
