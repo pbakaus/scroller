@@ -53,7 +53,7 @@ EasyScroller.prototype.render = (function() {
 		
 		return function(left, top, zoom) {
 			this.content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0) scale(' + zoom + ')';
-		};	
+		};
 		
 	} else if (helperElem.style[transformProperty] !== undef) {
 		
@@ -86,16 +86,15 @@ EasyScroller.prototype.reflow = function() {
 EasyScroller.prototype.bindEvents = function() {
 
 	var that = this;
+	var mousedown;
 
-	// reflow handling
-	window.addEventListener("resize", function() {
-		that.reflow();
-	}, false);
+	this.__listeners = {
 
-	// touch devices bind touch events
-	if ('ontouchstart' in window) {
+		resize: function() {
+			that.reflow();
+		},
 
-		this.container.addEventListener("touchstart", function(e) {
+		touchstart: function(e) {
 
 			// Don't react if initial down happens on a form element
 			if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i)) {
@@ -105,26 +104,21 @@ EasyScroller.prototype.bindEvents = function() {
 			that.scroller.doTouchStart(e.touches, e.timeStamp);
 			e.preventDefault();
 
-		}, false);
+		},
 
-		document.addEventListener("touchmove", function(e) {
+		touchmove: function(e) {
 			that.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
-		}, false);
+		},
 
-		document.addEventListener("touchend", function(e) {
+		touchend: function(e) {
 			that.scroller.doTouchEnd(e.timeStamp);
-		}, false);
+		},
 
-		document.addEventListener("touchcancel", function(e) {
+		touchcancel: function(e) {
 			that.scroller.doTouchEnd(e.timeStamp);
-		}, false);
+		},
 
-	// non-touch bind mouse events
-	} else {
-		
-		var mousedown = false;
-
-		this.container.addEventListener("mousedown", function(e) {
+		mousedown: function(e) {
 
 			if (e.target.tagName.match(/input|textarea|select/i)) {
 				return;
@@ -138,9 +132,9 @@ EasyScroller.prototype.bindEvents = function() {
 			mousedown = true;
 			e.preventDefault();
 
-		}, false);
+		},
 
-		document.addEventListener("mousemove", function(e) {
+		mousemove: function(e) {
 
 			if (!mousedown) {
 				return;
@@ -153,9 +147,9 @@ EasyScroller.prototype.bindEvents = function() {
 
 			mousedown = true;
 
-		}, false);
+		},
 
-		document.addEventListener("mouseup", function(e) {
+		mouseup: function(e) {
 
 			if (!mousedown) {
 				return;
@@ -165,14 +159,69 @@ EasyScroller.prototype.bindEvents = function() {
 
 			mousedown = false;
 
-		}, false);
+		},
 
-		this.container.addEventListener("mousewheel", function(e) {
-			if(that.options.zooming) {
-				that.scroller.doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);	
+		mousewheel: function(e) {
+			if (that.options.zooming) {
+				that.scroller.doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);
 				e.preventDefault();
 			}
-		}, false);
+		}
+	};
+
+	// reflow handling
+	window.addEventListener("resize", this.__listeners.resize, false);
+
+	// touch devices bind touch events
+	if ('ontouchstart' in window) {
+
+		this.container.addEventListener("touchstart", this.__listeners.touchstart, false);
+
+		document.addEventListener("touchmove", this.__listeners.touchmove, false);
+
+		document.addEventListener("touchend", this.__listeners.touchend, false);
+
+		document.addEventListener("touchcancel", this.__listeners.touchcancel, false);
+
+	// non-touch bind mouse events
+	} else {
+		
+		mousedown = false;
+
+		this.container.addEventListener("mousedown", this.__listeners.mousedown, false);
+
+		document.addEventListener("mousemove", this.__listeners.mousemove, false);
+
+		document.addEventListener("mouseup", this.__listeners.mouseup, false);
+
+		this.container.addEventListener("mousewheel", this.__listeners.mousewheel, false);
+
+	}
+};
+
+EasyScroller.prototype.unBindEvents = function() {
+
+	// touch devices unbind touch events
+	if ('ontouchstart' in window) {
+
+		this.container.removeEventListener("touchstart", this.__listeners.touchstart, false);
+
+		document.removeEventListener("touchmove", this.__listeners.touchmove, false);
+
+		document.removeEventListener("touchend", this.__listeners.touchend, false);
+
+		document.removeEventListener("touchcancel", this.__listeners.touchcancel, false);
+
+	// non-touch unbind mouse events
+	} else {
+
+		this.container.removeEventListener("mousedown", this.__listeners.mousedown, false);
+
+		document.removeEventListener("mousemove", this.__listeners.mousemove, false);
+
+		document.removeEventListener("mouseup", this.__listeners.mouseup, false);
+
+		this.container.removeEventListener("mousewheel", this.__listeners.mousewheel, false);
 
 	}
 
@@ -199,6 +248,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			maxZoom: maxZoom
 		});
 
-	};
+	}
 
 }, false);
