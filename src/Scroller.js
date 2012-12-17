@@ -56,8 +56,10 @@ var Scroller;
 			minZoom: 0.5,
 
 			/** Maximum zoom level */
-			maxZoom: 3
-			
+			maxZoom: 3,
+
+            /** Multiply or decrease scrolling speed **/
+            speedMultiplier: 1
 		};
 
 		for (var key in options) {
@@ -758,7 +760,7 @@ var Scroller;
 
 				if (self.__enableScrollX) {
 
-					scrollLeft -= moveX;
+					scrollLeft -= moveX * this.options.speedMultiplier;
 					var maxScrollLeft = self.__maxScrollLeft;
 
 					if (scrollLeft > maxScrollLeft || scrollLeft < 0) {
@@ -766,7 +768,7 @@ var Scroller;
 						// Slow down on the edges
 						if (self.options.bouncing) {
 
-							scrollLeft += (moveX / 2);
+							scrollLeft += (moveX / 2  * this.options.speedMultiplier);
 
 						} else if (scrollLeft > maxScrollLeft) {
 
@@ -783,7 +785,7 @@ var Scroller;
 				// Compute new vertical scroll position
 				if (self.__enableScrollY) {
 
-					scrollTop -= moveY;
+					scrollTop -= moveY * this.options.speedMultiplier;
 					var maxScrollTop = self.__maxScrollTop;
 
 					if (scrollTop > maxScrollTop || scrollTop < 0) {
@@ -791,7 +793,7 @@ var Scroller;
 						// Slow down on the edges
 						if (self.options.bouncing) {
 
-							scrollTop += (moveY / 2);
+							scrollTop += (moveY / 2 * this.options.speedMultiplier);
 							
 							// Support pull-to-refresh (only when only y is scrollable)
 							if (!self.__enableScrollX && self.__refreshHeight != null) {
