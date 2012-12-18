@@ -269,19 +269,19 @@ var Scroller;
 			var self = this;
 
 			// Only update values which are defined
-			if (clientWidth) {
+			if (clientWidth === +clientWidth) {
 				self.__clientWidth = clientWidth;
 			}
 
-			if (clientHeight) {
+			if (clientHeight === +clientHeight) {
 				self.__clientHeight = clientHeight;
 			}
 
-			if (contentWidth) {
+			if (contentWidth === +contentWidth) {
 				self.__contentWidth = contentWidth;
 			}
 
-			if (contentHeight) {
+			if (contentHeight === +contentHeight) {
 				self.__contentHeight = contentHeight;
 			}
 
