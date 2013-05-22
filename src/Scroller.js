@@ -65,7 +65,13 @@ var Scroller;
 			/** Callback that is fired on the later of touch end or deceleration end,
 				provided that another scrolling action has not begun. Used to know
 				when to fade out a scrollbar. */
-			scrollingComplete: NOOP
+			scrollingComplete: NOOP,
+			
+			/** This configures the amount of change applied to deceleration when reaching boundaries  **/
+            penetrationDeceleration : 0.03,
+
+            /** This configures the amount of change applied to acceleration when reaching boundaries  **/
+            penetrationAcceleration : 0.08
 
 		};
 
@@ -1272,8 +1278,8 @@ var Scroller;
 				var scrollOutsideY = 0;
 
 				// This configures the amount of change applied to deceleration/acceleration when reaching boundaries
-				var penetrationDeceleration = 0.03;
-				var penetrationAcceleration = 0.08;
+				var penetrationDeceleration = self.options.penetrationDeceleration; 
+				var penetrationAcceleration = self.options.penetrationAcceleration; 
 
 				// Check limits
 				if (scrollLeft < self.__minDecelerationScrollLeft) {
