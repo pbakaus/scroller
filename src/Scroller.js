@@ -365,6 +365,20 @@ var Scroller;
 
 
 		/**
+		 * Starts pull-to-refresh manually.
+		 */
+		triggerPullToRefresh: function() {
+			// Use publish instead of scrollTo to allow scrolling to out of boundary position
+			// We don't need to normalize scrollLeft, zoomLevel, etc. here because we only y-scrolling when pull-to-refresh is enabled
+			this.__publish(this.__scrollLeft, -this.__refreshHeight, this.__zoomLevel, true);
+
+			if (this.__refreshStart) {
+				this.__refreshStart();
+			}
+		},
+
+
+		/**
 		 * Signalizes that pull-to-refresh is finished.
 		 */
 		finishPullToRefresh: function() {
