@@ -1101,7 +1101,6 @@ var Scroller;
 
 					if (self.options.zooming) {
 						self.__computeScrollMax();
-						console.log(self.__zoomComplete);
 						if(self.__zoomComplete) {
 							self.__zoomComplete();
 							self.__zoomComplete = null;
