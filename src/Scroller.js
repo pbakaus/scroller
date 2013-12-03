@@ -1125,6 +1125,10 @@ var Scroller;
 				// Fix max scroll ranges
 				if (self.options.zooming) {
 					self.__computeScrollMax();
+					if(self.__zoomComplete) {
+						self.__zoomComplete();
+						self.__zoomComplete = null;
+					}
 				}
 			}
 		},
