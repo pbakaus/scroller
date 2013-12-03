@@ -438,13 +438,19 @@ var Scroller;
 		 * @param animate {Boolean ? false} Whether to use animation
 		 * @param originLeft {Number ? null} Zoom in at given left coordinate
 		 * @param originTop {Number ? null} Zoom in at given top coordinate
+		 * @param callback {Function ? null} A callback that gets fired when the zoom is complete.
 		 */
-		zoomTo: function(level, animate, originLeft, originTop) {
+		zoomTo: function(level, animate, originLeft, originTop, callback) {
 
 			var self = this;
 
 			if (!self.options.zooming) {
 				throw new Error("Zooming is not enabled!");
+			}
+
+			// Add callback if exists
+			if(callback) {
+				self.__zoomComplete = callback;
 			}
 
 			// Stop deceleration
@@ -501,12 +507,13 @@ var Scroller;
 		 * @param animate {Boolean ? false} Whether to use animation
 		 * @param originLeft {Number ? 0} Zoom in at given left coordinate
 		 * @param originTop {Number ? 0} Zoom in at given top coordinate
+		 * @param callback {Function ? null} A callback that gets fired when the zoom is complete.
 		 */
-		zoomBy: function(factor, animate, originLeft, originTop) {
+		zoomBy: function(factor, animate, originLeft, originTop, callback) {
 
 			var self = this;
 
-			self.zoomTo(self.__zoomLevel * factor, animate, originLeft, originTop);
+			self.zoomTo(self.__zoomLevel * factor, animate, originLeft, originTop, callback);
 
 		},
 
@@ -1094,6 +1101,11 @@ var Scroller;
 
 					if (self.options.zooming) {
 						self.__computeScrollMax();
+						console.log(self.__zoomComplete);
+						if(self.__zoomComplete) {
+							self.__zoomComplete();
+							self.__zoomComplete = null;
+						}
 					}
 				};
 
