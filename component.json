@@ -5,6 +5,7 @@
   "version": "0.0.1",
   "keywords": ["scroller", "mobile", "animation"],
   "scripts": [
+    "index.js",
     "src/Animate.js",
     "src/Scroller.js"
   ],
