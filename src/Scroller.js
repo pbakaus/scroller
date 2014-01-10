@@ -177,8 +177,11 @@ var Scroller;
 		/** {Integer} Snapping height for content */
 		__snapHeight: 100,
 
+		/** {Boolean} Is pull to refresh horizontal? */
+		__refreshIsHorizontal: false,
+
 		/** {Integer} Height to assign to refresh area */
-		__refreshHeight: null,
+		__refreshSize: null,
 
 		/** {Boolean} Whether the refresh process is enabled when the event is released now */
 		__refreshActive: false,
@@ -347,20 +350,25 @@ var Scroller;
 		 * the user event is released during visibility of this zone. This was introduced by some apps on iOS like
 		 * the official Twitter client.
 		 *
-		 * @param height {Integer} Height of pull-to-refresh zone on top of rendered list
+		 * @param isHorizontal {Boolean} If the pull to refresh is horizontal (default to false)
+		 * @param size {Integer} Size of pull-to-refresh zone on top or left of rendered list
 		 * @param activateCallback {Function} Callback to execute on activation. This is for signalling the user about a refresh is about to happen when he release.
 		 * @param deactivateCallback {Function} Callback to execute on deactivation. This is for signalling the user about the refresh being cancelled.
 		 * @param startCallback {Function} Callback to execute to start the real async refresh action. Call {@link #finishPullToRefresh} after finish of refresh.
 		 */
-		activatePullToRefresh: function(height, activateCallback, deactivateCallback, startCallback) {
+		activatePullToRefresh: function(isHorizontal, size, activateCallback, deactivateCallback, startCallback) {
 
-			var self = this;
+			var self = this, shift = function(a) { return Array.prototype.shift.apply(a); };
 
-			self.__refreshHeight = height;
-			self.__refreshActivate = activateCallback;
-			self.__refreshDeactivate = deactivateCallback;
-			self.__refreshStart = startCallback;
-
+			if (isHorizontal === true || isHorizontal === false) {
+				self.__refreshIsHorizontal = shift(arguments);
+			} else {
+				self.__refreshIsHorizontal = false;
+			}
+			self.__refreshSize = shift(arguments);
+			self.__refreshActivate = shift(arguments);
+			self.__refreshDeactivate = shift(arguments);
+			self.__refreshStart = shift(arguments);
 		},
 
 
@@ -370,7 +378,11 @@ var Scroller;
 		triggerPullToRefresh: function() {
 			// Use publish instead of scrollTo to allow scrolling to out of boundary position
 			// We don't need to normalize scrollLeft, zoomLevel, etc. here because we only y-scrolling when pull-to-refresh is enabled
-			this.__publish(this.__scrollLeft, -this.__refreshHeight, this.__zoomLevel, true);
+			if (this.__refreshIsHorizontal) {
+				this.__publish(-this.__refreshSize, this.__scrollTop, this.__zoomLevel, true);
+			} else {
+				this.__publish(this.__scrollLeft, -this.__refreshSize, this.__zoomLevel, true);
+			}
 
 			if (this.__refreshStart) {
 				this.__refreshStart();
@@ -815,6 +827,26 @@ var Scroller;
 
 							scrollLeft += (moveX / 2  * this.options.speedMultiplier);
 
+							// Support pull-to-refresh (only when only x is scrollable)
+							if (!self.__enableScrollY && self.__refreshSize != null && this.__refreshIsHorizontal) {
+
+								if (!self.__refreshActive && scrollLeft <= -self.__refreshSize) {
+
+									self.__refreshActive = true;
+									if (self.__refreshActivate) {
+										self.__refreshActivate();
+									}
+
+								} else if (self.__refreshActive && scrollLeft > -self.__refreshSize) {
+
+									self.__refreshActive = false;
+									if (self.__refreshDeactivate) {
+										self.__refreshDeactivate();
+									}
+
+								}
+							}
+
 						} else if (scrollLeft > maxScrollLeft) {
 
 							scrollLeft = maxScrollLeft;
@@ -841,16 +873,16 @@ var Scroller;
 							scrollTop += (moveY / 2 * this.options.speedMultiplier);
 
 							// Support pull-to-refresh (only when only y is scrollable)
-							if (!self.__enableScrollX && self.__refreshHeight != null) {
+							if (!self.__enableScrollX && self.__refreshSize != null && !this.__refreshIsHorizontal) {
 
-								if (!self.__refreshActive && scrollTop <= -self.__refreshHeight) {
+								if (!self.__refreshActive && scrollTop <= -self.__refreshSize) {
 
 									self.__refreshActive = true;
 									if (self.__refreshActivate) {
 										self.__refreshActivate();
 									}
 
-								} else if (self.__refreshActive && scrollTop > -self.__refreshHeight) {
+								} else if (self.__refreshActive && scrollTop > -self.__refreshSize) {
 
 									self.__refreshActive = false;
 									if (self.__refreshDeactivate) {
@@ -1000,7 +1032,11 @@ var Scroller;
 
 					// Use publish instead of scrollTo to allow scrolling to out of boundary position
 					// We don't need to normalize scrollLeft, zoomLevel, etc. here because we only y-scrolling when pull-to-refresh is enabled
-					self.__publish(self.__scrollLeft, -self.__refreshHeight, self.__zoomLevel, true);
+					if (this.__refreshIsHorizontal) {
+						self.__publish(-self.__refreshSize, self.__scrollTop, self.__zoomLevel, true);
+					} else {
+						self.__publish(self.__scrollLeft, -self.__refreshSize, self.__zoomLevel, true);
+					}
 
 					if (self.__refreshStart) {
 						self.__refreshStart();

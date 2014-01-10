@@ -346,7 +346,7 @@ asyncTest("Scroll Animated", 4, function() {
 		equal(values.top, 400);
 		equal(values.zoom, 1);
 		start();
-	}, 400);
+	}, 500);
 	
 });
 
@@ -850,3 +850,84 @@ asyncTest("Pull-to-Refresh", function() {
 
 });
 
+
+asyncTest("Horizontal Pull-to-Refresh", function() {
+	
+	var scroller = new Scroller(null, {
+		scrollingY: false
+	});
+	
+	var phase = 0;
+	
+	// Activate => Start => Done => Deactivate
+	
+	var activateFunc = function() {
+		equal(phase, 0);
+		phase = 1;
+	};
+	
+	var deactivateFunc = function() {
+		equal(phase, 3);
+		phase = 4;
+		start();
+	};
+	
+	var startFunc = function() {
+		equal(phase, 1);
+		phase = 2;
+		
+		setTimeout(function() {
+			equal(phase, 2);
+			phase = 3;
+
+			scroller.finishPullToRefresh();
+		}, 1000);
+	};
+
+	scroller.activatePullToRefresh(true, 50, activateFunc, deactivateFunc, startFunc);
+
+	var now = 0;
+	
+	scroller.doTouchStart([{
+		pageY: 250,
+		pageX: 300
+	}], now+=20);
+	
+	scroller.doTouchMove([{
+		pageY: 250,
+		pageX: 310
+	}], now+=20);
+
+	scroller.doTouchMove([{
+		pageY: 250,
+		pageX: 330
+	}], now+=20);
+
+	scroller.doTouchMove([{
+		pageY: 250,
+		pageX: 350
+	}], now+=100);
+
+	scroller.doTouchMove([{
+		pageY: 250,
+		pageX: 370
+	}], now+=100);
+
+	scroller.doTouchMove([{
+		pageY: 250,
+		pageX: 390
+	}], now+=100);
+
+	scroller.doTouchMove([{
+		pageY: 250,
+		pageX: 410
+	}], now+=100);
+
+	scroller.doTouchMove([{
+		pageY: 250,
+		pageX: 430
+	}], now+=100);
+	
+	scroller.doTouchEnd(now);
+
+});
