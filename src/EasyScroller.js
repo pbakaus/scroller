@@ -110,15 +110,15 @@ EasyScroller.prototype.bindEvents = function() {
 
 		}, false);
 
-		document.addEventListener("touchmove", function(e) {
+		this.container.addEventListener("touchmove", function(e) {
 			that.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
 		}, false);
 
-		document.addEventListener("touchend", function(e) {
+		this.container.addEventListener("touchend", function(e) {
 			that.scroller.doTouchEnd(e.timeStamp);
 		}, false);
 
-		document.addEventListener("touchcancel", function(e) {
+		this.container.addEventListener("touchcancel", function(e) {
 			that.scroller.doTouchEnd(e.timeStamp);
 		}, false);
 
