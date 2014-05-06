@@ -106,11 +106,10 @@ EasyScroller.prototype.bindEvents = function() {
 			that.reflow();
 			
 			that.scroller.doTouchStart(e.touches, e.timeStamp);
-			e.preventDefault();
-
 		}, false);
 
 		this.container.addEventListener("touchmove", function(e) {
+			e.preventDefault();
 			that.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
 		}, false);
 
