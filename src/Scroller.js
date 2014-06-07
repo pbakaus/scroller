@@ -1197,7 +1197,7 @@ var Scroller;
 			};
 
 			// How much velocity is required to keep the deceleration running
-			var minVelocityToKeepDecelerating = self.options.snapping ? 4 : 0.1;
+			var minVelocityToKeepDecelerating = self.options.snapping ? 4 : 0.001;
 
 			// Detect whether it's still worth to continue animating steps
 			// If we are already slow enough to not being user perceivable anymore, we stop the whole process here.
