@@ -1,0 +1,12 @@
+{
+  "name": "scroller",
+  "description": "Scroller",
+  "development": {},
+  "main": "./Scroller.js",
+  "scripts": [
+    "Scroller.js"
+  , "Animate.js"
+  , "EasyScroller.js"
+  ],
+  "local": [],
+}
