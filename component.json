@@ -1,0 +1,10 @@
+{
+  "name": "MainScroller",
+  "paths": [ "src" ],
+  "dependencies": {},
+  "files" : [
+    "LICENSE.txt"
+  , "README.md"
+  , "jasyproject.json"
+  ]
+}
