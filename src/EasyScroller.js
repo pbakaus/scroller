@@ -101,21 +101,23 @@ EasyScroller.prototype.bindEvents = function() {
 			if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i)) {
 				return;
 			}
-
+			
+			// reflow since the container may have changed
+			that.reflow();
+			
 			that.scroller.doTouchStart(e.touches, e.timeStamp);
-			e.preventDefault();
-
 		}, false);
 
-		document.addEventListener("touchmove", function(e) {
+		this.container.addEventListener("touchmove", function(e) {
+			e.preventDefault();
 			that.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
 		}, false);
 
-		document.addEventListener("touchend", function(e) {
+		this.container.addEventListener("touchend", function(e) {
 			that.scroller.doTouchEnd(e.timeStamp);
 		}, false);
 
-		document.addEventListener("touchcancel", function(e) {
+		this.container.addEventListener("touchcancel", function(e) {
 			that.scroller.doTouchEnd(e.timeStamp);
 		}, false);
 
@@ -136,6 +138,10 @@ EasyScroller.prototype.bindEvents = function() {
 			}], e.timeStamp);
 
 			mousedown = true;
+			
+			// reflow since the container may have changed
+			that.reflow();
+			
 			e.preventDefault();
 
 		}, false);
