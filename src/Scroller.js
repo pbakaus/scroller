@@ -66,7 +66,7 @@ var Scroller;
 				provided that another scrolling action has not begun. Used to know
 				when to fade out a scrollbar. */
 			scrollingComplete: NOOP,
-			
+
 			/** This configures the amount of change applied to deceleration when reaching boundaries  **/
             penetrationDeceleration : 0.03,
 
@@ -595,7 +595,9 @@ var Scroller;
 			}
 
 			// Publish new values
-			self.__publish(left, top, zoom, animate);
+			if (!self.__isTracking) {
+        self.__publish(left, top, zoom, animate);
+      }
 
 		},
 
@@ -1197,7 +1199,7 @@ var Scroller;
 			};
 
 			// How much velocity is required to keep the deceleration running
-			var minVelocityToKeepDecelerating = self.options.snapping ? 4 : 0.1;
+			var minVelocityToKeepDecelerating = self.options.snapping ? 4 : 0.001;
 
 			// Detect whether it's still worth to continue animating steps
 			// If we are already slow enough to not being user perceivable anymore, we stop the whole process here.
@@ -1309,8 +1311,8 @@ var Scroller;
 				var scrollOutsideY = 0;
 
 				// This configures the amount of change applied to deceleration/acceleration when reaching boundaries
-				var penetrationDeceleration = self.options.penetrationDeceleration; 
-				var penetrationAcceleration = self.options.penetrationAcceleration; 
+				var penetrationDeceleration = self.options.penetrationDeceleration;
+				var penetrationAcceleration = self.options.penetrationAcceleration;
 
 				// Check limits
 				if (scrollLeft < self.__minDecelerationScrollLeft) {
