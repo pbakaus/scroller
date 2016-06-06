@@ -58,13 +58,13 @@ body{
 }
 
 #settings > div{
-	vertical-align: center;
+	vertical-align: middle;
 	padding: 4px 0;
 }
 
 #settings > div > *{
 	display: inline-block;
-	vertical-align: center;
+	vertical-align: middle;
 }
 
 #settings label{
