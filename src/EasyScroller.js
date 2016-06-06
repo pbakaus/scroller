@@ -191,8 +191,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	for (var i = 0; i < elements.length; i++) {
 
 		element = elements[i];
-		var scrollable = element.dataset.scrollable;
-		var zoomable = element.dataset.zoomable || '';
+		var scrollable = element.attributes.getNamedItem('data-scrollable') ? element.attributes.getNamedItem('data-scrollable').value : null;
+		var zoomable = element.attributes.getNamedItem('data-zoomable') ? element.attributes.getNamedItem('data-zoomable').value : '';
 		var zoomOptions = zoomable.split('-');
 		var minZoom = zoomOptions.length > 1 && parseFloat(zoomOptions[0]);
 		var maxZoom = zoomOptions.length > 1 && parseFloat(zoomOptions[1]);
