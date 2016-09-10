@@ -526,7 +526,7 @@ var Scroller;
 		 * @param animate {Boolean?false} Whether the scrolling should happen using an animation
 		 * @param zoom {Number?null} Zoom level to go to
 		 */
-		scrollTo: function(left, top, animate, zoom) {
+		scrollTo: function(left, top, animate, zoom, _callback) {
 
 			var self = this;
 
@@ -592,6 +592,9 @@ var Scroller;
 			// that rendered position is really in-sync with internal data
 			if (left === self.__scrollLeft && top === self.__scrollTop) {
 				animate = false;
+				if (_callback) {
+					_callback();
+				}
 			}
 
 			// Publish new values
@@ -1213,12 +1216,8 @@ var Scroller;
 
 			var completed = function(renderedFramesPerSecond, animationId, wasFinished) {
 				self.__isDecelerating = false;
-				if (self.__didDecelerationComplete) {
-					self.options.scrollingComplete();
-				}
-
 				// Animate to grid when snapping is active, otherwise just fix out-of-boundary positions
-				self.scrollTo(self.__scrollLeft, self.__scrollTop, self.options.snapping);
+				self.scrollTo(self.__scrollLeft, self.__scrollTop, self.options.snapping, null, self.__didDecelerationComplete && self.options.scrollingComplete);
 			};
 
 			// Start animation and switch on flag
