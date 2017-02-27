@@ -549,6 +549,11 @@ var Scroller;
 				// Recompute maximum values while temporary tweaking maximum scroll ranges
 				self.__computeScrollMax(zoom);
 
+			} else if (typeof zoom !== 'undefined') {
+				
+				left *= zoom;
+				top *= zoom;
+				
 			} else {
 
 				// Keep zoom when not defined
