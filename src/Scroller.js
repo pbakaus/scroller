@@ -525,8 +525,9 @@ var Scroller;
 		 * @param top {Number?null} Vertical scroll position, keeps current if value is <code>null</code>
 		 * @param animate {Boolean?false} Whether the scrolling should happen using an animation
 		 * @param zoom {Number?null} Zoom level to go to
+		 * @param forceZoom {Boolean} Forces zoom level to update
 		 */
-		scrollTo: function(left, top, animate, zoom) {
+		scrollTo: function(left, top, animate, zoom, forceZoom) {
 
 			var self = this;
 
@@ -537,7 +538,7 @@ var Scroller;
 			}
 
 			// Correct coordinates based on new zoom level
-			if (zoom != null && zoom !== self.__zoomLevel) {
+			if (zoom != null && (zoom !== self.__zoomLevel || forceZoom)) {
 
 				if (!self.options.zooming) {
 					throw new Error("Zooming is not enabled!");
@@ -549,11 +550,6 @@ var Scroller;
 				// Recompute maximum values while temporary tweaking maximum scroll ranges
 				self.__computeScrollMax(zoom);
 
-			} else if (typeof zoom !== 'undefined') {
-				
-				left *= zoom;
-				top *= zoom;
-				
 			} else {
 
 				// Keep zoom when not defined
