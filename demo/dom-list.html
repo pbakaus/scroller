@@ -54,7 +54,7 @@
 		text-indent: 10px;
 	}
 	
-	.refresh{
+	.refresh, .loading{
 		background: #7b91aa;
 		color: white;
 		font-weight: bold;
@@ -71,20 +71,25 @@
 		transition: background-color 300ms;
 	}
 	
-	.refresh.active{
+	.refresh.active, .loading.active{
 		background: #006eb3;
 	}
 	
-	.refresh.running{
+	.refresh.running, .loading.running{
 		background: #00b373;
 	}
-	
+	.loading {
+		margin-top: 0;
+	}
 	</style>
 
 </head>
 <body>
 	<div id="container">
-		<div id="content"><div class="refresh">Pull to Refresh</div></div>
+		<div id="content">
+			<div class="refresh">Pull to Refresh</div>
+			<div class="loading">Pull to Loading</div>
+		</div>
 	</div>
 
 	<script type="text/javascript">
@@ -92,6 +97,7 @@
 	var container = document.getElementById("container");
 	var content = document.getElementById("content");
 	var refreshElem = content.getElementsByTagName("div")[0];
+	var loadingElem = content.getElementsByTagName("div")[1];
 
 
 	// Initialize Scroller
@@ -115,8 +121,23 @@
 			scroller.finishPullToRefresh();
 		}, 2000);
 	});
-	
-	
+
+	// Activate pull-to-loading
+	scroller.activatePullToLoading(50, function() {
+		loadingElem.className += " active";
+		loadingElem.innerHTML = "Release to Loading";
+	}, function() {
+		loadingElem.className = loadingElem.className.replace(" active", "");
+		loadingElem.innerHTML = "Pull to Loading";
+	}, function() {
+		loadingElem.className += " running";
+		loadingElem.innerHTML = "Loading...";
+		setTimeout(function() {
+			loadingElem.className = loadingElem.className.replace(" running", "");
+			insertItems(true);
+			scroller.finishPullToLoading();
+		}, 2000);
+	});
 	
 	// Setup Scroller
 
@@ -128,7 +149,7 @@
 	
 	// Fill Scroller
 	
-	var insertItems = function() {
+	var insertItems = function(after) {
 		
 		for (var i=0; i<15; i++) {
 			
@@ -137,16 +158,15 @@
 			row.style.backgroundColor = i%2 > 0 ? "#ddd" : "";
 			row.innerHTML = Math.random();
 			
-			if (content.firstChild == content.lastChild) {
-				content.appendChild(row);
+			if (after) {
+				content.insertBefore(row, content.lastElementChild);
 			} else {
-				content.insertBefore(row, content.childNodes[1])
+				content.insertBefore(row, content.childNodes[2])
 			}
 		}
 
 		// Update Scroller dimensions for changed content
-		scroller.setDimensions(container.clientWidth, container.clientHeight, content.offsetWidth, content.offsetHeight-50);
-		
+		scroller.setDimensions(container.clientWidth, container.clientHeight, content.offsetWidth, content.offsetHeight-100);
 	};
 
 	insertItems();	

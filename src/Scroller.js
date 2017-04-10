@@ -192,6 +192,25 @@ var Scroller;
 		/** {Function} Callback to execute to start the actual refresh. Call {@link #refreshFinish} when done */
 		__refreshStart: null,
 
+
+		/*--------------------------------------------------------------------------------*/
+		/** {Integer} Height to assign to loading area */
+		__loadingHeight: null,
+
+		/** {Boolean} Whether the loading process is enabled when the event is released now */
+		__loadingActive: false,
+
+		/** {Function} Callback to execute on activation. This is for signalling the user about a loading is about to happen when he release */
+		__loadingActivate: null,
+
+		/** {Function} Callback to execute on deactivation. This is for signalling the user about the loading being cancelled */
+		__loadingDeactivate: null,
+
+		/** {Function} Callback to execute to start the actual loading. Call {@link #loadingFinish} when done */
+		__loadingStart: null,
+		/*--------------------------------------------------------------------------------*/
+
+
 		/** {Number} Zoom level */
 		__zoomLevel: 1,
 
@@ -393,6 +412,47 @@ var Scroller;
 			self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
 
 		},
+
+
+		/*-------------------------------------------------------------------------------------*/
+		/**
+		 * Like `activatePullToRefresh` but the zone on the bottom
+		 */
+		activatePullToLoading: function(height, activateCallback, deactivateCallback, startCallback) {
+
+			var self = this;
+
+			self.__loadingHeight = height;
+			self.__loadingActivate = activateCallback;
+			self.__loadingDeactivate = deactivateCallback;
+			self.__loadingStart = startCallback;
+
+		},
+
+		/**
+		 * Like `triggerPullToRefresh`
+		 */
+		triggerPullToLoading: function() {
+			this.__publish(this.__scrollLeft, this.__maxScrollTop + this.__loadingHeight, this.__zoomLevel, true);
+
+			if (this.__loadingStart) {
+				this.__loadingStart();
+			}
+		},
+
+		/**
+		 * Like `finishPullToRefresh`
+		 */
+		finishPullToLoading: function() {
+
+			var self = this;
+
+			self.__loadingActive = false;
+			if (self.__loadingDeactivate) {
+				self.__loadingDeactivate();
+			}
+		},
+		/*-------------------------------------------------------------------------------------*/
 
 
 		/**
@@ -862,6 +922,26 @@ var Scroller;
 								}
 							}
 
+							// Support pull-to-loading (only when only y is scrollable)
+							if (!self.__enableScrollX && self.__loadingHeight != null) {
+
+								if (!self.__loadingActive && scrollTop >= maxScrollTop + self.__loadingHeight) {
+
+									self.__loadingActive = true;
+									if (self.__loadingActivate) {
+										self.__loadingActivate();
+									}
+
+								} else if (self.__loadingActive && scrollTop < maxScrollTop + self.__loadingHeight) {
+
+									self.__loadingActive = false;
+									if (self.__loadingDeactivate) {
+										self.__loadingDeactivate();
+									}
+
+								}
+							}
+
 						} else if (scrollTop > maxScrollTop) {
 
 							scrollTop = maxScrollTop;
@@ -978,8 +1058,8 @@ var Scroller;
 						// Verify that we have enough velocity to start deceleration
 						if (Math.abs(self.__decelerationVelocityX) > minVelocityToStartDeceleration || Math.abs(self.__decelerationVelocityY) > minVelocityToStartDeceleration) {
 
-							// Deactivate pull-to-refresh when decelerating
-							if (!self.__refreshActive) {
+							// Deactivate pull-to-refresh and pull-to-loading when decelerating
+							if (!self.__refreshActive && !self.__loadingActive) {
 								self.__startDeceleration(timeStamp);
 							}
 						} else {
@@ -1010,6 +1090,12 @@ var Scroller;
 						self.__refreshStart();
 					}
 
+				} else if(self.__loadingActive && self.__loadingStart) {
+					self.__publish(self.__scrollLeft, self.__maxScrollTop + self.__loadingHeight, self.__zoomLevel, true);
+
+					if (self.__loadingStart) {
+						self.__loadingStart();
+					}
 				} else {
 
 					if (self.__interruptedAnimation || self.__isDragging) {
@@ -1023,6 +1109,15 @@ var Scroller;
 						self.__refreshActive = false;
 						if (self.__refreshDeactivate) {
 							self.__refreshDeactivate();
+						}
+
+					}
+
+					if (self.__loadingActive) {
+
+						self.__loadingActive = false;
+						if (self.__loadingDeactivate) {
+							self.__loadingDeactivate();
 						}
 
 					}
