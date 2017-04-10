@@ -122,6 +122,7 @@
 		}, 2000);
 	});
 
+	// Activate pull-to-loading
 	scroller.activatePullToLoading(50, function() {
 		loadingElem.className += " active";
 		loadingElem.innerHTML = "Release to Loading";
@@ -137,8 +138,6 @@
 			scroller.finishPullToLoading();
 		}, 2000);
 	});
-	
-	
 	
 	// Setup Scroller
 

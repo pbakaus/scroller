@@ -415,6 +415,9 @@ var Scroller;
 
 
 		/*-------------------------------------------------------------------------------------*/
+		/**
+		 * Like `activatePullToRefresh` but the zone on the bottom
+		 */
 		activatePullToLoading: function(height, activateCallback, deactivateCallback, startCallback) {
 
 			var self = this;
@@ -425,15 +428,21 @@ var Scroller;
 			self.__loadingStart = startCallback;
 
 		},
+
+		/**
+		 * Like `triggerPullToRefresh`
+		 */
 		triggerPullToLoading: function() {
-			// Use publish instead of scrollTo to allow scrolling to out of boundary position
-			// We don't need to normalize scrollLeft, zoomLevel, etc. here because we only y-scrolling when pull-to-refresh is enabled
-			this.__publish(this.__scrollLeft, -this.__loadingHeight, this.__zoomLevel, true);
+			this.__publish(this.__scrollLeft, this.__maxScrollTop + this.__loadingHeight, this.__zoomLevel, true);
 
 			if (this.__loadingStart) {
 				this.__loadingStart();
 			}
 		},
+
+		/**
+		 * Like `finishPullToRefresh`
+		 */
 		finishPullToLoading: function() {
 
 			var self = this;
@@ -442,9 +451,6 @@ var Scroller;
 			if (self.__loadingDeactivate) {
 				self.__loadingDeactivate();
 			}
-
-			// self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
-
 		},
 		/*-------------------------------------------------------------------------------------*/
 
@@ -1052,8 +1058,8 @@ var Scroller;
 						// Verify that we have enough velocity to start deceleration
 						if (Math.abs(self.__decelerationVelocityX) > minVelocityToStartDeceleration || Math.abs(self.__decelerationVelocityY) > minVelocityToStartDeceleration) {
 
-							// Deactivate pull-to-refresh when decelerating
-							if (!self.__refreshActive) {
+							// Deactivate pull-to-refresh and pull-to-loading when decelerating
+							if (!self.__refreshActive && !self.__loadingActive) {
 								self.__startDeceleration(timeStamp);
 							}
 						} else {
