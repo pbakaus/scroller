@@ -455,7 +455,7 @@ var Scroller;
 
 			// Stop deceleration
 			if (self.__isDecelerating) {
-				core.effect.Animate.stop(self.__isDecelerating);
+				zynga.effect.Animate.stop(self.__isDecelerating);
 				self.__isDecelerating = false;
 			}
 
@@ -532,7 +532,7 @@ var Scroller;
 
 			// Stop deceleration
 			if (self.__isDecelerating) {
-				core.effect.Animate.stop(self.__isDecelerating);
+				zynga.effect.Animate.stop(self.__isDecelerating);
 				self.__isDecelerating = false;
 			}
 
@@ -665,14 +665,14 @@ var Scroller;
 
 			// Stop deceleration
 			if (self.__isDecelerating) {
-				core.effect.Animate.stop(self.__isDecelerating);
+				zynga.effect.Animate.stop(self.__isDecelerating);
 				self.__isDecelerating = false;
 				self.__interruptedAnimation = true;
 			}
 
 			// Stop animation
 			if (self.__isAnimating) {
-				core.effect.Animate.stop(self.__isAnimating);
+				zynga.effect.Animate.stop(self.__isAnimating);
 				self.__isAnimating = false;
 				self.__interruptedAnimation = true;
 			}
@@ -1056,7 +1056,7 @@ var Scroller;
 			// Remember whether we had an animation, then we try to continue based on the current "drive" of the animation
 			var wasAnimating = self.__isAnimating;
 			if (wasAnimating) {
-				core.effect.Animate.stop(wasAnimating);
+				zynga.effect.Animate.stop(wasAnimating);
 				self.__isAnimating = false;
 			}
 
@@ -1113,7 +1113,7 @@ var Scroller;
 				};
 
 				// When continuing based on previous animation we choose an ease-out animation instead of ease-in-out
-				self.__isAnimating = core.effect.Animate.start(step, verify, completed, self.options.animationDuration, wasAnimating ? easeOutCubic : easeInOutCubic);
+				self.__isAnimating = zynga.effect.Animate.start(step, verify, completed, self.options.animationDuration, wasAnimating ? easeOutCubic : easeInOutCubic);
 
 			} else {
 
@@ -1222,7 +1222,7 @@ var Scroller;
 			};
 
 			// Start animation and switch on flag
-			self.__isDecelerating = core.effect.Animate.start(step, verify, completed);
+			self.__isDecelerating = zynga.effect.Animate.start(step, verify, completed);
 
 		},
 
