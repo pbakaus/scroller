@@ -1,0 +1,61 @@
+{
+  "name": "scroller",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Accelerated panning and zooming for HTML and Canvas",
+  "keywords": ["scroller", "mobile", "animation", "touch", "zoom", "pan", "scroll"],
+  "author": "Zynga Inc.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zynga/scroller.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zynga/scroller/issues"
+  },
+  "homepage": "https://github.com/zynga/scroller#readme",
+  "main": "dist/scroller.cjs.js",
+  "module": "dist/scroller.esm.js",
+  "unpkg": "dist/scroller-full.min.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/scroller.esm.js",
+      "require": "./dist/scroller.cjs.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "LICENSE.txt",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w",
+    "dev": "rollup -c -w",
+    "lint": "biome check src",
+    "lint:fix": "biome check --write src",
+    "format": "biome format src",
+    "format:fix": "biome format --write src",
+    "check": "biome check src",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.25.0",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+} 

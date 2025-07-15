@@ -42,8 +42,40 @@ These are the available options with their defaults. Options can be modified usi
 * minZoom = `0.5`
 * maxZoom = `3`
 
+Installation
+------------
+
+**Modern (npm):**
+```bash
+npm install scroller
+```
+
+**CDN (vanilla JS):**
+```html
+<!-- Full bundle (recommended) -->
+<script src="https://unpkg.com/scroller/dist/scroller-full.min.js"></script>
+
+<!-- Core only -->
+<script src="https://unpkg.com/scroller/dist/scroller.min.js"></script>
+```
+
 Usage
 -----
+
+**ES6 Modules:**
+```js
+import { Scroller } from 'scroller';
+```
+
+**CommonJS:**
+```js
+const { Scroller } = require('scroller');
+```
+
+**Vanilla JS:**
+```js
+// Available as global Scroller after loading script
+```
 
 Callback (first parameter of constructor) is required. Options are optional. Defaults are listed above. The created instance must have proper dimensions using a `setDimensions()` call. Afterwards you can pass in event data or manually control scrolling/zooming via the API.
 
@@ -56,6 +88,15 @@ var scrollerObj = new Scroller(function(left, top, zoom) {
 
 // Configure to have an outer dimension of 1000px and inner dimension of 3000px
 scrollerObj.setDimensions(1000, 1000, 3000, 3000);
+```
+
+**EasyScroller (Simplified API):**
+```js
+// ES6 Modules
+import { EasyScroller } from 'scroller';
+
+// Vanilla JS (full bundle only)
+const easyScroller = new Scroller.EasyScroller(contentElement, options);
 ```
 
 Public API
