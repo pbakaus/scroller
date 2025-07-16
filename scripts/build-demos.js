@@ -54,4 +54,4 @@ for (const file of demoFiles) {
 }
 
 console.log(`✅ Production demos built in ${distDemoDir}/`);
-console.log(`💡 Open ${distDemoDir}/easyscroller.html to test the production build`); 
+console.log(`💡 Open file://${process.cwd()}/${distDemoDir}/easyscroller.html in your browser to test the production build`); 

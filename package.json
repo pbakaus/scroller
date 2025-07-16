@@ -16,12 +16,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zynga/scroller.git"
+    "url": "git+https://github.com/pbakaus/scroller.git"
   },
   "bugs": {
-    "url": "https://github.com/zynga/scroller/issues"
+    "url": "https://github.com/pbakaus/scroller/issues"
   },
-  "homepage": "https://github.com/zynga/scroller#readme",
+  "homepage": "https://github.com/pbakaus/scroller#readme",
   "main": "dist/scroller.cjs.js",
   "module": "dist/scroller.esm.js",
   "unpkg": "dist/scroller-full.min.js",

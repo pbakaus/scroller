@@ -1,10 +1,10 @@
 /*
  * Scroller
- * http://github.com/zynga/scroller
+ * http://github.com/pbakaus/scroller
  *
  * Copyright 2011, Zynga Inc.
  * Licensed under the MIT License.
- * https://raw.github.com/zynga/scroller/master/MIT-LICENSE.txt
+ * https://raw.github.com/pbakaus/scroller/master/MIT-LICENSE.txt
  */
 
 import { Animate } from "./Animate.js";
