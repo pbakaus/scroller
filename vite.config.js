@@ -1,11 +1,11 @@
 export default {
-  root: './demo',
+  root: './',
   server: {
     port: 3000,
-    open: true,
+    open: '/demo/',
     host: true
   },
   build: {
-    outDir: '../dist'
+    outDir: 'dist'
   }
 } 
