@@ -34,18 +34,18 @@ for (const file of demoFiles) {
     } else {
       // Replace ES module imports with UMD scripts for demo files
       if (content.includes('EasyScroller')) {
-        // EasyScroller demo - use full bundle
+        // EasyScroller demo - use full bundle (local copy for GitHub Pages)
         content = content.replace(
           /<!-- Load from source files \(dev mode\) -->[\s\S]*?<script type="module">[\s\S]*?<\/script>/,
           `<!-- Load from built bundle (production) -->
-	<script src="../scroller-full.umd.js"></script>`
+	<script src="scroller-full.umd.js"></script>`
         );
       } else if (content.includes('Scroller')) {
-        // Core Scroller demos - use core bundle
+        // Core Scroller demos - use core bundle (local copy for GitHub Pages)
         content = content.replace(
           /<!-- Load from source files \(dev mode\) -->[\s\S]*?<script type="module">[\s\S]*?<\/script>/,
           `<!-- Load from built bundle (production) -->
-	<script src="../scroller.umd.js"></script>`
+	<script src="scroller.umd.js"></script>`
         );
       }
       console.log(`  📄 ${file} (processed)`);
@@ -56,6 +56,25 @@ for (const file of demoFiles) {
     // Copy other files as-is
     fs.copyFileSync(srcPath, destPath);
     console.log(`  📄 ${file}`);
+  }
+}
+
+// Copy required JS files into the demo directory for GitHub Pages
+console.log('📦 Copying JS bundles to demo directory...');
+const jsFiles = [
+  'scroller.umd.js',
+  'scroller-full.umd.js'
+];
+
+for (const jsFile of jsFiles) {
+  const srcPath = path.join('dist', jsFile);
+  const destPath = path.join(distDemoDir, jsFile);
+  
+  if (fs.existsSync(srcPath)) {
+    fs.copyFileSync(srcPath, destPath);
+    console.log(`  📄 ${jsFile}`);
+  } else {
+    console.warn(`  ⚠️  ${jsFile} not found in dist/`);
   }
 }
 
