@@ -1,37 +1,370 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>EasyScroller</title>
-
-	<!-- Scroller + EasyScroller (full bundle) -->
-	<script src="../dist/scroller-full.umd.js"></script>
+    <meta charset="UTF-8">
+    <title>EasyScroller Demo</title>
 
 	<style type="text/css">
-		body { background-color: #EEE; overflow: hidden; padding: 0; }
-		#container { background-color: #FFF; border: 5px solid #000; height: 480px; margin: 10% auto 0 auto; overflow: hidden; width: 80%; position: relative;}
-		#content { padding: 10px; position: absolute; }
+		body { 
+			background-color: #EEE; 
+			padding: 20px; 
+			font-family: Arial, sans-serif;
+			margin: 0;
+		}
+		
+		h1 { text-align: center; color: #333; }
+		h2 { color: #555; margin-top: 40px; }
+		
+		.demo-section {
+			margin: 30px auto;
+			max-width: 1200px;
+		}
+		
+		.demo-container {
+			display: flex;
+			gap: 30px;
+			align-items: flex-start;
+		}
+		
+		.demo-box {
+			flex: 1;
+		}
+		
+		.scroll-container { 
+			background-color: #FFF; 
+			border: 3px solid #000; 
+			height: 300px; 
+			overflow: hidden; 
+			width: 100%; 
+			position: relative;
+			border-radius: 8px;
+		}
+		
+		.zoom-container {
+			background-color: #FFF; 
+			border: 3px solid #007acc; 
+			height: 300px; 
+			overflow: hidden; 
+			width: 100%; 
+			position: relative;
+			border-radius: 8px;
+		}
+		
+		.content { 
+			padding: 10px; 
+			position: absolute; 
+		}
+		
+		.zoom-content {
+			padding: 20px;
+			position: absolute;
+			width: 600px;
+			height: 600px;
+			background: #f8f9fa;
+		}
+		
+		.zoom-item {
+			background: #007acc;
+			color: white;
+			padding: 15px;
+			margin: 10px;
+			border-radius: 8px;
+			display: inline-block;
+			min-width: 100px;
+			text-align: center;
+		}
+		
+		.instructions {
+			background: #f9f9f9;
+			padding: 15px;
+			border-radius: 8px;
+			margin-bottom: 15px;
+			border-left: 4px solid #007acc;
+		}
+		
+		.code-example {
+			background: #2d2d2d;
+			color: #f8f8f2;
+			padding: 15px;
+			border-radius: 8px;
+			margin: 10px 0;
+			font-family: 'Courier New', monospace;
+			overflow-x: auto;
+		}
+		
+		@media (max-width: 768px) {
+			.demo-container {
+				flex-direction: column;
+			}
+		}
 	</style>
 </head>
 <body>
-	<div id="container">
-		<div id="content" data-scrollable="y">
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat neque vel mi pellentesque laoreet. Praesent in nisi ut lacus fringilla fringilla id eget orci. Maecenas eget varius dolor. Pellentesque dignissim, libero at convallis aliquet, nibh mauris aliquam lacus, nec ornare libero arcu eget risus. Quisque quis nulla quis felis convallis feugiat sed tempus erat. Cras nec ante leo, vel aliquam dui. Vestibulum ut magna velit, eget luctus mi. Nullam eget sapien sit amet velit sagittis gravida ut in neque. Sed fermentum dui sed lorem malesuada nec adipiscing diam tempor. Etiam at augue ut ipsum scelerisque ullamcorper. Integer vehicula orci posuere sem tristique ac tempus odio facilisis. In mattis felis sed lacus consequat aliquet mollis lacus porta. Nullam ullamcorper risus et purus vulputate nec dignissim mauris imperdiet.</p>
-			<p>Nam sem lorem, porttitor posuere elementum et, mattis non diam. Donec non augue odio, at pellentesque augue. Integer egestas, sapien lacinia ullamcorper suscipit, purus orci mollis nisl, eget vulputate elit libero vel diam. Suspendisse sodales nisl in est volutpat vitae tempus mauris vulputate. Pellentesque purus augue, scelerisque sit amet rutrum non, lobortis sed magna. Proin ultricies, nisl id cursus dignissim, odio erat feugiat erat, sed mollis libero nisl sit amet ante. Aliquam ante urna, ultricies id euismod sed, gravida ultrices neque. Curabitur viverra odio ultrices quam dapibus a cursus mi malesuada.</p>
-			<p>Sed iaculis, felis non rhoncus accumsan, augue lectus condimentum ligula, in lacinia ipsum nibh id velit. Nam pellentesque, erat quis posuere vestibulum, tellus elit tristique lacus, ac elementum mauris felis at ipsum. Proin eget ante ante, nec faucibus turpis. Fusce in odio augue, eu malesuada sem. Nulla eu nulla eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum at justo ipsum. Maecenas iaculis hendrerit sem eu adipiscing. Aenean in sapien eu mi aliquam posuere. Ut facilisis rutrum lectus eu laoreet. Aliquam dictum nulla a eros aliquam mattis.</p>
-			<p>Maecenas eget ante velit, vitae commodo ligula. In hac habitasse platea dictumst. Proin id lectus justo. Praesent sollicitudin justo eu urna rhoncus pellentesque. In blandit elit a dui pellentesque ut congue dui malesuada. Pellentesque non eros porttitor nunc consectetur condimentum. Aliquam nec nunc eu justo rhoncus tempor in sed velit.</p>
-			<p>Sed est mauris, pulvinar at viverra vel, mollis eget ipsum. Sed porta lorem sed odio elementum quis imperdiet quam varius. In iaculis justo et odio interdum vel imperdiet nunc scelerisque. Phasellus semper blandit dolor ac egestas. Donec sit amet mauris nec sem ultricies tincidunt vel vel mauris. Phasellus pellentesque, erat sit amet ullamcorper ultrices, quam justo pharetra ante, ac lobortis arcu metus id nunc. Praesent at risus arcu.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat neque vel mi pellentesque laoreet. Praesent in nisi ut lacus fringilla fringilla id eget orci. Maecenas eget varius dolor. Pellentesque dignissim, libero at convallis aliquet, nibh mauris aliquam lacus, nec ornare libero arcu eget risus. Quisque quis nulla quis felis convallis feugiat sed tempus erat. Cras nec ante leo, vel aliquam dui. Vestibulum ut magna velit, eget luctus mi. Nullam eget sapien sit amet velit sagittis gravida ut in neque. Sed fermentum dui sed lorem malesuada nec adipiscing diam tempor. Etiam at augue ut ipsum scelerisque ullamcorper. Integer vehicula orci posuere sem tristique ac tempus odio facilisis. In mattis felis sed lacus consequat aliquet mollis lacus porta. Nullam ullamcorper risus et purus vulputate nec dignissim mauris imperdiet.</p>
-			<p>Nam sem lorem, porttitor posuere elementum et, mattis non diam. Donec non augue odio, at pellentesque augue. Integer egestas, sapien lacinia ullamcorper suscipit, purus orci mollis nisl, eget vulputate elit libero vel diam. Suspendisse sodales nisl in est volutpat vitae tempus mauris vulputate. Pellentesque purus augue, scelerisque sit amet rutrum non, lobortis sed magna. Proin ultricies, nisl id cursus dignissim, odio erat feugiat erat, sed mollis libero nisl sit amet ante. Aliquam ante urna, ultricies id euismod sed, gravida ultrices neque. Curabitur viverra odio ultrices quam dapibus a cursus mi malesuada.</p>
-			<p>Sed iaculis, felis non rhoncus accumsan, augue lectus condimentum ligula, in lacinia ipsum nibh id velit. Nam pellentesque, erat quis posuere vestibulum, tellus elit tristique lacus, ac elementum mauris felis at ipsum. Proin eget ante ante, nec faucibus turpis. Fusce in odio augue, eu malesuada sem. Nulla eu nulla eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum at justo ipsum. Maecenas iaculis hendrerit sem eu adipiscing. Aenean in sapien eu mi aliquam posuere. Ut facilisis rutrum lectus eu laoreet. Aliquam dictum nulla a eros aliquam mattis.</p>
-			<p>Maecenas eget ante velit, vitae commodo ligula. In hac habitasse platea dictumst. Proin id lectus justo. Praesent sollicitudin justo eu urna rhoncus pellentesque. In blandit elit a dui pellentesque ut congue dui malesuada. Pellentesque non eros porttitor nunc consectetur condimentum. Aliquam nec nunc eu justo rhoncus tempor in sed velit.</p>
-			<p>Sed est mauris, pulvinar at viverra vel, mollis eget ipsum. Sed porta lorem sed odio elementum quis imperdiet quam varius. In iaculis justo et odio interdum vel imperdiet nunc scelerisque. Phasellus semper blandit dolor ac egestas. Donec sit amet mauris nec sem ultricies tincidunt vel vel mauris. Phasellus pellentesque, erat sit amet ullamcorper ultrices, quam justo pharetra ante, ac lobortis arcu metus id nunc. Praesent at risus arcu.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat neque vel mi pellentesque laoreet. Praesent in nisi ut lacus fringilla fringilla id eget orci. Maecenas eget varius dolor. Pellentesque dignissim, libero at convallis aliquet, nibh mauris aliquam lacus, nec ornare libero arcu eget risus. Quisque quis nulla quis felis convallis feugiat sed tempus erat. Cras nec ante leo, vel aliquam dui. Vestibulum ut magna velit, eget luctus mi. Nullam eget sapien sit amet velit sagittis gravida ut in neque. Sed fermentum dui sed lorem malesuada nec adipiscing diam tempor. Etiam at augue ut ipsum scelerisque ullamcorper. Integer vehicula orci posuere sem tristique ac tempus odio facilisis. In mattis felis sed lacus consequat aliquet mollis lacus porta. Nullam ullamcorper risus et purus vulputate nec dignissim mauris imperdiet.</p>
-			<p>Nam sem lorem, porttitor posuere elementum et, mattis non diam. Donec non augue odio, at pellentesque augue. Integer egestas, sapien lacinia ullamcorper suscipit, purus orci mollis nisl, eget vulputate elit libero vel diam. Suspendisse sodales nisl in est volutpat vitae tempus mauris vulputate. Pellentesque purus augue, scelerisque sit amet rutrum non, lobortis sed magna. Proin ultricies, nisl id cursus dignissim, odio erat feugiat erat, sed mollis libero nisl sit amet ante. Aliquam ante urna, ultricies id euismod sed, gravida ultrices neque. Curabitur viverra odio ultrices quam dapibus a cursus mi malesuada.</p>
-			<p>Sed iaculis, felis non rhoncus accumsan, augue lectus condimentum ligula, in lacinia ipsum nibh id velit. Nam pellentesque, erat quis posuere vestibulum, tellus elit tristique lacus, ac elementum mauris felis at ipsum. Proin eget ante ante, nec faucibus turpis. Fusce in odio augue, eu malesuada sem. Nulla eu nulla eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum at justo ipsum. Maecenas iaculis hendrerit sem eu adipiscing. Aenean in sapien eu mi aliquam posuere. Ut facilisis rutrum lectus eu laoreet. Aliquam dictum nulla a eros aliquam mattis.</p>
-			<p>Maecenas eget ante velit, vitae commodo ligula. In hac habitasse platea dictumst. Proin id lectus justo. Praesent sollicitudin justo eu urna rhoncus pellentesque. In blandit elit a dui pellentesque ut congue dui malesuada. Pellentesque non eros porttitor nunc consectetur condimentum. Aliquam nec nunc eu justo rhoncus tempor in sed velit.</p>
-			<p>Sed est mauris, pulvinar at viverra vel, mollis eget ipsum. Sed porta lorem sed odio elementum quis imperdiet quam varius. In iaculis justo et odio interdum vel imperdiet nunc scelerisque. Phasellus semper blandit dolor ac egestas. Donec sit amet mauris nec sem ultricies tincidunt vel vel mauris. Phasellus pellentesque, erat sit amet ullamcorper ultrices, quam justo pharetra ante, ac lobortis arcu metus id nunc. Praesent at risus arcu.</p>
+	<h1>EasyScroller Demo</h1>
+	
+	<div class="demo-section">
+		<div class="instructions">
+			<strong>EasyScroller</strong> automatically enables scrolling and zooming for elements with <code>data-scrollable</code> or <code>data-zoomable</code> attributes.
+			<br><br>
+			<strong>Required DOM Structure:</strong> A container element with the data attribute containing exactly one child element that holds the content.
 		</div>
 	</div>
+
+	<div class="demo-section">
+		<h2>Combined Demo - Scrollable + Zoomable</h2>
+		<div class="demo-container">
+			<div class="demo-box">
+				<div class="instructions">
+					<strong>Scrollable and Zoomable:</strong> <code>data-scrollable="true" data-zoomable="true"</code><br>
+					Drag to scroll, use mouse wheel to zoom, or combine both for ultimate navigation control.
+				</div>
+				<div class="zoom-container" data-scrollable="true" data-zoomable="true">
+					<div class="content" style="width: 800px; height: 800px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px;">
+						<h3 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Interactive Content Area</h3>
+						<p style="color: white; font-size: 16px; line-height: 1.6;">This area supports both scrolling and zooming! Try these interactions:</p>
+						<ul style="color: white; font-size: 14px; margin: 20px 0;">
+							<li><strong>Scroll:</strong> Drag to pan around the content</li>
+							<li><strong>Zoom:</strong> Use mouse wheel or pinch to zoom in/out</li>
+							<li><strong>Combined:</strong> Zoom in and then scroll to explore details</li>
+						</ul>
+						
+						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin: 30px 0;">
+							<div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 8px; text-align: center; color: white;">
+								<div style="font-size: 24px; margin-bottom: 5px;">🎯</div>
+								<div>Target 1</div>
+							</div>
+							<div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 8px; text-align: center; color: white;">
+								<div style="font-size: 24px; margin-bottom: 5px;">🚀</div>
+								<div>Target 2</div>
+							</div>
+							<div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 8px; text-align: center; color: white;">
+								<div style="font-size: 24px; margin-bottom: 5px;">⭐</div>
+								<div>Target 3</div>
+							</div>
+							<div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 8px; text-align: center; color: white;">
+								<div style="font-size: 24px; margin-bottom: 5px;">💎</div>
+								<div>Target 4</div>
+							</div>
+						</div>
+						
+						<p style="color: white; margin-top: 40px;">This large content area extends beyond the visible container. Zoom out to see the full scope, or zoom in to see fine details of individual elements.</p>
+						
+						<div style="margin-top: 50px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 8px;">
+							<h4 style="color: white; margin: 0 0 10px 0;">Pro Tip:</h4>
+							<p style="color: white; margin: 0; font-size: 14px;">The combination of scrolling and zooming provides the most flexible navigation experience. Zoom out for overview, zoom in for details!</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="demo-section">
+		<h2>Scrollable Demo</h2>
+		<div class="demo-container">
+			<div class="demo-box">
+				<div class="instructions">
+					<strong>Scrollable (Y-axis only):</strong> <code>data-scrollable="y"</code><br>
+					Scroll or drag to navigate through the content.
+				</div>
+				<div class="scroll-container" data-scrollable="y">
+					<div class="content">
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat neque vel mi pellentesque laoreet. Praesent in nisi ut lacus fringilla fringilla id eget orci. Maecenas eget varius dolor. Pellentesque dignissim, libero at convallis aliquet, nibh mauris aliquam lacus, nec ornare libero arcu eget risus. Quisque quis nulla quis felis convallis feugiat sed tempus erat. Cras nec ante leo, vel aliquam dui. Vestibulum ut magna velit, eget luctus mi. Nullam eget sapien sit amet velit sagittis gravida ut in neque. Sed fermentum dui sed lorem malesuada nec adipiscing diam tempor. Etiam at augue ut ipsum scelerisque ullamcorper. Integer vehicula orci posuere sem tristique ac tempus odio facilisis. In mattis felis sed lacus consequat aliquet mollis lacus porta. Nullam ullamcorper risus et purus vulputate nec dignissim mauris imperdiet.</p>
+			<p>Nam sem lorem, porttitor posuere elementum et, mattis non diam. Donec non augue odio, at pellentesque augue. Integer egestas, sapien lacinia ullamcorper suscipit, purus orci mollis nisl, eget vulputate elit libero vel diam. Suspendisse sodales nisl in est volutpat vitae tempus mauris vulputate.</p>
+			<p>Pellentesque purus augue, scelerisque sit amet rutrum non, lobortis sed magna. Proin ultricies, nisl id cursus dignissim, odio erat feugiat erat, sed mollis libero nisl sit amet ante. Aliquam ante urna, ultricies id euismod sed, gravida ultrices neque. Curabitur viverra odio ultrices quam dapibus a cursus mi malesuada.</p>
+			<p>Sed iaculis, felis non rhoncus accumsan, augue lectus condimentum ligula, in lacinia ipsum nibh id velit. Nam pellentesque, erat quis posuere vestibulum, tellus elit tristique lacus, ac elementum mauris felis at ipsum. Proin eget ante ante, nec faucibus turpis.</p>
+			<p>Maecenas eget ante velit, vitae commodo ligula. In hac habitasse platea dictumst. Proin id lectus justo. Praesent sollicitudin justo eu urna rhoncus pellentesque. In blandit elit a dui pellentesque ut congue dui malesuada.</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="demo-box">
+				<div class="instructions">
+					<strong>Scrollable (Both axes):</strong> <code>data-scrollable="true"</code><br>
+					Drag to scroll in any direction.
+				</div>
+				<div class="scroll-container" data-scrollable="true">
+					<div class="content" style="width: 800px;">
+						<h3>Wide Content Area</h3>
+						<p>This content is wider than the container and can be scrolled horizontally and vertically. Try dragging in any direction to explore the content area.</p>
+						<div style="white-space: nowrap; margin: 20px 0;">
+							<span style="display: inline-block; width: 150px; height: 100px; background: #ff6b6b; margin-right: 10px; border-radius: 8px; text-align: center; line-height: 100px; color: white;">Box 1</span>
+							<span style="display: inline-block; width: 150px; height: 100px; background: #4ecdc4; margin-right: 10px; border-radius: 8px; text-align: center; line-height: 100px; color: white;">Box 2</span>
+							<span style="display: inline-block; width: 150px; height: 100px; background: #45b7d1; margin-right: 10px; border-radius: 8px; text-align: center; line-height: 100px; color: white;">Box 3</span>
+							<span style="display: inline-block; width: 150px; height: 100px; background: #96ceb4; margin-right: 10px; border-radius: 8px; text-align: center; line-height: 100px; color: white;">Box 4</span>
+							<span style="display: inline-block; width: 150px; height: 100px; background: #feca57; margin-right: 10px; border-radius: 8px; text-align: center; line-height: 100px; color: white;">Box 5</span>
+						</div>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat neque vel mi pellentesque laoreet. Praesent in nisi ut lacus fringilla fringilla id eget orci.</p>
+						<p>Pellentesque dignissim, libero at convallis aliquet, nibh mauris aliquam lacus, nec ornare libero arcu eget risus. Quisque quis nulla quis felis convallis feugiat sed tempus erat.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="demo-section">
+		<h2>Zoomable Demo</h2>
+		<div class="demo-container">
+			<div class="demo-box">
+				<div class="instructions">
+					<strong>Zoom-only (no panning):</strong> <code>data-zoomable="true"</code><br>
+					Use mouse wheel to zoom from cursor position. Content stays centered.
+				</div>
+				<div class="zoom-container" data-zoomable="true">
+					<div class="content" style="width: 600px; height: 600px; background: #f8f9fa; padding: 20px; border: 2px dashed #dee2e6;">
+						<h3 style="margin-top: 0; color: #495057;">Zoomable Area</h3>
+						<p style="color: #6c757d;">This area can be zoomed and panned. Use your mouse wheel to zoom in and out!</p>
+						
+						<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0;">
+							<div class="zoom-item">Item 1</div>
+							<div class="zoom-item">Item 2</div>
+							<div class="zoom-item">Item 3</div>
+							<div class="zoom-item">Item 4</div>
+							<div class="zoom-item">Item 5</div>
+							<div class="zoom-item">Item 6</div>
+							<div class="zoom-item">Item 7</div>
+							<div class="zoom-item">Item 8</div>
+						</div>
+						
+						<div style="margin: 30px 0; padding: 15px; background: #e9ecef; border-radius: 8px;">
+							<h4 style="margin: 0 0 10px 0; color: #495057;">Zoom Instructions:</h4>
+							<ul style="margin: 0; padding-left: 20px; color: #6c757d;">
+								<li>Mouse wheel: Zoom in/out</li>
+								<li>Drag: Pan around when zoomed</li>
+								<li>Touch: Pinch to zoom (mobile)</li>
+							</ul>
+						</div>
+						
+						<p style="color: #6c757d;">The content should remain visible and properly styled at all zoom levels. No more white screen issues!</p>
+						
+						<div style="margin-top: 40px;">
+							<div class="zoom-item" style="background: #28a745;">Success!</div>
+							<div class="zoom-item" style="background: #17a2b8;">Working</div>
+							<div class="zoom-item" style="background: #ffc107; color: #212529;">Fixed</div>
+							<div class="zoom-item" style="background: #dc3545;">Perfect</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="demo-box">
+				<div class="instructions">
+					<strong>Zoom + Pan (recommended):</strong> <code>data-scrollable="true" data-zoomable="true"</code><br>
+					Mouse wheel to zoom from cursor position. Drag to pan when zoomed in.
+				</div>
+				<div class="zoom-container" data-scrollable="true" data-zoomable="true">
+					<div class="content" style="width: 600px; height: 600px; background: #e8f4fd; padding: 20px; border: 2px dashed #007acc;">
+						<h3 style="margin-top: 0; color: #495057;">Zoom + Pan Area</h3>
+						<p style="color: #6c757d;">This demo combines zooming with panning for the best user experience.</p>
+						
+						<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0;">
+							<div class="zoom-item" style="background: #007acc;">Best UX</div>
+							<div class="zoom-item" style="background: #28a745;">Full Control</div>
+							<div class="zoom-item" style="background: #17a2b8;">Recommended</div>
+						</div>
+						
+						<p style="color: #6c757d;">Zoom from cursor position + pan when zoomed = perfect navigation!</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="demo-section">
+		<h2>Zoom with Range Limits</h2>
+		<div class="demo-container">
+			<div class="demo-box">
+				<div class="instructions">
+					<strong>Constrained Zoom Range:</strong> <code>data-zoomable="0.5-2"</code><br>
+					Limited zoom range from 0.5x to 2x magnification. Tests zoom origin fix.
+				</div>
+				<div class="zoom-container" data-zoomable="0.5-2">
+					<div class="zoom-content" style="background-color: #f8f9fa;">
+						<h3>Constrained Zoom</h3>
+						<p>This area has zoom limits set between 0.5x and 2x.</p>
+						<div style="margin: 20px 0;">
+							<div class="zoom-item" style="background: #e74c3c;">Min 0.5x</div>
+							<div class="zoom-item" style="background: #9b59b6;">Max 2.0x</div>
+						</div>
+						<p>Notice how the zoom is constrained within the specified range. You cannot zoom out beyond 0.5x or zoom in beyond 2.0x.</p>
+						<p>This is useful for maintaining readability while still allowing some zoom flexibility.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="demo-section">
+		<h2>Usage Examples</h2>
+		
+		<h3>Auto-initialization with Data Attributes</h3>
+		<div class="code-example">
+&lt;!-- Scrollable container (Y-axis only) --&gt;
+&lt;div data-scrollable="y"&gt;
+  &lt;div&gt;Your scrollable content here&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Scrollable container (both axes) --&gt;
+&lt;div data-scrollable="true"&gt;
+  &lt;div&gt;Your scrollable content here&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Zoomable container (with panning for better zoom origin) --&gt;
+&lt;div data-scrollable="true" data-zoomable="true"&gt;
+  &lt;div&gt;Your zoomable content here&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Zoomable with custom zoom range --&gt;
+&lt;div data-scrollable="true" data-zoomable="0.5-3"&gt;
+  &lt;div&gt;Content with zoom from 0.5x to 3x&lt;/div&gt;
+&lt;/div&gt;</div>
+
+		<h3>Manual Initialization</h3>
+		<div class="code-example">
+// Import EasyScroller
+import { EasyScroller } from 'scroller';
+
+// Get the container element (the one that should be scrollable)
+const container = document.getElementById('my-container');
+
+// Initialize with options
+const easyScroller = new EasyScroller(container, {
+  scrollingX: true,
+  scrollingY: true,
+  zooming: true,
+  minZoom: 0.5,
+  maxZoom: 3
+});
+
+// Use the API
+easyScroller.scrollTo(100, 200);
+easyScroller.zoomTo(1.5);
+const values = easyScroller.getValues(); // { left, top, zoom }</div>
+
+		<h3>Data Attribute Options</h3>
+		<div class="instructions">
+			<strong>data-scrollable values:</strong>
+			<ul>
+				<li><code>"true"</code> - Enable scrolling on both X and Y axes</li>
+				<li><code>"x"</code> - Enable scrolling on X-axis only</li>
+				<li><code>"y"</code> - Enable scrolling on Y-axis only</li>
+			</ul>
+			
+			<strong>data-zoomable values:</strong>
+			<ul>
+				<li><code>"true"</code> - Enable zooming with default range (0.5x to 3x)</li>
+				<li><code>"min-max"</code> - Enable zooming with custom range (e.g., "0.5-2" for 0.5x to 2x)</li>
+			</ul>
+			
+			<strong>💡 Pro Tip:</strong> Combine <code>data-scrollable="true"</code> with <code>data-zoomable</code> for the best user experience. This enables proper zoom-from-cursor behavior and allows panning when zoomed in.
+		</div>
+	</div>
+
+	<!-- Load from source files (dev mode) -->
+	<script type="module">
+		import { EasyScroller } from '../src/EasyScroller.js';
+		window.EasyScroller = EasyScroller;
+	</script>
 
 </body>
 </html>

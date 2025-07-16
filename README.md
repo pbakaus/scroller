@@ -91,12 +91,72 @@ scrollerObj.setDimensions(1000, 1000, 3000, 3000);
 ```
 
 **EasyScroller (Simplified API):**
+
+EasyScroller provides a simplified, DOM-focused API that automatically handles scrolling and zooming for elements with data attributes.
+
+**Auto-initialization:**
+EasyScroller automatically initializes on elements with `data-scrollable` or `data-zoomable` attributes when the DOM is ready.
+
+```html
+<!-- Auto-initialized scrollable container -->
+<div data-scrollable="y">
+  <div>Your content here</div>
+</div>
+
+<!-- Auto-initialized zoomable container -->
+<div data-zoomable="true">
+  <div>Your zoomable content here</div>
+</div>
+```
+
+**Manual initialization:**
 ```js
 // ES6 Modules
 import { EasyScroller } from 'scroller';
 
 // Vanilla JS (full bundle only)
-const easyScroller = new Scroller.EasyScroller(contentElement, options);
+const easyScroller = new Scroller.EasyScroller(containerElement, options);
+
+// Basic usage
+const container = document.getElementById('my-container');
+const easyScroller = new EasyScroller(container, {
+  scrollingX: true,
+  scrollingY: true,
+  zooming: true
+});
+```
+
+**DOM Structure Requirements:**
+EasyScroller requires a specific DOM structure where the container element (with data attributes or passed to constructor) contains exactly one child element that holds the actual content:
+
+```html
+<div data-scrollable="true">  <!-- Container -->
+  <div>                       <!-- Content wrapper (required) -->
+    <!-- Your actual content here -->
+  </div>
+</div>
+```
+
+**Data Attribute Options:**
+- `data-scrollable="true"` - Enable scrolling on both axes
+- `data-scrollable="x"` - Enable horizontal scrolling only  
+- `data-scrollable="y"` - Enable vertical scrolling only
+- `data-zoomable="true"` - Enable zooming with default range (0.5x to 3x)
+- `data-zoomable="min-max"` - Enable zooming with custom range (e.g., "0.5-2")
+
+**EasyScroller API:**
+```js
+// Scroll to position
+easyScroller.scrollTo(left, top, animate);
+
+// Zoom to level
+easyScroller.zoomTo(level, animate, originLeft, originTop);
+
+// Get current values
+const values = easyScroller.getValues(); // { left, top, zoom }
+
+// Clean up
+easyScroller.destroy();
 ```
 
 Public API

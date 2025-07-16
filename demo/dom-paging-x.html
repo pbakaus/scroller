@@ -1,10 +1,15 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title>Scroller - Paging X</title>
           
-    	<script src="../dist/scroller.umd.js"></script>
-          
+    		<!-- Load from source files (dev mode) -->
+	<script type="module">
+		import { Scroller } from '../src/Scroller.js';
+		window.Scroller = Scroller;
+	</script>
+
 	<script src="asset/render.js"></script>
 
 	<style type="text/css">
@@ -64,68 +69,37 @@
 
 	<script type="text/javascript">
 
-	var container = document.getElementById("container");
-	var content = document.getElementById("content");
+	function initializeDemo() {
+		var container = document.getElementById("container");
+		var content = document.getElementById("content");
 
-	// Content Generator
-	var size = 400;
-	var frag = document.createDocumentFragment();
-	for (var cell=0, cl=content.clientWidth/size; cell<cl; cell++) {
-		elem = document.createElement("div");
-		elem.className = "cell";
-		elem.style.backgroundColor = cell%2 > 0 ? "#ddd" : "";
-		elem.innerHTML = cell;
-		frag.appendChild(elem);
-	}
-	content.appendChild(frag);
+		// Content Generator
+		var size = 400;
+		var frag = document.createDocumentFragment();
+		for (var cell=0, cl=content.clientWidth/size; cell<cl; cell++) {
+			elem = document.createElement("div");
+			elem.className = "cell";
+			elem.style.backgroundColor = cell%2 > 0 ? "#ddd" : "";
+			elem.innerHTML = cell;
+			frag.appendChild(elem);
+		}
+		content.appendChild(frag);
 
-	// Initialize Scroller
-	var scroller = new Scroller(render, {
-		scrollingY: false,
-		paging: true
-	});
-	
-	
-	// Setup Scroller
+		// Initialize Scroller
+		var scroller = new Scroller(render, {
+			scrollingY: false,
+			paging: true
+		});
 
-	var rect = container.getBoundingClientRect();
+		// Setup Scroller
+		var rect = container.getBoundingClientRect();
+		scroller.setPosition(rect.left+container.clientLeft, rect.top+container.clientTop);
+		scroller.setDimensions(container.clientWidth, container.clientHeight, content.offsetWidth, content.offsetHeight);
 
-	scroller.setPosition(rect.left+container.clientLeft, rect.top+container.clientTop);
-	scroller.setDimensions(container.clientWidth, container.clientHeight, content.offsetWidth, content.offsetHeight);
-	
-	
-	// Event Handler
-	
-	if ('ontouchstart' in window) {
-		
-		container.addEventListener("touchstart", function(e) {
-			// Don't react if initial down happens on a form element
-			if (e.target.tagName.match(/input|textarea|select/i)) {
-				return;
-			}
-			
-			scroller.doTouchStart(e.touches, e.timeStamp);
-			e.preventDefault();
-		}, false);
-
-		document.addEventListener("touchmove", function(e) {
-			scroller.doTouchMove(e.touches, e.timeStamp);
-		}, false);
-
-		document.addEventListener("touchend", function(e) {
-			scroller.doTouchEnd(e.timeStamp);
-		}, false);
-		
-	} else {
-		
+		// Event Handler
 		var mousedown = false;
 
 		container.addEventListener("mousedown", function(e) {
-			// Don't react if initial down happens on a form element
-			if (e.target.tagName.match(/input|textarea|select/i)) {
-				return;
-			}
-			
 			scroller.doTouchStart([{
 				pageX: e.pageX,
 				pageY: e.pageY
@@ -156,9 +130,14 @@
 
 			mousedown = false;
 		}, false);
-		
 	}
-	
+
+	// Initialize when page loads (works for both dev and production)
+	document.addEventListener('DOMContentLoaded', function() {
+		// Small delay to ensure Scroller is available (especially in dev mode)
+		setTimeout(initializeDemo, 10);
+	});
+
 	</script>
 </body>
 </html>

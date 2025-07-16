@@ -3,7 +3,15 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Accelerated panning and zooming for HTML and Canvas",
-  "keywords": ["scroller", "mobile", "animation", "touch", "zoom", "pan", "scroll"],
+  "keywords": [
+    "scroller",
+    "mobile",
+    "animation",
+    "touch",
+    "zoom",
+    "pan",
+    "scroll"
+  ],
   "author": "Zynga Inc.",
   "license": "MIT",
   "repository": {
@@ -32,9 +40,11 @@
     "README.md"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "npm run build:lib && npm run build:demos",
+    "build:lib": "rollup -c",
+    "build:demos": "node scripts/build-demos.js",
     "build:watch": "rollup -c -w",
-    "dev": "rollup -c -w",
+    "dev": "vite",
     "lint": "biome check src",
     "lint:fix": "biome check --write src",
     "format": "biome format src",
@@ -42,15 +52,47 @@
     "check": "biome check src",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run clean && npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_OPTIONS=\"--experimental-vm-modules\" jest",
+    "test:watch": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --watch",
+    "test:coverage": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --coverage",
+    "test:ci": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --ci --coverage --watchAll=false"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.js"
+    ],
+    "testMatch": [
+      "<rootDir>/tests/**/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/index.js",
+      "!src/umd.js",
+      "!src/umd-full.js"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
+    "transform": {},
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    }
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@jest/globals": "^29.7.0",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "^0.4.4",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "rollup": "^4.25.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vite": "^7.0.4"
   },
   "engines": {
     "node": ">=14.0.0"
@@ -58,4 +100,4 @@
   "publishConfig": {
     "access": "public"
   }
-} 
+}

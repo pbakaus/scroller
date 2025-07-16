@@ -1,10 +1,15 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title>Scroller - Canvas</title>
 	<link rel="stylesheet" href="asset/ui.css" />
 	
-	<script src="../dist/scroller.umd.js"></script>
+	<!-- Load from source files (dev mode) -->
+	<script type="module">
+		import { Scroller } from '../src/Scroller.js';
+		window.Scroller = Scroller;
+	</script>
 
 	<script src="asset/Tiling.js"></script>
 </head>
@@ -81,8 +86,21 @@
 	</script>
 	
 	<!-- Create Scroller, bind UI layer and mouse/touch events -->
-	<script src="asset/ui.js"></script>
-	
+	<script>
+		// Load ui.js after ensuring Scroller is available
+		function loadUI() {
+			if (typeof window.Scroller !== 'undefined') {
+				const script = document.createElement('script');
+				script.src = 'asset/ui.js';
+				document.head.appendChild(script);
+			} else {
+				// Retry in a few milliseconds
+				setTimeout(loadUI, 10);
+			}
+		}
+		
+		document.addEventListener('DOMContentLoaded', loadUI);
+	</script>
 	
 </body>
 </html>

@@ -170,7 +170,15 @@ export const Animate = {
 			var now = time();
 
 			// Verification is executed before next animation step
-			if (!running[id] || (verifyCallback && !verifyCallback(id))) {
+			var shouldContinue = true;
+			try {
+				shouldContinue = !verifyCallback || verifyCallback(id);
+			} catch (error) {
+				// Handle verify function errors gracefully
+				shouldContinue = false;
+			}
+			
+			if (!running[id] || !shouldContinue) {
 				running[id] = null;
 				completedCallback?.(desiredFrames - dropCounter / ((now - start) / millisecondsPerSecond), id, false);
 				return;
@@ -196,7 +204,15 @@ export const Animate = {
 
 			// Execute step callback, then...
 			var value = easingMethod ? easingMethod(percent) : percent;
-			if ((stepCallback(value, now, render) === false || percent === 1) && render) {
+			var stepResult = false;
+			try {
+				stepResult = stepCallback(value, now, render);
+			} catch (error) {
+				// Handle step function errors gracefully
+				stepResult = false;
+			}
+			
+			if ((stepResult === false || percent === 1) && render) {
 				running[id] = null;
 				completedCallback?.(
 					desiredFrames - dropCounter / ((now - start) / millisecondsPerSecond),
@@ -205,7 +221,7 @@ export const Animate = {
 				);
 			} else if (render) {
 				lastFrame = now;
-				Animate.requestAnimationFrame(step, renderRoot);
+				Animate.requestAnimationFrame(step);
 			}
 		};
 
@@ -213,7 +229,7 @@ export const Animate = {
 		running[id] = true;
 
 		// Init first step
-		Animate.requestAnimationFrame(step, renderRoot);
+		Animate.requestAnimationFrame(step);
 
 		// Return unique animation ID
 		return id;

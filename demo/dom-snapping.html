@@ -1,10 +1,15 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title>Scroller - Snapping</title>
 
-	<script src="../dist/scroller.umd.js"></script>
-          
+		<!-- Load from source files (dev mode) -->
+	<script type="module">
+		import { Scroller } from '../src/Scroller.js';
+		window.Scroller = Scroller;
+	</script>
+
 	<script src="asset/render.js"></script>
 
 	<style type="text/css">
@@ -71,8 +76,9 @@
 
 	<script type="text/javascript">
 
-	var container = document.getElementById("container");
-	var content = document.getElementById("content");
+	function initializeDemo() {
+		var container = document.getElementById("container");
+		var content = document.getElementById("content");
 
 	// Content Generator
 	var size = 100;
@@ -168,6 +174,14 @@
 		
 	}
 	
+	}
+	
+	// Initialize when page loads (works for both dev and production)
+	document.addEventListener('DOMContentLoaded', function() {
+		// Small delay to ensure Scroller is available (especially in dev mode)
+		setTimeout(initializeDemo, 10);
+	});
+
 	</script>
 </body>
 </html>
