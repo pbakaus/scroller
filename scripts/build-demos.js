@@ -38,14 +38,14 @@ for (const file of demoFiles) {
         content = content.replace(
           /<!-- Load from source files \(dev mode\) -->[\s\S]*?<script type="module">[\s\S]*?<\/script>/,
           `<!-- Load from built bundle (production) -->
-	<script src="scroller-full.umd.js"></script>`
+	<script src="./scroller-full.umd.js"></script>`
         );
       } else if (content.includes('Scroller')) {
         // Core Scroller demos - use core bundle (local copy for GitHub Pages)
         content = content.replace(
           /<!-- Load from source files \(dev mode\) -->[\s\S]*?<script type="module">[\s\S]*?<\/script>/,
           `<!-- Load from built bundle (production) -->
-	<script src="scroller.umd.js"></script>`
+	<script src="./scroller.umd.js"></script>`
         );
       }
       console.log(`  📄 ${file} (processed)`);
