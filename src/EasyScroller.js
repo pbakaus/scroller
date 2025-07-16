@@ -13,69 +13,19 @@ var EasyScroller = function (container, options) {
 
 	// the content element needs a correct transform origin for zooming
 	if (this.content && this.content.style) {
-		this.content.style[`${EasyScroller.vendorPrefix}TransformOrigin`] = "left top";
+		this.content.style.transformOrigin = "left top";
 	}
 
 	// reflow for the first time
 	this.reflow();
 };
 
-EasyScroller.prototype.render = (() => {
-	var docStyle = document.documentElement.style;
-
-	var engine;
-	if (window.opera && Object.prototype.toString.call(opera) === "[object Opera]") {
-		engine = "presto";
-	} else if ("MozAppearance" in docStyle) {
-		engine = "gecko";
-	} else if ("WebkitAppearance" in docStyle) {
-		engine = "webkit";
-	} else if (typeof navigator.cpuClass === "string") {
-		engine = "trident";
+EasyScroller.prototype.render = function (left, top, zoom) {
+	if (this.content && this.content.style) {
+		// Use standard CSS transforms - translate3d for hardware acceleration
+		this.content.style.transform = `translate3d(${-left}px,${-top}px,0) scale(${zoom})`;
 	}
-
-	EasyScroller.vendorPrefix = {
-		trident: "ms",
-		gecko: "Moz",
-		webkit: "Webkit",
-		presto: "O",
-	}[engine];
-	var vendorPrefix = EasyScroller.vendorPrefix;
-
-	var helperElem = document.createElement("div");
-	var undef;
-
-	var perspectiveProperty = `${vendorPrefix}Perspective`;
-	var transformProperty = `${vendorPrefix}Transform`;
-
-	if (helperElem.style[perspectiveProperty] !== undef) {
-		return function (left, top, zoom) {
-			if (this.content && this.content.style) {
-				this.content.style[transformProperty] = `translate3d(${-left}px,${-top}px,0) scale(${zoom})`;
-			}
-		};
-	}
-	if (helperElem.style[transformProperty] !== undef) {
-		return function (left, top, zoom) {
-			if (this.content && this.content.style) {
-				this.content.style[transformProperty] = `translate(${-left}px,${-top}px) scale(${zoom})`;
-			}
-		};
-	}
-	// Fallback for testing environments - use standard transform
-	if (helperElem.style.transform !== undef) {
-		return function (left, top, zoom) {
-			if (this.content && this.content.style) {
-				this.content.style.transform = `translate3d(${-left}px,${-top}px,0) scale(${zoom})`;
-			}
-		};
-	}
-	return function (left, top, zoom) {
-		this.content.style.marginLeft = left ? `${-left / zoom}px` : "";
-		this.content.style.marginTop = top ? `${-top / zoom}px` : "";
-		this.content.style.zoom = zoom || "";
-	};
-})();
+};
 
 EasyScroller.prototype.reflow = function () {
 	// Validate that we have proper DOM elements
@@ -93,8 +43,8 @@ EasyScroller.prototype.reflow = function () {
 
 	// refresh the position for zooming purposes
 	var rect = this.container.getBoundingClientRect();
-	var scrollX = window.pageXOffset || document.documentElement.scrollLeft || 0;
-	var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+	var scrollX = window.pageXOffset;
+	var scrollY = window.pageYOffset;
 	this.scroller.setPosition(
 		rect.left + this.container.clientLeft + scrollX, 
 		rect.top + this.container.clientTop + scrollY
@@ -157,7 +107,7 @@ EasyScroller.prototype.bindEvents = function () {
 	this._resizeHandler = () => {
 		this.reflow();
 	};
-	window.addEventListener("resize", this._resizeHandler, false);
+	window.addEventListener("resize", this._resizeHandler);
 
 	// touch devices bind touch events
 	if ("ontouchstart" in window) {
@@ -186,10 +136,10 @@ EasyScroller.prototype.bindEvents = function () {
 			this.scroller.doTouchEnd(e.timeStamp);
 		};
 
-		this.container.addEventListener("touchstart", this._touchStartHandler, false);
-		this.container.addEventListener("touchmove", this._touchMoveHandler, false);
-		this.container.addEventListener("touchend", this._touchEndHandler, false);
-		this.container.addEventListener("touchcancel", this._touchCancelHandler, false);
+		this.container.addEventListener("touchstart", this._touchStartHandler);
+		this.container.addEventListener("touchmove", this._touchMoveHandler);
+		this.container.addEventListener("touchend", this._touchEndHandler);
+		this.container.addEventListener("touchcancel", this._touchCancelHandler);
 
 		// non-touch bind mouse events
 	} else {
@@ -246,15 +196,16 @@ EasyScroller.prototype.bindEvents = function () {
 
 		this._wheelHandler = (e) => {
 			if (this.options.zooming) {
-				this.scroller.doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);
+				// Use standard wheel event deltaY (inverted compared to old wheelDelta)
+				this.scroller.doMouseZoom(-e.deltaY, e.timeStamp, e.pageX, e.pageY);
 				e.preventDefault();
 			}
 		};
 
-		this.container.addEventListener("mousedown", this._mouseDownHandler, false);
-		document.addEventListener("mousemove", this._mouseMoveHandler, false);
-		document.addEventListener("mouseup", this._mouseUpHandler, false);
-		this.container.addEventListener("mousewheel", this._wheelHandler, false);
+		this.container.addEventListener("mousedown", this._mouseDownHandler);
+		document.addEventListener("mousemove", this._mouseMoveHandler);
+		document.addEventListener("mouseup", this._mouseUpHandler);
+		this.container.addEventListener("wheel", this._wheelHandler);
 	}
 };
 
@@ -271,12 +222,8 @@ EasyScroller.autoInit = function() {
 
 	for (i = 0; i < elements.length; i++) {
 		element = elements[i];
-		scrollable = element.attributes.getNamedItem("data-scrollable")
-			? element.attributes.getNamedItem("data-scrollable").value
-			: null;
-		zoomable = element.attributes.getNamedItem("data-zoomable")
-			? element.attributes.getNamedItem("data-zoomable").value
-			: "";
+		scrollable = element.dataset.scrollable || null;
+		zoomable = element.dataset.zoomable || "";
 		zoomOptions = zoomable.split("-");
 		minZoom = zoomOptions.length > 1 ? Number.parseFloat(zoomOptions[0]) : undefined;
 		maxZoom = zoomOptions.length > 1 ? Number.parseFloat(zoomOptions[1]) : undefined;
@@ -303,4 +250,4 @@ EasyScroller.autoInit = function() {
 // automatically attach an EasyScroller to elements found with the right data attributes
 export { EasyScroller };
 
-document.addEventListener("DOMContentLoaded", EasyScroller.autoInit, false);
+document.addEventListener("DOMContentLoaded", EasyScroller.autoInit);

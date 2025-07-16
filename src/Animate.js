@@ -23,85 +23,13 @@
  * based on the pure time difference.
  */
 
-var time = Date.now || (() => +new Date());
+var time = Date.now;
 var desiredFrames = 60;
 var millisecondsPerSecond = 1000;
 var running = {};
 var counter = 1;
 
 export const Animate = {
-	/**
-	 * A requestAnimationFrame wrapper / polyfill.
-	 *
-	 * @param callback {Function} The callback to be invoked before the next repaint.
-	 * @param root {HTMLElement} The root element for the repaint
-	 */
-	requestAnimationFrame: (() => {
-		// Cross-environment global reference
-		var globalScope = typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : {};
-
-		// Check for request animation Frame support
-		var requestFrame =
-			globalScope.requestAnimationFrame ||
-			globalScope.webkitRequestAnimationFrame ||
-			globalScope.mozRequestAnimationFrame ||
-			globalScope.oRequestAnimationFrame;
-		var isNative = !!requestFrame;
-
-		if (requestFrame && !/requestAnimationFrame\(\)\s*\{\s*\[native code\]\s*\}/i.test(requestFrame.toString())) {
-			isNative = false;
-		}
-
-		if (isNative) {
-			return (callback, root) => {
-				requestFrame(callback, root);
-			};
-		}
-
-		var TARGET_FPS = 60;
-		var requests = {};
-		var requestCount = 0;
-		var rafHandle = 1;
-		var intervalHandle = null;
-		var lastActive = +new Date();
-
-		return (callback, root) => {
-			var callbackHandle = rafHandle++;
-
-			// Store callback
-			requests[callbackHandle] = callback;
-			requestCount++;
-
-			// Create timeout at first request
-			if (intervalHandle === null) {
-				intervalHandle = setInterval(() => {
-					var time = +new Date();
-					var currentRequests = requests;
-
-					// Reset data structure before executing callbacks
-					requests = {};
-					requestCount = 0;
-
-					for (var key in currentRequests) {
-						if (Object.hasOwn(currentRequests, key)) {
-							currentRequests[key](time);
-							lastActive = time;
-						}
-					}
-
-					// Disable the timeout when nothing happens for a certain
-					// period of time
-					if (time - lastActive > 2500) {
-						clearInterval(intervalHandle);
-						intervalHandle = null;
-					}
-				}, 1000 / TARGET_FPS);
-			}
-
-			return callbackHandle;
-		};
-	})(),
-
 	/**
 	 * Stops the given animation.
 	 *
@@ -221,7 +149,7 @@ export const Animate = {
 				);
 			} else if (render) {
 				lastFrame = now;
-				Animate.requestAnimationFrame(step);
+				requestAnimationFrame(step);
 			}
 		};
 
@@ -229,7 +157,7 @@ export const Animate = {
 		running[id] = true;
 
 		// Init first step
-		Animate.requestAnimationFrame(step);
+		requestAnimationFrame(step);
 
 		// Return unique animation ID
 		return id;

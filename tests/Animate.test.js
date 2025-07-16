@@ -3,8 +3,7 @@ import { Animate } from '../src/Animate.js';
 
 describe('Animate', () => {
   let mockStep, mockVerify, mockComplete;
-  let originalPerformanceNow;
-  let originalRequestAnimationFrame;
+  let originalPerformanceNow, originalRequestAnimationFrame;
   let performanceTime;
 
   beforeEach(() => {
@@ -13,11 +12,11 @@ describe('Animate', () => {
     originalPerformanceNow = global.performance.now;
     global.performance.now = jest.fn(() => performanceTime);
     
-    // Mock the Animate.requestAnimationFrame method
-    originalRequestAnimationFrame = Animate.requestAnimationFrame;
-    Animate.requestAnimationFrame = jest.fn((callback) => {
+    // Mock the global requestAnimationFrame method
+    originalRequestAnimationFrame = global.requestAnimationFrame;
+    global.requestAnimationFrame = jest.fn((callback) => {
       // Store the callback for manual triggering in tests
-      Animate.requestAnimationFrame.lastCallback = callback;
+      global.requestAnimationFrame.lastCallback = callback;
       // Simulate immediate execution for some tests
       setTimeout(() => callback(performanceTime), 0);
       return 1; // Return a mock ID
@@ -35,15 +34,15 @@ describe('Animate', () => {
   afterEach(() => {
     Animate.stop();
     global.performance.now = originalPerformanceNow;
-    Animate.requestAnimationFrame = originalRequestAnimationFrame;
+    global.requestAnimationFrame = originalRequestAnimationFrame;
   });
 
   describe('Basic Animation Functions', () => {
     test('should call requestAnimationFrame when starting animation', () => {
       Animate.start(mockStep, mockVerify, mockComplete);
       
-      expect(Animate.requestAnimationFrame).toHaveBeenCalledTimes(1);
-      expect(Animate.requestAnimationFrame).toHaveBeenCalledWith(expect.any(Function));
+      expect(global.requestAnimationFrame).toHaveBeenCalledTimes(1);
+      expect(global.requestAnimationFrame).toHaveBeenCalledWith(expect.any(Function));
     });
   });
 
@@ -129,7 +128,7 @@ describe('Animate', () => {
     test('should not start new animation if one is already running', () => {
       // Start first animation
       const id1 = Animate.start(mockStep, mockVerify, mockComplete);
-      const firstCallCount = Animate.requestAnimationFrame.mock.calls.length;
+      const firstCallCount = global.requestAnimationFrame.mock.calls.length;
       
       // Try to start second animation
       const mockStep2 = jest.fn();
@@ -140,7 +139,7 @@ describe('Animate', () => {
       
       // Both should have unique IDs and separate calls
       expect(id1).not.toBe(id2);
-      expect(Animate.requestAnimationFrame.mock.calls.length).toBeGreaterThan(firstCallCount);
+      expect(global.requestAnimationFrame.mock.calls.length).toBeGreaterThan(firstCallCount);
     });
   });
 
@@ -154,8 +153,8 @@ describe('Animate', () => {
       performanceTime = 1016; // +16ms = ~60fps
       global.performance.now.mockReturnValue(1016);
       
-      if (Animate.requestAnimationFrame.lastCallback) {
-        Animate.requestAnimationFrame.lastCallback(1016);
+      if (global.requestAnimationFrame.lastCallback) {
+        global.requestAnimationFrame.lastCallback(1016);
       }
       
       // Wait for execution
@@ -176,8 +175,8 @@ describe('Animate', () => {
       performanceTime = 1100; // +100ms
       global.performance.now.mockReturnValue(1100);
       
-      if (Animate.requestAnimationFrame.lastCallback) {
-        Animate.requestAnimationFrame.lastCallback(1100);
+      if (global.requestAnimationFrame.lastCallback) {
+        global.requestAnimationFrame.lastCallback(1100);
       }
       
       // Wait for execution
@@ -226,8 +225,8 @@ describe('Animate', () => {
       performanceTime = 1001;
       global.performance.now.mockReturnValue(1001);
       
-      if (Animate.requestAnimationFrame.lastCallback) {
-        Animate.requestAnimationFrame.lastCallback(1001);
+      if (global.requestAnimationFrame.lastCallback) {
+        global.requestAnimationFrame.lastCallback(1001);
       }
       
       // Wait for execution

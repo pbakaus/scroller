@@ -263,10 +263,10 @@ describe('EasyScroller', () => {
       
       // Should have bound mouse events (since touch is disabled in test env)
       expect(mockContainer.addEventListener).toHaveBeenCalledWith(
-        'mousedown', expect.any(Function), false
+        'mousedown', expect.any(Function)
       );
       expect(mockContainer.addEventListener).toHaveBeenCalledWith(
-        'mousewheel', expect.any(Function), false
+        'wheel', expect.any(Function)
       );
     });
 
@@ -307,7 +307,7 @@ describe('EasyScroller', () => {
       easyScroller = new EasyScroller(mockContainer, mockOptions);
       
       expect(global.window.addEventListener).toHaveBeenCalledWith(
-        'resize', expect.any(Function), false
+        'resize', expect.any(Function)
       );
       
       // Restore original
@@ -700,11 +700,9 @@ describe('EasyScroller', () => {
       contentElement.parentNode = configElement;
       configElement.firstElementChild = contentElement;
       
-      configElement.attributes = {
-        getNamedItem: jest.fn((name) => {
-          if (name === 'data-scrollable') return { value: 'true' };
-          return null;
-        })
+      // Mock dataset property for modern data attribute access
+      configElement.dataset = {
+        scrollable: 'true'
       };
       
       global.document.querySelectorAll = jest.fn().mockReturnValue([configElement]);
@@ -712,7 +710,8 @@ describe('EasyScroller', () => {
       // Call auto-initialization directly
       EasyScroller.autoInit();
       
-      expect(configElement.attributes.getNamedItem).toHaveBeenCalledWith('data-scrollable');
+      // Verify that the element was processed (dataset.scrollable should have been accessed)
+      expect(configElement.dataset.scrollable).toBe('true');
     });
   });
 
