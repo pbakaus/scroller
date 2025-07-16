@@ -1,5 +1,5 @@
 {
-  "name": "scroller",
+  "name": "@paulbakaus/scroller",
   "version": "1.3.0",
   "type": "module",
   "description": "Accelerated panning and zooming for HTML and Canvas",

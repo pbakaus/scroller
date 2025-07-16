@@ -27,25 +27,31 @@ for (const file of demoFiles) {
     // Process HTML files - replace src script with dist script
     let content = fs.readFileSync(srcPath, 'utf8');
     
-    // Replace ES module imports with UMD scripts
-    if (content.includes('EasyScroller')) {
-      // EasyScroller demo - use full bundle
-      content = content.replace(
-        /<!-- Load from source files \(dev mode\) -->[\s\S]*?<script type="module">[\s\S]*?<\/script>/,
-        `<!-- Load from built bundle (production) -->
+    if (file === 'index.html') {
+      // For index.html, adjust the data-src paths to be relative
+      content = content.replace(/data-src="\/demo\//g, 'data-src="');
+      console.log(`  📄 ${file} (processed - adjusted paths)`);
+    } else {
+      // Replace ES module imports with UMD scripts for demo files
+      if (content.includes('EasyScroller')) {
+        // EasyScroller demo - use full bundle
+        content = content.replace(
+          /<!-- Load from source files \(dev mode\) -->[\s\S]*?<script type="module">[\s\S]*?<\/script>/,
+          `<!-- Load from built bundle (production) -->
 	<script src="../scroller-full.umd.js"></script>`
-      );
-    } else if (content.includes('Scroller')) {
-      // Core Scroller demos - use core bundle
-      content = content.replace(
-        /<!-- Load from source files \(dev mode\) -->[\s\S]*?<script type="module">[\s\S]*?<\/script>/,
-        `<!-- Load from built bundle (production) -->
+        );
+      } else if (content.includes('Scroller')) {
+        // Core Scroller demos - use core bundle
+        content = content.replace(
+          /<!-- Load from source files \(dev mode\) -->[\s\S]*?<script type="module">[\s\S]*?<\/script>/,
+          `<!-- Load from built bundle (production) -->
 	<script src="../scroller.umd.js"></script>`
-      );
+        );
+      }
+      console.log(`  📄 ${file} (processed)`);
     }
     
     fs.writeFileSync(destPath, content);
-    console.log(`  📄 ${file} (processed)`);
   } else {
     // Copy other files as-is
     fs.copyFileSync(srcPath, destPath);
